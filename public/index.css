@@ -1,0 +1,112 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  
+}
+
+#intro{
+    height: 100vh;
+    width: 100%;
+    background-image: url(Omnichannel.png);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+  
+.img-logo {
+    margin-top: 4rem;
+    margin-left: 4rem;
+    max-width: 50%;
+}
+
+.title1{
+    margin-top: 7rem;
+    margin-left: 6rem;
+    margin-bottom: 0;
+    font-family: Poppins;
+    font-size: 3.75rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 120%; /* 3.75rem */
+    letter-spacing: -0.15rem;
+    background: var(--Gradient-01, linear-gradient(178deg, #6ECAF8 0%, #0179FF 31.51%, #2246E2 100.03%));
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.title2{
+    margin: 0 0 0 6rem;
+    width: 75rem; 
+    flex-shrink: 0;
+    color: #000;
+    font-family: Poppins;
+    font-size: 8.75rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 100%; /* 8.75rem */
+    letter-spacing: -0.35rem;
+}
+
+.address, .website{
+    margin-left: 6rem;
+}
+
+.address{
+    margin-top: 2rem;
+    display: flex; 
+    align-items: center;
+}
+
+.website{
+    display: flex; 
+    align-items: center;
+}
+
+.address img, .website img {
+    width: 2rem; 
+    height: 2.7rem; 
+    margin-right: 10px; 
+}
+
+.address p, .website p {
+    color: var(--Color-Light-Grey, #75778B);
+    font-family: Poppins;
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 100%; /* 1.875rem */
+    letter-spacing: 0.050rem;
+}
+
+#page1{
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-image: url(img-bg-page1);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.page1-text h1{
+    margin: 0;
+    padding: 3rem 23rem;
+    color: var(--Color-Dark-Blue, #050938);
+    font-family: Poppins;
+    font-size: 4.68288rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 150%; /* 7.02431rem */
+    letter-spacing: -0.18731rem;
+}
+
+.page1-text #monthly-users, #location{
+    color: var(--Color-Blue, #0179FF);
+}
+
+.img-logo2 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 3rem 3rem 0;
+}

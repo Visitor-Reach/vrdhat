@@ -1,0 +1,217 @@
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;  
+    background-color: white;
+}
+
+#intro{
+    height: 100vh;
+    width: 100%;
+    background-image: url(../../../public/Omnichannel.png);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+  
+.img-logo-main {
+    margin-top: 0rem;
+    margin-left: 0rem;
+    max-width: 50%;
+}
+
+.title1{
+    margin-top: 0rem;
+    margin-left: 0rem;
+    margin-bottom: 0;
+    font-size: 3.75rem;
+    font-style: normal;
+    font-weight: bolder;
+    letter-spacing: -0.15rem;
+
+}
+
+.title2-intro{
+    margin: 0 0 0 0rem;
+    width: 75rem; 
+    flex-shrink: 0;
+    color: #000;
+    font-size: 6rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 100%; /* 8.75rem */
+    letter-spacing: -0.35rem;
+}
+
+.address, .website{
+    margin-left: 0rem;
+}
+
+.address{
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    display: flex; 
+    align-items: center;
+}
+
+.website{
+    display: flex; 
+    align-items: center;
+}
+
+.address img, .website img {
+    width: 2rem; 
+    height: 2.7rem; 
+    margin-right: 10px; 
+}
+
+.address p, .website p {
+    color: var(--Color-Light-Grey, #75778B);
+    font-size: 1.875rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 100%; /* 1.875rem */
+    letter-spacing: 0.050rem;
+}
+
+#page1{
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    background-image: url(../../../public/img-bg-page1.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    opacity: 1;
+}
+
+.page1-text h1{
+    margin: 0;
+    padding: 15rem 23rem;
+    color: var(--Color-Dark-Blue, #050938);
+    font-size: 4rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 150%; /* 7.02431rem */
+    letter-spacing: -0.18731rem;
+    text-shadow: azure 10px 10 10px;
+    opacity: 1;
+}
+
+.page1-text #monthly-users, #location{
+    color: var(--Color-Blue, #0179FF);
+}
+
+.img-logo2 {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 0 3rem 3rem 0;
+}
+
+@media (max-width: 650px) {
+    #intro{
+        height: 100vh;
+        width: 100%;
+        background-image: url(../../../public/Omnichannel.png);
+        background-position: center bottom;
+        background-repeat: no-repeat;
+        background-size: 100%;
+    }
+      
+    .img-logo {
+        margin: 2rem auto;
+        max-width: 50%;
+    }
+
+    .main-text{
+        margin: auto;
+    }
+    
+    .title1{
+        margin-top: 3rem;
+        margin-left: 3rem;
+        margin-bottom: 0;
+        font-size: 1.75rem;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 120%; /* 3.75rem */
+        letter-spacing: -0.15rem;
+        background: var(--Gradient-01, linear-gradient(178deg, #6ECAF8 0%, #0179FF 31.51%, #2246E2 100.03%));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    .title2-intro{
+        margin: 1rem 0 0 3rem;
+        width: 30%;
+        flex-shrink: 0;
+        color: #000;
+        font-size: 3.75rem;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 100%; /* 8.75rem */
+        letter-spacing: -0.35rem;
+    }
+    
+    .address, .website{
+        margin-left: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .address{
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+        display: flex; 
+        align-items: center;
+    }
+    
+    .website{
+        margin-top: 2.5rem;
+        display: flex; 
+        align-items: center;
+    }
+    
+    .address img, .website img {
+        width: 2rem; 
+        height: 2.7rem; 
+        margin-right: 0px;
+        margin-bottom: 1rem; 
+    }
+    
+    .address p, .website p {
+        color: var(--Color-Light-Grey, #75778B);
+        font-size: 0.8rem;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 100%; /* 1.875rem */
+        letter-spacing: 0.050rem;
+        width: 75%;
+    }
+
+    .website p{
+        margin-left: 5rem;
+    }
+
+    .page1-text h1{
+        margin: 0;
+        padding: 3rem 2rem;
+        color: var(--Color-Dark-Blue, #050938);
+        font-family: Poppins;
+        font-size: 2.68288rem;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 150%; /* 7.02431rem */
+        letter-spacing: -0.18731rem;
+    }
+
+    .img-logo2 {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        margin: 0 1rem 3rem 0;
+        width: 50%;
+    }
+}
+  

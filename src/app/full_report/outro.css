@@ -1,0 +1,124 @@
+
+#outro{
+    height: 100vh;
+    width: 100%;
+    background-color: white;
+    background-image: url(../../../public/img-pg8.png);
+    background-position: right bottom;
+    background-repeat: no-repeat;
+}
+  
+.img-logo-outro {
+    padding-top: 7rem;
+    margin-left: 4rem;
+    max-width: 50%;
+}
+
+
+.title2{
+    margin: 15rem 0 0 6rem;
+    width: 75rem; 
+    flex-shrink: 0;
+    color: #000;
+    font-size: 5rem;
+    font-style: normal;
+    font-weight: bolder;
+    line-height: 100%; /* 8.75rem */
+    letter-spacing: -0.35rem;
+}
+
+.main-text{
+    color: var(--Color-Light-Grey, #75778B);
+    font-size: 2.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%; /* 3.375rem */
+    letter-spacing: -0.09rem;
+}
+
+.main-text .p-outro{
+    margin-left: 6rem;
+}
+
+#color-p-outro{
+    color: var(--Color-Brand-Blue, #0179FF);
+    font-size: 2.25rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 150%;
+    letter-spacing: -0.09rem;
+    text-decoration-line: underline;
+}
+
+.img-qr-outro{
+    margin-top: 3rem;
+    margin-left: 6rem;
+}
+
+.ct-general{
+    display: flex;
+    justify-content: space-between;
+}
+
+@media (max-width: 650px) {
+    #outro{
+        margin-top: 100rem; /*PROVISIONAL PARA CONFIGURAR*/
+        height: 100vh;
+        width: 100%;
+        background-color: white;
+        background-image: none;
+        background-position: center bottom;
+        background-repeat: no-repeat;
+    }
+
+    .img-logo-outro {
+        padding-top: 3rem;
+        margin-left: 3rem;
+        max-width: 15%;
+    }
+    
+    
+    .title2{
+        margin: 5rem 2rem 0 2rem;
+        width: 75rem; 
+        flex-shrink: 0;
+        color: #000;
+        font-size: 2.30rem;
+        font-style: normal;
+        font-weight: bolder;
+        line-height: 100%; /* 8.75rem */
+        letter-spacing: 0.01rem;
+    }
+    
+    .main-text{
+        color: var(--Color-Light-Grey, #75778B);
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 150%; /* 3.375rem */
+        letter-spacing: -0.09rem;
+    }
+    
+    .main-text .p-outro{
+        margin-top: 1rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+    }
+    
+    #color-p-outro{
+        color: var(--Color-Brand-Blue, #0179FF);
+        font-size: 1.25rem;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 150%;
+        letter-spacing: -0.09rem;
+        text-decoration-line: underline;
+    }
+    
+    .img-qr-outro{
+        margin-top: 3rem;
+        margin-left: 4rem;
+    }
+}
+
+
