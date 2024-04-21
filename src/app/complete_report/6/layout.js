@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
-import "../globals.css";
 import { Poppins } from "next/font/google";
 import Image from 'next/image'
+import { Suspense } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -12,11 +12,13 @@ const poppins = Poppins({
 const inter = Inter({ subsets: ["latin"] });
 
 
-export default function FullReportLayout({ children }) {
+export default function CompletePage6Layout({ children }) {
   return (
-    <div>
-          {children}
-    </div>
-    
+    <>
+      <Suspense>
+        {children}
+      </Suspense>
+          
+    </>
   );
 }

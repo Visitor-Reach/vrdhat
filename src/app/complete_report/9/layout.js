@@ -1,5 +1,4 @@
 import { Inter } from "next/font/google";
-import "../globals.css";
 import { Poppins } from "next/font/google";
 import Image from 'next/image'
 
@@ -12,11 +11,10 @@ const poppins = Poppins({
 const inter = Inter({ subsets: ["latin"] });
 
 
-export default function FullReportLayout({ children }) {
+export default function CompletePage9Layout({ children }) {
   return (
-    <div>
+    <>
           {children}
-    </div>
-    
+    </>
   );
 }

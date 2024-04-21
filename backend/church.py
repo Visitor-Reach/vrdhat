@@ -238,6 +238,8 @@ class church:
             keyword = line[1].split(';')[0]
             
             keywords.append(keyword)
+        keywords = ",".join([item for item in keywords])
+
         return keywords
     
     def get_semrush_domain_organic_results(self):
@@ -248,7 +250,7 @@ class church:
 
     def get_digital_search_assesment_score(self):
         self.set_coordinates()
-        #self.get_semrush_domain_organic_results()
+        self.get_semrush_domain_organic_results()
         self.get_semrush_authority_score()
         self.get_maps_score()
         self.get_voice_score()

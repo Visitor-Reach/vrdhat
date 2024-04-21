@@ -19,8 +19,8 @@ volume_search_last_month = 0
  
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = "jrivero.jesus@gmail.com"
-app.config['MAIL_PASSWORD'] = "jrgr pagf uawe cohs"
+app.config['MAIL_USERNAME'] = os.environ.get('GOOGLE_MAIL_USER')
+app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_MAIL_PASS')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['WTF_CSRF_ENABLED'] = False
@@ -137,7 +137,8 @@ def handle_form_submission():
                                 0,
                                 church_obj.domain_trust_score,
                                 volume_search_last_month,
-                                0
+                                0,
+                                church_obj.domain_organic_keywords
                             )
         if map_index is not None:
             church_obj.get_map_image(map_index)
@@ -177,7 +178,8 @@ def fetch_data():
             'loc_zipcode': user_info[8],
             'loc_city': user_info[7],
             'loc_state': user_info[6],
-            'website' : user_info[9]
+            'website' : user_info[9],
+            'keywords': user_info[12]
         }
 
         print("Fetched Data")

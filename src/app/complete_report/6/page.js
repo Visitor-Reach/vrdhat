@@ -28,6 +28,7 @@ export default function CompleteReportPage6() {
     const [loc_address, setLoc_address] = useState("");
     const [loc_state, setLoc_state] = useState("");
     const [webpage, setWebpage] = useState("");
+    const [keywords, setKeywords] = useState("");
 
     const searchParams = useSearchParams()
     const user_key = searchParams.get('user_key')
@@ -62,6 +63,7 @@ export default function CompleteReportPage6() {
             setLoc_zipcode(data.loc_zipcodesetLoc_ziploc_zipcode);
             setLoc_state(data.loc_state);
             setWebpage(data.website);
+            setKeywords(data.keywords.split(","));
             console.log('Sucess fetching data: ', data)
           } catch (error) {
             console.error('Error fetching data:', error);
@@ -106,6 +108,8 @@ export default function CompleteReportPage6() {
                     <h2 className='relative top-24 text-[#75778B] w-5/6 left-0 text-[18px] font-medium text-center m-auto'>
                         The #1 organic result is 10x more likely to receive a click compared to #10 spot. This makes having a well-ranking website extremely important. A strong online presence leads to more people finding your church, identifying with your mission and culture, and visiting your church.
                     </h2>
+                    
+                    
                     <h3 className='text-[#0179FF] text-[15px] font-regular relative top-28 left-80'> Source: backlinko </h3>
 
 
@@ -141,7 +145,22 @@ export default function CompleteReportPage6() {
                     </div>
                     <h1 className='text-[#050938] text-[28px] font-medium w-2/3 relative left-12 -top-16'>Your Church’s Domain Keywords in Organic Search</h1>
                     <h2 className='text-[#75778B] text-[18px] font-regular w-3/4 relative left-12 -top-10' >The top 8 keywords or phrases your website is known for by Google and other search engines</h2>
-
+                    <div className='relative -right-12'>
+                        {keywords.length > 0 && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <ul className='text-xl text-blue-600'>
+                                {keywords.slice(0, Math.floor(keywords.length / 2)).map((keyword) => (
+                                    <li key={keyword}>{keyword}</li>
+                                ))}
+                                </ul>
+                                <ul className='text-xl text-blue-600'>
+                                {keywords.slice(Math.floor(keywords.length / 2)).map((keyword) => (
+                                    <li key={keyword}>{keyword}</li>
+                                ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                     
                 </div>
 
