@@ -3,7 +3,7 @@
 import 'next/router'
 
 import { Controls, Player } from '@lottiefiles/react-lottie-player'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
@@ -50,7 +50,7 @@ export default function Page() {
 
       /* const formData = new FormData(event.currentTarget)
  
-       const response = await fetch(NEXT_PUBLIC_API_ROOT + '/submit-form', {
+       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
         body: formData,
       })
@@ -78,7 +78,7 @@ export default function Page() {
       })
       set_email(event.target.elements.email.value)
       console.log(churchInfo)
-      const response = await fetch(NEXT_PUBLIC_API_ROOT + '/submit-form', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
         body: churchInfo,
         headers: myHeaders,

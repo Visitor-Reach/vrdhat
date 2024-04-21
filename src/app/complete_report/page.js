@@ -2,7 +2,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css' // Import bootstrap CSS
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Circularbar from '../../app/components/Circularbar1.js'
 import Image from 'next/image'
@@ -41,7 +41,7 @@ export default function CompleteReport() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,

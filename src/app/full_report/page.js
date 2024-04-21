@@ -9,7 +9,7 @@ import './page6.css'
 import './page7.css'
 import './outro.css'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Circularbar from '../components/Circularbar1.js'
 import ScoreSummary from '../components/ScoreSummarySimple.js'
@@ -37,7 +37,7 @@ export default function FullReport() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(NEXT_PUBLIC_API_ROOT + '/api/fetch-data')
+        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data')
         const data = await response.json()
 
         set_church_name(data.church_name)

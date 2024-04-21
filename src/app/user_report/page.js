@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Link from 'next/link'
 import ScoreSummary from '../components/ScoreSummary'
@@ -35,7 +35,7 @@ export default function SimpleResult() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
