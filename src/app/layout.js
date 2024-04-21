@@ -1,7 +1,7 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { Poppins } from "next/font/google";
-
+import { Suspense } from "react";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["300", "400", "500"],
@@ -22,8 +22,10 @@ export default function RootLayout({ children }) {
       <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/44122818.js"></script>
 
       <body className={`${poppins.className} antialiased bg-gradient-to-br from-sky-200 from-5% via-white to-white`} >
-        
-        {children}
+        <Suspense>
+           {children}
+        </Suspense>
+       
         </body>
     </html>
   );
