@@ -52,7 +52,7 @@ export default function Page() {
 
       /* const formData = new FormData(event.currentTarget)
  
-       const response = await fetch('http://localhost:8080/submit-form', {
+       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
         body: formData,
       })
@@ -80,7 +80,7 @@ export default function Page() {
       })
       set_email(event.target.elements.email.value)
       console.log(churchInfo)
-      const response = await fetch('http://localhost:8080/submit-form', {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
         body: churchInfo,
         headers: myHeaders,
