@@ -98,9 +98,8 @@ export default function SimpleResult() {
               <a className="text-xl text-vr-title-second font-medium block">{last_month_searches} monthly </a>
               Google searches for "churches near me" in{' '}
               <a className="text-xl text-vr-title-second font-medium block">
-                {loc_city} , {loc_state}{' '}
+                {loc_city} , {loc_state} ?
               </a>
-              ?
             </p>
           </div>
 
