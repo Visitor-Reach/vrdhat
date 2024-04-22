@@ -1,7 +1,9 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import ScoreSummary from '../components/ScoreSummary'
+
+import React, { useEffect, useState } from 'react'
+
 import Link from 'next/link'
+import ScoreSummary from '../components/ScoreSummary'
 import { useSearchParams } from 'next/navigation'
 
 export default function SimpleResult() {
@@ -93,8 +95,8 @@ export default function SimpleResult() {
           <div className="m-auto mb-20  text-center  pt-10  w-full">
             <p className="text-xl text-vr-body-color font-medium block">
               Did you know there are{' '}
-              <a className="text-xl text-vr-title-second font-medium block">{last_month_searches} </a> Google searches
-              for "churches near me" in{' '}
+              <a className="text-xl text-vr-title-second font-medium block">{last_month_searches} monthly </a>
+              Google searches for "churches near me" in{' '}
               <a className="text-xl text-vr-title-second font-medium block">
                 {loc_city} , {loc_state}{' '}
               </a>
