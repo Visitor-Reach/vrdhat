@@ -99,7 +99,7 @@ export default function SimpleResult() {
               Google searches for <br />
               &#x201C;churches near me&#x201D; in{' '}
               <a className="text-xl text-vr-title-second font-medium">
-                {loc_city} , {loc_state}
+                {loc_city}, {loc_state}
               </a>
               ?
             </p>
