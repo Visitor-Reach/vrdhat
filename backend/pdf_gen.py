@@ -25,7 +25,7 @@ def merge_pdf(church_name, pdf_routes):
     doc.close()
 
 
-def generate(church_name, email):
+def generate(church_name, email, map_name):
     dirs = [1, 1, 2, 3, 4, 6, 7, 8, 9]
     church_name = church_name.lower().replace(" ", "_")
     path = r"reports\\" + church_name
@@ -34,7 +34,7 @@ def generate(church_name, email):
         if not os.path.exists(path): 
             os.makedirs(path)
         email_reform = email
-        converter.convert(f'http://localhost:3000/complete_report/{str(dir)}?user_key={email_reform}', path + "\\page" + str(dir) + ".pdf", print_options={"printBackground": True,
+        converter.convert(f'http://localhost:3000/complete_report/{str(dir)}?user_key={email_reform}&map_key={map_name}', path + "\\page" + str(dir) + ".pdf", print_options={"printBackground": True,
                                                                                                                               "paperHeight" : 5.4,
                                                                                                                               "paperWidth" : 11,
                                                                                                                               "scale" : 0.5})

@@ -30,7 +30,7 @@ export default function CompleteReportPage3() {
 
     const searchParams = useSearchParams()
     const user_key = searchParams.get('user_key')
-
+    const map = searchParams.get('map_key')
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -84,7 +84,7 @@ export default function CompleteReportPage3() {
                 </div>
                 <div className="relative col-span-2">
                     <div style={{zoom: 0.8}}>
-                        <NavBar></NavBar>
+                        <NavBar user_key={user_key} map={map}></NavBar>
                     </div>
                     
                     

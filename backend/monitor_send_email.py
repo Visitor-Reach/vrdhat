@@ -15,8 +15,8 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = "jrivero.jesus@gmail.com"
-app.config['MAIL_PASSWORD'] = "zmjj lapq nifu uvzu"
+app.config['MAIL_USERNAME'] = "glenn@visitorreach.com"
+app.config['MAIL_PASSWORD'] = "zunl umkl dcyk uoyh"
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['WTF_CSRF_ENABLED'] = False
@@ -63,6 +63,25 @@ def update_sent_pdf(email):
     except Exception as error:
         print("Update failed")
     
+def get_map_id(email):
+    cur, connection = init_connection()
+    cur.execute(f"""
+                        EXPLAIN QUERY PLAN 
+                        SELECT
+                            *
+                        FROM
+                            Users
+                        WHERE
+                        email = "{email}"
+
+                """)
+    try:
+        results = cur.fetchall()[0][0]
+        connection.commit()
+        close_connection(cur, connection)
+        return results
+    except Exception as e:
+        pass
     
 
 def send_email_with_pdf(recipient_email, pdf_bytes, church_name, first_name):
@@ -85,10 +104,9 @@ def check_and_send_emails(app):
         users = retrieve_email_missing_pdf()
 
         for user in users:
-            print(user)
-        
             email, church_name, first_name, pdf_sent = user
-            pdf_bytes = pdf_gen.generate(church_name, email)
+            map_id = get_map_id(email)
+            pdf_bytes = pdf_gen.generate(church_name, email, map_id)
             with app.app_context():
                 send_email_with_pdf(email, pdf_bytes, church_name, first_name)
                 

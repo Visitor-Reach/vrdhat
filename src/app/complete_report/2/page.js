@@ -30,7 +30,8 @@ export default function CompleteReportPage2() {
 
     const searchParams = useSearchParams()
     const user_key = searchParams.get('user_key')
-
+    const map = searchParams.get('map_key')
+    console.log(`/map_background_report/map_back_${map}.png`)
     useEffect(() => {
         const fetchData = async () => {
           try {
@@ -73,7 +74,7 @@ export default function CompleteReportPage2() {
     return (
         <div className="">
             
-            <div id="cr_page2" className="relative w-full h-[100vh] bg-[url('/img-bg-page1.png')] bg-cover">
+            <div id="cr_page2" className={`relative w-full h-[100vh] bg-[url('/map_background_report/map_back_${map}.png')] bg-cover`}>
                 <div className="relative w-full h-[100vh] bg-gradient-to-br from-white from-10% to-white/30">
                     <h1 className="absolute left-[107px] top-[110px] text-[#050938] text-[75px] font-medium w-4/6">Did you know there are <span className="text-[#0179FF]">{last_month_searches} monthly</span> Google searches for “churches near me” in <span className="text-[#0179FF]">{loc_city}, {loc_state}</span>?</h1>
                     <h2 className="absolute left-[107px] bottom-60 text-[#292A36] text-[40px] font-regular w-4/6">How many of those seekers find your church?</h2>

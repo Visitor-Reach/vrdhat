@@ -13,6 +13,7 @@ export default function Page() {
   const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [map, setMap] = useState('')
  
   const [email, set_email] = useState('')
   
@@ -20,7 +21,7 @@ export default function Page() {
     if (submitted) {
       const timeoutId = setTimeout(() => {
         setShowAnimation(true)
-        router.push('/user_report?user_key='+email)
+        router.push("/user_report?user_key="+email+"&map_key="+map)
     }, 8000)
         
       return () => clearTimeout(timeoutId)
@@ -32,7 +33,7 @@ export default function Page() {
     return (
         <div className="pt loading flex-grow flex flex-col justify-center items-center">
             
-            <div className='relative'>
+            <div className=' '>
                 <Player
                     autoplay
                     loop
@@ -90,7 +91,7 @@ export default function Page() {
       })
      
       const data = await response.json()
-
+      setMap(data.map_index)
 
 
       setSubmitted(true)
