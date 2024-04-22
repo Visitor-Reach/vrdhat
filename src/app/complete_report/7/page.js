@@ -1,9 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import NavBar from '../components/navbar.js'
+
+import React, { useEffect, useState } from 'react'
+
 import Circularbar from '../../../app/components/Circularbar1.js'
+import Image from 'next/image'
 import Link from 'next/link.js'
+import NavBar from '../components/navbar.js'
 import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useSearchParams } from 'next/navigation'
 
@@ -37,7 +39,7 @@ export default function CompleteReportPage7() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -105,7 +107,7 @@ export default function CompleteReportPage7() {
           <Circularbar
             value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority}
             title={undefined}
-            max_value={1000}
+            max_value={750}
           />
         </div>
         <h2 className="text-[#75778B] text-[16px] font-regular relative top-20 w-5/6 m-auto text-center">

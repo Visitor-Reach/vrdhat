@@ -39,7 +39,7 @@ export default function CompleteReportPage3() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -84,7 +84,7 @@ export default function CompleteReportPage3() {
           </div>
         </div>
         <div className="col-span-4 flex flex-col justify-center justify-items-center">
-          <div className="bg-white w-5/6 h-[40vh] relative top-[6vh] rounded-3xl m-auto shadow-2xl ">
+          <div className="bg-white w-5/6 h-[40vh] relative top-[6vh] rounded-3xl m-auto shadow-2xl">
             <div className="relative m-auto w-[120px] top-10">
               <Image src={'/homepod.svg'} alt={' '} height={400} width={400} />
             </div>
@@ -108,26 +108,26 @@ export default function CompleteReportPage3() {
           </div>
         </div>
         <div className="col-span-3 flex flex-col justify-center justify-items-center">
-          <div className=" w-[25vw] h-[80vh] rounded-3xl ml-[0px] shadow-2xl relative -top-[2vh] -left-[3vw]">
-            <h1 className="relative text-[#050938] w-2/3 m-auto text-center font-bold text-[32px] justify-center justify-items-center">
+          <div className=" w-[25vw] h-[75vh] rounded-3xl ml-[0px] shadow-2xl relative top-[0vh] -left-[3vw]">
+            <h1 className="relative text-[#050938] w-2/3 m-auto text-center font-bold text-[32px] justify-center justify-items-center top-[5vh]">
               Your Digital Voice Score
             </h1>
-            <div className="relative m-auto grid justify-center mt-10">
+            <div className="relative m-auto grid justify-center top-[10vh]" style={{ zoom: 0.8 }}>
               <Circularbar value={digitalVoice} title={undefined} max_value={250} />
             </div>
-            <div className="relative m-auto grid justify-center mt-0 w-[130px]">
+            <div className="relative top-[8vh] m-auto grid justify-center mt-0 w-[110px]">
               <Image src={'/2p_church.svg'} alt={' '} height={400} width={400} />
             </div>
-            <h1 className="text-[#050938] text-[20px] font-medium relative m-auto grid justify-center mt-5">
+            <h1 className="text-[#050938] text-[20px] font-medium relative top-[7vh] m-auto grid justify-center mt-5">
               Only 2% of churches
             </h1>
-            <h2 className="text-[#75778B] text-[15px] font-regular relative m-auto grid justify-center w-4/6 mt-5">
+            <h2 className="text-[#75778B] text-[15px] font-regular relative top-[6vh] m-auto grid justify-center w-5/6 mt-5">
               are optimized for voice search. If your church’s digital presence isn’t optimized for voice search, people
               won’t be able to find and visit your church!
             </h2>
 
             <Link href={{ pathname: 'www.visitorreach.com' }}>
-              <h3 className="text-[#0179FF] text-[12px] font-regular relative m-auto grid justify-center w-4/6 mt-5 pb-10">
+              <h3 className="text-[#0179FF] text-[12px] font-regular relative top-[7vh] m-auto grid justify-center w-4/6 mt-5 pb-10">
                 Source: VisitorReach
               </h3>
             </Link>

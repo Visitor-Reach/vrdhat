@@ -1,9 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import NavBar from '../components/navbar.js'
+
+import React, { useEffect, useState } from 'react'
+
 import Circularbar from '../../../app/components/Circularbar1.js'
+import Image from 'next/image'
 import Link from 'next/link.js'
+import NavBar from '../components/navbar.js'
 import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useSearchParams } from 'next/navigation'
 
@@ -37,7 +39,7 @@ export default function CompleteReportPage8() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -106,11 +108,20 @@ export default function CompleteReportPage8() {
             </div>
           </div>
         </div>
-        <div className="col-span-7 row-span-4 relative left-14 top-10">
-          <h1 className="text-[#0179FF] text-[45px] font-medium ">The VisitorReach Process -</h1>
-          <h1 className="text-[45px] font-medium text-[#050938]">Created for Pastors, by Pastors</h1>
-          <div className="w-[60vw] relative -top-[35vh] left-[10vw]">
-            <Image src={'/footer.svg'} alt={' '} height={2000} width={2000} />
+        <div className="col-span-7 row-span-4 relative left-14 top-5">
+          <h1 className="text-[#0179FF] text-[30px] font-medium ">The VisitorReach Process -</h1>
+          <h1 className="text-[30px] font-medium text-[#050938]">Created for Pastors, by Pastors</h1>
+          <div className="w-[60vw] absolute -bottom-[40vh] left-[30vw]">
+            <Image src={'/Radial waves.svg'} alt={' '} height={2000} width={2000} />
+          </div>
+          <div className="w-[50vw] absolute top-[14vh] left-[5vw]">
+            <Image src={'/timeline.svg'} alt={' '} height={2000} width={2000} />
+          </div>
+          <div className="w-[9vw] absolute top-[14vh] -left-[3vw]">
+            <Image src={'/walking.svg'} alt={' '} height={2000} width={2000} />
+          </div>
+          <div className="w-[10vw] absolute bottom-[10vh] left-[55vw]">
+            <Image src={'/church_end.svg'} alt={' '} height={2000} width={2000} />
           </div>
         </div>
       </div>

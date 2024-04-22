@@ -109,7 +109,7 @@ const ScoreSummary = ({
         <Circularbar1
           value={digitalVoiceScore + digitalMapsScore + socialClarityScore + websiteAuthorityScore}
           title={''}
-          max_value={1000}
+          max_value={750}
         />
         <div className="pt-20 justify-center justify-items-center text-center">
           <p className="text-2xl text-slate-500 text-regular relative -top-12">

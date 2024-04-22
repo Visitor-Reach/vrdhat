@@ -44,7 +44,7 @@ export default function CompleteReportPage6() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -93,7 +93,7 @@ export default function CompleteReportPage6() {
       </div>
 
       <div className="col-span-4  rounded-3xl justify-center justify-items-center shadow-2xl h-96 w-[42vw] relative top-16 left-3">
-        <div className="relative top-8 w-[120px]  m-auto">
+        <div className="relative top-8 w-[90px]  m-auto">
           <Image src={'/authority_im.svg'} alt={' '} height={400} width={400} />
         </div>
         <h1 className="relative top-11 text-[#050938] w-2/3 left-0 text-[26px] font-medium text-center m-auto">
@@ -105,7 +105,13 @@ export default function CompleteReportPage6() {
           identifying with your mission and culture, and visiting your church.
         </h2>
 
-        <h3 className="text-[#0179FF] text-[15px] font-regular relative top-16 left-[32vw]"> Source: backlinko </h3>
+        <Link
+          href={
+            'https://backlinko.com/google-ctr-stats?_gl=1*19kkzkr*_ga*MTg2NDAxNDU1OC4xNzA5NTk3NDUx*_ga_BPNLXP3JQG*MTcxMTczNzgwMi4yLjAuMTcxMTczNzgwMi4wLjAuMjAwOTQxOTIzNg..*_ga_HYWKMHR981*MTcxMTczNzgwMi4yLjAuMTcxMTczNzgwMi42MC4wLjA.'
+          }
+        >
+          <h3 className="text-[#0179FF] text-[15px] font-regular relative top-16 left-[32vw]"> Source: backlinko </h3>
+        </Link>
       </div>
 
       <div className="col-span-2  rounded-3xl shadow-2xl h-96 right-2 relative top-16">
@@ -120,22 +126,22 @@ export default function CompleteReportPage6() {
 
       <div className="col-span-2 bg-[url('/computer_im.png')] bg-cover w-full h-[45vh]  shadow-2xl rounded-3xl relative left-2 top-3">
         <div className="relative w-full h-[45vh] bg-gradient-to-br from-[#11133F] from-10% to-white/30 rounded-3xl ">
-          <h1 className="relative top-36 text-white w-2/3 ml-10 text-[26px] font-medium">
+          <h1 className="relative top-40 text-white w-2/3 ml-10 text-[26px] font-medium">
             9 out of 10 people will visit your church website before ever visiting in-person
           </h1>
         </div>
       </div>
       <div className="col-span-4 w-[42vw] h-[45vh] shadow-2xl rounded-3xl relative left-10 top-3">
-        <div className="relative -right-72 top-5 w-[200px] m-auto">
+        <div className="relative -right-72 top-0 w-[150px] m-auto">
           <Image src={'/keywords_im.svg'} alt={' '} height={400} width={400} />
         </div>
-        <h1 className="text-[#050938] text-[28px] font-medium w-2/3 relative left-12 -top-16">
+        <h1 className="text-[#050938] text-[28px] font-medium w-2/3 relative left-12 -top-24">
           Your Church’s Domain Keywords in Organic Search
         </h1>
-        <h2 className="text-[#75778B] text-[18px] font-regular w-3/4 relative left-12 -top-10">
+        <h2 className="text-[#75778B] text-[18px] font-regular w-3/4 relative left-12 -top-16">
           The top 8 keywords or phrases your website is known for by Google and other search engines
         </h2>
-        <div className="relative -right-12 bottom-4">
+        <div className="relative -right-12 bottom-10">
           {keywords.length > 0 && (
             <div className="grid grid-cols-2 gap-4">
               <ul className="text-xl text-blue-600">
