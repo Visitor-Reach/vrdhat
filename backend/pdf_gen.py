@@ -6,101 +6,50 @@ from PIL import Image
 from pdf2image import convert_from_path
 import img2pdf
 import time
+from pyhtml2pdf import converter
+import fitz 
 
-def merge_images_to_pdf(church_name, image_files):
-    images_data = []
-    for image_file in image_files:
-        with open(image_file, 'rb') as f:
-            images_data.append(f.read())
-    
-    pdf_bytes = img2pdf.convert(images_data)
+def merge_pdf(church_name, pdf_routes):
+    url_page_count = 1
+    doc = fitz.open()  # an omitted argument causes creation of a new PDF
 
-    # Save the PDF to the specified output filename
-    with open("reports/" + church_name.replace(" ", "_") + ".pdf", 'wb') as f:
-        f.write(pdf_bytes)
+    # Now loop through names of input files to insert each.
+    for filename in pdf_routes:
+        doc.insert_file(r"reports\\" + filename)  # appends it to the epdf
+        if url_page_count == 1:
+            doc.load_page(0)
+        url_page_count+=1
+    # At this point, we have a PDF that contains all input files.
+    # We save it to disk, giving it a desired file name.
+    doc.save(f"reports\\{church_name}.pdf")
+    doc.close()
 
 
 def generate(church_name, email):
-    print("333333333")
-    try:
-        # Launch a new browser instance with Selenium
-        service = Service(ChromeDriverManager().install())
-        options = webdriver.ChromeOptions()
-        options.add_argument("--window-size=1920,945")
-        options.add_argument("--hide-scrollbars")
-        #options.add_argument("--headless=new")
-        #o  ptions.add_argument("--force-device-scale-factor=1.5")
-        driver = webdriver.Chrome(service=service, options=options)
+    dirs = [1, 1, 2, 3, 4, 6, 7, 8, 9]
+    church_name = church_name.lower().replace(" ", "_")
+    path = r"reports\\" + church_name
+    print("****", church_name)
+    for dir in dirs:
+        if not os.path.exists(path): 
+            os.makedirs(path)
+        email_reform = email
+        converter.convert(f'http://localhost:3000/complete_report/{str(dir)}?user_key={email_reform}', path + "\\page" + str(dir) + ".pdf", print_options={"printBackground": True,
+                                                                                                                              "paperHeight" : 5.4,
+                                                                                                                              "paperWidth" : 11,
+                                                                                                                              "scale" : 0.5})
+    # Create a list of image file paths
+    pdf_pages = [
+        f"{church_name}\\page1.pdf",
+        f"{church_name}\\page2.pdf",
+        f"{church_name}\\page3.pdf",
+        f"{church_name}\\page4.pdf",
+        f"{church_name}\\page6.pdf",
+        f"{church_name}\\page7.pdf",
+        f"{church_name}\\page8.pdf",
+        f"{church_name}\\page9.pdf",
+    ]                                                                                                                       
+    merge_pdf(church_name, pdf_pages)
         
-        driver.maximize_window()
-        print(church_name)
-        church_name = church_name
-        folder_name = f"reports/{church_name}"
-
-        if not os.path.exists(folder_name):
-            os.makedirs(folder_name)
-        driver.implicitly_wait(120)
-        # Render the /complete_report page server-side
-        driver.get("http://localhost:3000/complete_report/1?user_key="+email)
-        time.sleep(60)
-        driver.implicitly_wait(120)
-        driver.save_screenshot(f"{folder_name}\\cr_page1.png")
  
-        driver.get("http://localhost:3000/complete_report/2?user_key="+email)
-        time.sleep(60)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page2.png")
- 
-        driver.get("http://localhost:3000/complete_report/3?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page3.png")
- 
-        driver.get("http://localhost:3000/complete_report/4?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page4.png")
- 
-        driver.get("http://localhost:3000/complete_report/6?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page6.png")
- 
-        driver.get("http://localhost:3000/complete_report/7?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page7.png")
- 
-        driver.get("http://localhost:3000/complete_report/8?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page8.png")
- 
-        driver.get("http://localhost:3000/complete_report/9?user_key="+email)
-        driver.implicitly_wait(5)
-        driver.save_screenshot(f"{folder_name}\\cr_page9.png")
- 
-        driver.quit()
- 
-        # Create a list of image file paths
-        image_files = [
-            f"{folder_name}\\cr_page1.png",
-            f"{folder_name}\\cr_page2.png",
-            f"{folder_name}\\cr_page3.png",
-            f"{folder_name}\\cr_page4.png",
-            f"{folder_name}\\cr_page6.png",
-            f"{folder_name}\\cr_page7.png",
-            f"{folder_name}\\cr_page8.png",
-            f"{folder_name}\\cr_page9.png",
-        ]
- 
-        # Merge images to PDF
-        pdf_file = merge_images_to_pdf(church_name, image_files)
-        if pdf_file is not None:
-            print("PDF report generated successfully")
-        else:
-            print("The PDF was empty")
-        return pdf_file
-
- 
-        
-    except Exception as e:
-        print(f"Error generating PDF: {e}")
-        return None
-        
  

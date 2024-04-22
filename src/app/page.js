@@ -9,7 +9,7 @@ import { useRef, useState } from 'react';
 export default function Home() {
   const ref = useRef();
   return (
-    <div className="h-[100vh]" >
+    <div className="h-[100vh] bg-gradient-to-br from-sky-200 from-5% via-white to-white" >
       <div className = "relative left-[-700px] top-16 w-[320px]">
           <Image
           src={"Logo.svg"}

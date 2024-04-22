@@ -6,9 +6,11 @@ import Circularbar from "../../../app/components/Circularbar1.js";
 import Link from 'next/link.js';
 import Summary from "../../../app/components/ScoreSummarySimple.js"
 import { useSearchParams } from 'next/navigation'
-
+import Pdf from 'react-to-pdf';
+import { useRef } from 'react';
 
 export default function CompleteReportPage6() {
+    const ref = useRef();
     const timeElapsed = Date.now();
     const today = new Date(timeElapsed);
     const [isLoading, setIsLoading] = useState(true);
@@ -74,9 +76,11 @@ export default function CompleteReportPage6() {
       }, []);
 
     return (
-        <div className="">
 
-            <div id="cr_page6" className="relative w-full h-[100vh] grid grid-cols-9 grid-rows-2 justify-center bg-white" >
+        
+
+
+            <div id="cr_page6" className="relative w-full h-[100vh] grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden" >
                 <div className="absolute left-[40px] top-[77px] w-[200px] ">
                     <Image
                         src={"/full_report_logo.svg"}
@@ -164,12 +168,9 @@ export default function CompleteReportPage6() {
                     
                 </div>
 
-                <div className=''>
-
-                </div>
-                
+            
             </div>
            
-        </div>
+
     )
 }

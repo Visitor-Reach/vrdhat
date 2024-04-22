@@ -1,12 +1,13 @@
 "use client"
-import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
 import React, { useState, useEffect } from 'react';
 import Image from "next/image";
-import NavBar from "./components/navbar.js"
+import NavBar from "../complete_report/components/navbar.js"
 import Circularbar from "../../app/components/Circularbar1.js";
 import Link from 'next/link.js';
 import Summary from "../../app/components/ScoreSummarySimple.js"
 import { useSearchParams } from 'next/navigation'
+import "bootstrap/dist/css/bootstrap.min.css"; // Import bootstrap CSS
+
 
 export default function CompleteReport() {
     const timeElapsed = Date.now();
@@ -28,6 +29,7 @@ export default function CompleteReport() {
     const [loc_address, setLoc_address] = useState("");
     const [loc_state, setLoc_state] = useState("");
     const [webpage, setWebpage] = useState("");
+    const [keywords, setKeywords] = useState("");
 
     const searchParams = useSearchParams()
     const user_key = searchParams.get('user_key')
@@ -45,7 +47,6 @@ export default function CompleteReport() {
             })
             
             const data = await response.json()
-      
             set_church_name(data.church_name);
             setDigitalVoice(data.digitalVoice);
             setAppleMaps(data.appleMaps);
@@ -62,6 +63,7 @@ export default function CompleteReport() {
             setLoc_zipcode(data.loc_zipcodesetLoc_ziploc_zipcode);
             setLoc_state(data.loc_state);
             setWebpage(data.website);
+            setKeywords(data.keywords.split(","));
             console.log('Sucess fetching data: ', data)
           } catch (error) {
             console.error('Error fetching data:', error);
@@ -486,6 +488,22 @@ export default function CompleteReport() {
                     </div>
                     <h1 className='text-[#050938] text-xl sm:text-2xl md:text-3xl font-medium w-2/3 relative m-auto -top-16'>Your Church's Domain Keywords in Organic Search</h1>
                     <h2 className='text-[#75778B] text-sm sm:text-base md:text-lg font-regular w-3/4 relative m-auto -top-10' >The top 8 keywords or phrases your website is known for by Google and other search engines</h2>
+                    <div className='relative -right-12'>
+                        {keywords.length > 0 && (
+                            <div className="grid grid-cols-2 gap-4">
+                                <ul className='text-xl text-blue-600'>
+                                {keywords.slice(0, Math.floor(keywords.length / 2)).map((keyword) => (
+                                    <li key={keyword}>{keyword}</li>
+                                ))}
+                                </ul>
+                                <ul className='text-xl text-blue-600'>
+                                {keywords.slice(Math.floor(keywords.length / 2)).map((keyword) => (
+                                    <li key={keyword}>{keyword}</li>
+                                ))}
+                                </ul>
+                            </div>
+                        )}
+                    </div>
                 </div>
                
             </div>

@@ -87,16 +87,7 @@ export default function CompleteReportPage9() {
                     <div className='w-4/6 relative top-40 left-32'>
                         <h1 className = "lg:text-[60px] md:text-[60px] sm:text-[30px] text-[#050938] font-medium relative block">Grow Your <a className = "text-[#0179FF]">Church</a> with VisitorReach</h1>
 
-                        <p className="2xl:text-[35px] xl:text-2xl md:text-[20px] sm:text-[20px] text-[#75778B] relative top-20">
-                                    
-                            To learn more about VisitorReach, 
-                            <span className="text-[#0179FF] "> 
-                                <Link href = {{pathname:"https://connect.visitorreach.com/digital-health-follow-up"}}>    
-                                    schedule<br />a quick 15 minute call
-                                </Link > 
-                                
-                            </span>  with our team today.
-                        </p>
+                        <p className="2xl:text-[35px] xl:text-2xl md:text-[20px] sm:text-[20px] text-[#75778B] relative top-20 w-full"> To learn more about VisitorReach, <span className="text-[#0179FF] mt-5">  <Link href = {{pathname:"https://connect.visitorreach.com/digital-health-follow-up"}}> schedule a quick 15 minute call</Link > </span>  with our team today.</p>
                     </div>
                     <div className="relative 2xl:top-[300px] 2xl:left-32 w-[200px] xl:top-[30vh] xl:left-[20vw]">
                         <Image
@@ -110,7 +101,7 @@ export default function CompleteReportPage9() {
                 </div>
                 <div className='relative w-full h-full'>
                     
-                    <div className="relative 2xl:left-[25vw] 2xl:-top-[0vh] 2xl:w-[40vw] 2xl:visible xl:visible md:hidden ">
+                    <div className="absolute 2xl:left-[30vw] 2xl:-top-[0vh] 2xl:w-[18vw] 2xl:visible xl:visible ">
                         <Image
                             src={"/guzman.svg"}
                             alt={" "}
@@ -118,7 +109,7 @@ export default function CompleteReportPage9() {
                             width={600}
                         />
                     </div>
-                    <div className="relative 2xl:visible 2xl:-right-[0vw] 2xl:bottom-[0vh] 2xl:w-[20vw] xl:w-[30vw] xl:top-[40vh]  xl:right-[0vw]  md:w-[10vw]">
+                    <div className="absolute 2xl:visible 2xl:left-[10vw] 2xl:bottom-[0vh] 2xl:w-[18vw] xl:w-[30vw] xl:top-[40vh]  xl:right-[0vw]  md:w-[10vw]">
                         <Image
                             src={"/app_messages.svg"}
                             alt={" "}

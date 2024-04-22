@@ -77,7 +77,7 @@ def send_email(church_obj):
  
     msg = Message(
             "Check your Digital Health Assessment report for your church: " + church_obj.name,
-            sender ='jrivero.jesus@gmail.com',
+            sender ='digitalhealth@visitorreach.com',
             recipients = [church_obj.email]
             )
     pdf_gen.generate(church_obj.name)

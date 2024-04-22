@@ -72,9 +72,9 @@ export default function CompleteReportPage7() {
       }, []);
 
     return (
-        <div className="">
+
             
-            <div id="cr_page7" className='relative w-full h-[100vh] grid grid-cols-9 grid-rows-2 justify-center bg-white'>
+            <div id="cr_page7" className='relative w-full h-[100vh] grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden'>
                 <div className="absolute left-[40px] top-[77px] w-[200px] ">
                     <Image
                         src={"/full_report_logo.svg"}
@@ -133,7 +133,5 @@ export default function CompleteReportPage7() {
                 </div>
             </div>
 
-           
-        </div>
     )
 }

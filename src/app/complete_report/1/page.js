@@ -71,8 +71,8 @@ export default function CompleteReportPage1() {
       }, []);
 
     return (
-        <div className="">
-            <div id="cr_page1" className="relative w-full h-[100vh] bg-white">
+
+            <div id="cr_page1" className="relative w-full h-[100vh] bg-white overflow-hidden">
                 <div className="">
                     <div className="absolute left-[71px] top-[93px]">
                         <Image
@@ -120,6 +120,6 @@ export default function CompleteReportPage1() {
                 </div>
             </div>
            
-        </div>
+
     )
 }
