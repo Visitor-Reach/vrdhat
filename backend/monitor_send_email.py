@@ -38,7 +38,7 @@ def close_connection(cur, connection):
 def retrieve_email_missing_pdf():
     cur, connection = init_connection()
     cur.execute(f""" 
-                    SELECT email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1 
+                    SELECT email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1 AND pdf_sent = 999 
                 """)
     try:
         results = cur.fetchall()
