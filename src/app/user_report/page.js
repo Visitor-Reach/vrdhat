@@ -95,11 +95,13 @@ export default function SimpleResult() {
           <div className="m-auto mb-20  text-center  pt-10  w-full">
             <p className="text-xl text-vr-body-color font-medium block">
               Did you know there are{' '}
-              <a className="text-xl text-vr-title-second font-medium block">{last_month_searches} monthly </a>
-              Google searches for "churches near me" in{' '}
-              <a className="text-xl text-vr-title-second font-medium block">
-                {loc_city} , {loc_state} ?
+              <a className="text-xl text-vr-title-second font-medium">{last_month_searches} monthly </a>
+              Google searches for <br />
+              &#x201C;churches near me&#x201D; in{' '}
+              <a className="text-xl text-vr-title-second font-medium">
+                {loc_city} , {loc_state}
               </a>
+              ?
             </p>
           </div>
 
