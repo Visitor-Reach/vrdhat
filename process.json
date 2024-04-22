@@ -1,0 +1,31 @@
+{
+  "apps": [
+    {
+      "name": "backend-service",
+      "cwd": "./backend",
+      "script": "back.py",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "email-service",
+      "cwd": "./backend",
+      "script": "monitor_send_email.py",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    },
+    {
+      "name": "web-app",
+      "script": "npm",
+      "args": "start",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
