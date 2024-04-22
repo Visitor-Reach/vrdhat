@@ -1,13 +1,15 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import NavBar from '../components/navbar.js'
+
+import React, { useEffect, useState } from 'react'
+
 import Circularbar from '../../../app/components/Circularbar1.js'
+import Image from 'next/image'
 import Link from 'next/link.js'
-import Summary from '../../../app/components/ScoreSummarySimple.js'
-import { useSearchParams } from 'next/navigation'
+import NavBar from '../components/navbar.js'
 import Pdf from 'react-to-pdf'
+import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useRef } from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function CompleteReportPage6() {
   const ref = useRef()
@@ -34,6 +36,7 @@ export default function CompleteReportPage6() {
 
   const searchParams = useSearchParams()
   const user_key = searchParams.get('user_key')
+  const map = searchParams.get('map_key')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,7 +44,7 @@ export default function CompleteReportPage6() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -85,7 +88,7 @@ export default function CompleteReportPage6() {
       </div>
       <div className="relative col-span-2 row-span-2 ">
         <div style={{ zoom: 0.8 }}>
-          <NavBar></NavBar>
+          <NavBar user_key={user_key} map={map}></NavBar>
         </div>
       </div>
 

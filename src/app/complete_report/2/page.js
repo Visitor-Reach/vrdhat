@@ -1,9 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import NavBar from '../components/navbar.js'
+
+import React, { useEffect, useState } from 'react'
+
 import Circularbar from '../../../app/components/Circularbar1.js'
+import Image from 'next/image'
 import Link from 'next/link.js'
+import NavBar from '../components/navbar.js'
 import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useSearchParams } from 'next/navigation'
 
@@ -30,14 +32,15 @@ export default function CompleteReportPage2() {
 
   const searchParams = useSearchParams()
   const user_key = searchParams.get('user_key')
-
+  const map = searchParams.get('map_key')
+  console.log(`/map_background_report/map_back_${map}.png`)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -72,7 +75,10 @@ export default function CompleteReportPage2() {
 
   return (
     <div className="">
-      <div id="cr_page2" className="relative w-full h-[100vh] bg-[url('/img-bg-page1.png')] bg-cover">
+      <div
+        id="cr_page2"
+        className={`relative w-full h-[100vh] bg-[url('/map_background_report/map_back_${map}.png')] bg-cover`}
+      >
         <div className="relative w-full h-[100vh] bg-gradient-to-br from-white from-10% to-white/30">
           <h1 className="absolute left-[107px] top-[110px] text-[#050938] text-[75px] font-medium w-4/6">
             Did you know there are <span className="text-[#0179FF]">{last_month_searches} monthly</span> Google searches

@@ -16,6 +16,7 @@ export default function Page() {
   const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [map, setMap] = useState('')
 
   const [email, set_email] = useState('')
 
@@ -23,7 +24,7 @@ export default function Page() {
     if (submitted) {
       const timeoutId = setTimeout(() => {
         setShowAnimation(true)
-        router.push('/user_report?user_key=' + email)
+        router.push('/user_report?user_key=' + email + '&map_key=' + map)
       }, 8000)
 
       return () => clearTimeout(timeoutId)
@@ -33,7 +34,7 @@ export default function Page() {
   const LoadingAnimation = () => {
     return (
       <div className="pt loading flex-grow flex flex-col justify-center items-center">
-        <div className="relative">
+        <div className=" ">
           <Player autoplay loop src="/Message Loading 1.json" style={{ width: '800px', height: '800px' }}>
             <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
           </Player>
@@ -51,7 +52,7 @@ export default function Page() {
 
       /* const formData = new FormData(event.currentTarget)
  
-       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
+       const response = await fetch('http://localhost:8080/submit-form', {
         method: 'POST',
         body: formData,
       })
@@ -79,13 +80,14 @@ export default function Page() {
       })
       set_email(event.target.elements.email.value)
       console.log(churchInfo)
-      const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
+      const response = await fetch('http://localhost:8080/submit-form', {
         method: 'POST',
         body: churchInfo,
         headers: myHeaders,
       })
 
       const data = await response.json()
+      setMap(data.map_index)
 
       setSubmitted(true)
     } catch (error) {

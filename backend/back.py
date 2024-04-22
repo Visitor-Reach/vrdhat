@@ -147,8 +147,10 @@ def handle_form_submission():
     if map_index is not None:
         church_obj.get_map_image(map_index)
         print("Map index: ", map_index)
-    print("New user created")
-    return jsonify({'message': 'Form submission received'}), 200
+        print("New user created")
+        return jsonify({'map_index': f'{map_index}'})
+    else:
+        pass
     # except Exception as e:
     #     exc_type, exc_obj, exc_tb = sys.exc_info()
     #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
