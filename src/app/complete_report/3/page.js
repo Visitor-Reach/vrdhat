@@ -90,7 +90,7 @@ export default function CompleteReportPage3() {
                     
                 </div>
                 <div className='col-span-4 flex flex-col justify-center justify-items-center'>
-                    <div className="bg-white w-5/6 h-3/6 rounded-3xl m-auto shadow-2xl">
+                    <div className="bg-white w-5/6 h-[40vh] relative top-[6vh] rounded-3xl m-auto shadow-2xl ">
                         <div className="relative m-auto w-[120px] top-10">
                             <Image
                                 src={"/homepod.svg"}
@@ -104,16 +104,19 @@ export default function CompleteReportPage3() {
                             Voice technology allows people to perform a hands-free search by asking questions to their smart devices such as smartphones, smart speakers, and in-car systems. Your church’s Digital Voice Score shows how optimized your digital presence is when it comes to showing up in voice search results.
                         </h2>
                     </div>
-                    <div className="bg-white w-5/6 h-2/6 rounded-3xl m-auto shadow-2xl bg-[url('/woman-background.png')] bg-cover">
-                        <h1 className='relative text-white w-2/3 ml-10 text-[80px]'>57%</h1>
-                        <h2 className='relative text-white w-2/3 ml-10 text-[20px]'>of American adults use voice assistants on their devices to find out information on a daily basis.</h2>
-                        <h3 className='relative text-white w-2/3 ml-10 mt-10 text-[14px]'>Source: NPR</h3>
+                    <div className="bg-white w-5/6 h-[34vh] rounded-3xl m-auto shadow-2xl bg-[url('/woman-background.png')] bg-cover relative bottom-[6vh]">
+                        <div className='bg-gradient-to-br from-[#11133F] from-10% to-white/30 h-[34vh] rounded-3xl'>
+                                <h1 className='relative text-white w-2/3 ml-10 text-[80px]'>57%</h1>
+                                <h2 className='relative text-white w-2/3 ml-10 text-[20px]'>of American adults use voice assistants on their devices to find out information on a daily basis.</h2>
+                                <h3 className='relative text-white w-2/3 ml-10 mt-10 text-[14px]'>Source: NPR</h3>
+                        </div>
+                        
                     </div>
 
                     
                 </div>
                 <div className='col-span-3 flex flex-col justify-center justify-items-center'>
-                    <div className="bg-white w-5/6 h-11/12 rounded-3xl ml-[0px] shadow-2xl">
+                    <div className=" w-[25vw] h-[80vh] rounded-3xl ml-[0px] shadow-2xl relative -top-[2vh] -left-[3vw]">
                         <h1 className='relative text-[#050938] w-2/3 m-auto text-center font-bold text-[32px] justify-center justify-items-center'>Your Digital Voice Score</h1>
                         <div className='relative m-auto grid justify-center mt-10'>
                             <Circularbar value={digitalVoice} title={undefined} max_value={250}/>

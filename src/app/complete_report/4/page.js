@@ -91,20 +91,20 @@ export default function CompleteReportPage4() {
                     
                 </div>
                 <div className="relative col-span-2">
-                    <div className="w-full h-full bg-[url('/Bounds.png')] bg-cover">
-                        <h1 className='relative top-48 text-white w-2/3 ml-10 text-[26px] font-medium'>
+                    <div className="w-[16vw] h-[40vh]  bg-[url('/Bounds.png')] bg-cover border-2 rounded-3xl relative top-[10vh] left-[5vw]">
+                        <h1 className='relative top-[10vh] text-white w-2/3 ml-10 text-[26px] font-medium'>
                             People in the U.S. search for “churches near me” over <a className='text-[#0179FF]'>1 million </a>times each month
                         </h1>
                     </div>
                 </div>
                 <div className="relative  col-span-2 ">
-                    <div className="w-full h-full bg-[url('/sample_map.png')] bg-cover rounded-3xl shadow-2xl">
-                        <h1 className='relative top-14 text-[#050938] w-2/3 ml-10 text-[26px] font-medium'>
+                    <div className="w-[18vw] h-[40vh] bg-[url('/sample_map.png')] bg-cover rounded-3xl shadow-2xl relative top-[10vh]">
+                        <h1 className='relative  top-[10vh] text-[#050938] w-2/3 ml-10 text-[26px] font-medium'>
                             Nearly <a className='text-[#0179FF]'>2 billion </a>people use Google Maps every month
                         </h1>
                     </div>
                 </div>
-                <div className="relative col-span-2 h-full w-11/12  rounded-3xl shadow-2xl">
+                <div className="relative col-span-2 h-[40vh] w-11/12  rounded-3xl shadow-2xl top-[10vh] -left-[3vw]">
                     <div className='flex'>
                         <div className="relative top-10 left-5 w-[40px]">
                             <Image
@@ -124,8 +124,8 @@ export default function CompleteReportPage4() {
                 </div>
                 <div className="relative ">
                 </div>
-                <div className="relative col-span-4 justify-center justify-items-center shadow-2xl rounded-3xl">
-                    <div className="relative top-5 w-[180px] m-auto">
+                <div className="relative col-span-4 justify-center justify-items-center shadow-2xl rounded-3xl w-[35vw] left-[5vw] top-[3vh] h-[40vh]">
+                    <div className="relative top-5 w-[120px] m-auto">
                         <Image
                             src={"/pin_map.svg"}
                             alt={" "}
@@ -133,24 +133,24 @@ export default function CompleteReportPage4() {
                             width={400}
                         />
                     </div>
-                    <h1 className='relative top-14 text-[#050938] w-2/3 left-0 text-[28px] font-medium text-center m-auto'>
+                    <h1 className='relative top-14 text-[#050938] w-2/3 left-0 text-[22px] font-medium text-center m-auto'>
                         What is your <a className='text-[#0179FF]'>Digital Maps </a>Score & Why it’s Important
                     </h1>
-                    <h2 className='relative top-14 text-[#75778B] w-2/3 left-0 text-[18px] font-medium text-center m-auto'>
+                    <h2 className='relative top-16 text-[#75778B] w-2/3 left-0 text-[14px] font-medium text-center m-auto'>
                         From where we eat to where we visit, digital maps are more important in our lives than ever before. The Digital Maps Score reflects how likely your church is to show up on these digital navigation apps when someone searches for “churches near me,” If your church information isn’t listed correctly, they won’t find you.
                     </h2>
                 </div>
-                <div className="relative col-span-2 h-full w-11/12  rounded-3xl shadow-2xl">
+                <div className="relative col-span-2 h-[40vh] -left-[3vw] top-[3vh] w-11/12  rounded-3xl shadow-2xl">
                     <div className='flex'>
-                        <div className="relative top-10 left-5 w-[40px]">
+                        <div className="relative top-10 left-5 w-[45px]">
                             <Image
-                                src={"/google_maps.svg"}
+                                src={"/apple_mps.svg"}
                                 alt={" "}
                                 height={400}
                                 width={400}
                             />
                         </div>
-                        <h1 className='relative top-8 left-12 text-[20px] font-medium text-[#050938] w-3/6'>
+                        <h1 className='relative top-8 left-14 text-[20px] font-medium text-[#050938] w-3/6'>
                             Your Apple Maps Search Score
                         </h1>
                     </div>

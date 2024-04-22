@@ -119,7 +119,7 @@ export default function CompleteReportPage8() {
                         The VisitorReach Process - 
                     </h1>
                     <h1 className='text-[45px] font-medium text-[#050938]'>Created for Pastors, by Pastors</h1>
-                    <div className="w-[1200px] relative -top-80 -left-24">
+                    <div className="w-[60vw] relative -top-[35vh] left-[10vw]">
                             <Image
                                 src={"/footer.svg"}
                                 alt={" "}

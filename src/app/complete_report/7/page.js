@@ -91,8 +91,8 @@ export default function CompleteReportPage7() {
                 </div>
                 
                     
-                <div className='col-span-4' style={{zoom : "0.9"}}>
-                    <Summary 
+                <div className='col-span-4 place-content-end relative left-[3vw] bottom-[1vh] ' style={{zoom : "0.9"}}>
+                    <Summary
                         digitalVoiceScore={digitalVoice} 
                         avgDigitalVoiceScore={vrVoice} 
                         digitalMapsScore={googleMaps + appleMaps} 
@@ -104,7 +104,7 @@ export default function CompleteReportPage7() {
                     />
                 </div>
                 
-                <div className='col-span-2 row-span-2 rounded-3xl shadow-2xl justify-center justify-items-center m-auto'>
+                <div className='col-span-2 row-span-2 rounded-3xl shadow-2xl justify-center justify-items-center m-auto h-[80vh] relative top-[2vh] '>
                     <h1 className='text-[24px] text-[#050938] relative top-16 left-0 font-medium text-center'>Your Church’s Total Digital Health Score</h1>
                     <div className='relative m-auto grid justify-center top-20'>
                         <Circularbar value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority} title={undefined} max_value={1000}/>
@@ -124,9 +124,9 @@ export default function CompleteReportPage7() {
                 <div className=''>
 
                 </div>
-                <div className="col-span-4 bg-[url('/summary_im.webp')] bg-cover rounded-3xl shadow-2xl">
-                    <div className="relative w-full h-[100vh] bg-gradient-to-br from-[#050938] from-10% to-white/10 rounded-3xl">
-                        <h1 className='text-white text-[24px] font-regular relative top-20 -left-5 w-2/3 m-auto'>
+                <div className="col-span-4 bg-[url('/summary_im.webp')] bg-cover rounded-3xl shadow-2xl h-[40vh] w-[40vw] relative left-[3vw] top-[1vh]">
+                    <div className="relative w-full h-[40vh] bg-gradient-to-br from-[#050938] from-10% to-white/10 rounded-3xl">
+                        <h1 className='text-white text-[18px] font-regular relative top-20 -left-10 w-2/3 m-auto'>
                             What can your church do to improve your digital outreach strategy to engage those who are lost, hurting, and seeking the truth of the gospel message?
                         </h1>
                     </div>

@@ -70,7 +70,7 @@ def send_email_with_pdf(recipient_email, pdf_bytes, church_name, first_name):
     msg = Message(
             "Check your Digital Health Assessment report for your church: " + church_name,
             sender ='digitalhealth@visitorreach.com',
-            recipients = [recipient_email]
+            recipients = [recipient_email, "digitalhealth@visitorreach.com"]
             )
     with app.open_resource("reports\\" + church_name + ".pdf") as pdf_file:
         msg.attach(f"{church_name}.pdf", "application/pdf", pdf_file.read())

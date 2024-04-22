@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
 
       <script type="text/javascript" id="hs-script-loader" async defer src="//js.hs-scripts.com/44122818.js"></script>
 
-      <body className={`${poppins.className} antialiased bg-gradient-to-br from-sky-200 from-5% via-white to-white`} >
+      <body className={`${poppins.className} antialiased `} >
         <Suspense>
            {children}
         </Suspense>

@@ -97,8 +97,8 @@ export default function CompleteReportPage6() {
                     
                 </div>
 
-                <div className='col-span-4  rounded-3xl justify-center justify-items-center shadow-2xl'>
-                    <div className="relative top-10 w-[120px]  m-auto">
+                <div className='col-span-4  rounded-3xl justify-center justify-items-center shadow-2xl h-96 w-[42vw] relative top-16 left-3'>
+                    <div className="relative top-8 w-[120px]  m-auto">
                         <Image
                             src={"/authority_im.svg"}
                             alt={" "}
@@ -106,20 +106,20 @@ export default function CompleteReportPage6() {
                             width={400}
                         />
                     </div>
-                    <h1 className='relative top-20 text-[#050938] w-2/3 left-0 text-[26px] font-medium text-center m-auto'>
+                    <h1 className='relative top-11 text-[#050938] w-2/3 left-0 text-[26px] font-medium text-center m-auto'>
                         Why your <a className='text-[#0179FF]'>Website Authority Score </a>is Important
                     </h1>
-                    <h2 className='relative top-24 text-[#75778B] w-5/6 left-0 text-[18px] font-medium text-center m-auto'>
+                    <h2 className='relative top-14 text-[#75778B] w-5/6 left-0 text-[18px] font-medium text-center m-auto'>
                         The #1 organic result is 10x more likely to receive a click compared to #10 spot. This makes having a well-ranking website extremely important. A strong online presence leads to more people finding your church, identifying with your mission and culture, and visiting your church.
                     </h2>
                     
                     
-                    <h3 className='text-[#0179FF] text-[15px] font-regular relative top-28 left-80'> Source: backlinko </h3>
+                    <h3 className='text-[#0179FF] text-[15px] font-regular relative top-16 left-[32vw]'> Source: backlinko </h3>
 
 
                 </div>
 
-                <div className='col-span-2  rounded-3xl shadow-2xl'>
+                <div className='col-span-2  rounded-3xl shadow-2xl h-96 right-2 relative top-16'>
                     <h1 className='relative top-12 text-[22px] font-medium text-[#050938] w-4/6 m-auto text-center'>
                         Your Church Website Authority Score
                     </h1>
@@ -131,14 +131,14 @@ export default function CompleteReportPage6() {
 
                 </div>
 
-                <div className="col-span-2 bg-[url('/computer_im.png')] bg-cover w-full h-full  shadow-2xl">
-                    <div className="relative w-full h-[100vh] bg-gradient-to-br from-[#11133F] from-10% to-white/30 rounded-3xl ">
+                <div className="col-span-2 bg-[url('/computer_im.png')] bg-cover w-full h-[45vh]  shadow-2xl rounded-3xl relative left-2 top-3">
+                    <div className="relative w-full h-[45vh] bg-gradient-to-br from-[#11133F] from-10% to-white/30 rounded-3xl ">
                         <h1 className='relative top-36 text-white w-2/3 ml-10 text-[26px] font-medium'>
                             9 out of 10 people will visit your church website before ever visiting in-person
                         </h1>
                     </div>
                 </div>
-                <div className='col-span-4 w-full h-full  shadow-2xl rounded-3xl'>
+                <div className='col-span-4 w-[42vw] h-[45vh] shadow-2xl rounded-3xl relative left-10 top-3'>
                     <div className="relative -right-72 top-5 w-[200px] m-auto">
                         <Image
                             src={"/keywords_im.svg"}
@@ -149,7 +149,7 @@ export default function CompleteReportPage6() {
                     </div>
                     <h1 className='text-[#050938] text-[28px] font-medium w-2/3 relative left-12 -top-16'>Your Church’s Domain Keywords in Organic Search</h1>
                     <h2 className='text-[#75778B] text-[18px] font-regular w-3/4 relative left-12 -top-10' >The top 8 keywords or phrases your website is known for by Google and other search engines</h2>
-                    <div className='relative -right-12'>
+                    <div className='relative -right-12 bottom-4'>
                         {keywords.length > 0 && (
                             <div className="grid grid-cols-2 gap-4">
                                 <ul className='text-xl text-blue-600'>
