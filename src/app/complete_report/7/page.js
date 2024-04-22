@@ -107,7 +107,7 @@ export default function CompleteReportPage7() {
                 <div className='col-span-2 row-span-2 rounded-3xl shadow-2xl justify-center justify-items-center m-auto h-[80vh] relative top-[2vh] '>
                     <h1 className='text-[24px] text-[#050938] relative top-16 left-0 font-medium text-center'>Your Church’s Total Digital Health Score</h1>
                     <div className='relative m-auto grid justify-center top-20'>
-                        <Circularbar value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority} title={undefined} max_value={1000}/>
+                        <Circularbar value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority} title={undefined} max_value={750}/>
                     </div>
                     <h2 className='text-[#75778B] text-[16px] font-regular relative top-20 w-5/6 m-auto text-center'>If you’re surprised by your digital health score, you are not alone. Most churches are in the same boat.</h2>
                     <div className="relative top-24 w-[200px] m-auto">

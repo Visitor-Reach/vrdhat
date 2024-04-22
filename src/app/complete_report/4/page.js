@@ -124,7 +124,7 @@ export default function CompleteReportPage4() {
                 </div>
                 <div className="relative ">
                 </div>
-                <div className="relative col-span-4 justify-center justify-items-center shadow-2xl rounded-3xl w-[35vw] left-[5vw] top-[3vh] h-[40vh]">
+                <div className="relative col-span-4 justify-center justify-items-center shadow-2xl rounded-3xl w-[35vw] left-[5vw] top-[1vh] h-[40vh]">
                     <div className="relative top-5 w-[120px] m-auto">
                         <Image
                             src={"/pin_map.svg"}
@@ -133,10 +133,10 @@ export default function CompleteReportPage4() {
                             width={400}
                         />
                     </div>
-                    <h1 className='relative top-14 text-[#050938] w-2/3 left-0 text-[22px] font-medium text-center m-auto'>
+                    <h1 className='relative top-6 text-[#050938] w-2/3 left-0 text-[22px] font-medium text-center m-auto'>
                         What is your <a className='text-[#0179FF]'>Digital Maps </a>Score & Why it’s Important
                     </h1>
-                    <h2 className='relative top-16 text-[#75778B] w-2/3 left-0 text-[14px] font-medium text-center m-auto'>
+                    <h2 className='relative top-12 text-[#75778B] w-11/12 left-0 text-[14px] font-medium text-center m-auto'>
                         From where we eat to where we visit, digital maps are more important in our lives than ever before. The Digital Maps Score reflects how likely your church is to show up on these digital navigation apps when someone searches for “churches near me,” If your church information isn’t listed correctly, they won’t find you.
                     </h2>
                 </div>

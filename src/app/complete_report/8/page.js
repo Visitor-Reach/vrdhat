@@ -114,19 +114,44 @@ export default function CompleteReportPage8() {
                         </div>
                     </div>
                 </div>
-                <div className='col-span-7 row-span-4 relative left-14 top-10'>
-                    <h1 className='text-[#0179FF] text-[45px] font-medium '>
+                <div className='col-span-7 row-span-4 relative left-14 top-5'>
+                    <h1 className='text-[#0179FF] text-[30px] font-medium '>
                         The VisitorReach Process - 
                     </h1>
-                    <h1 className='text-[45px] font-medium text-[#050938]'>Created for Pastors, by Pastors</h1>
-                    <div className="w-[60vw] relative -top-[35vh] left-[10vw]">
+                    <h1 className='text-[30px] font-medium text-[#050938]'>Created for Pastors, by Pastors</h1>
+                    <div className="w-[60vw] absolute -bottom-[40vh] left-[30vw]">
                             <Image
-                                src={"/footer.svg"}
+                                src={"/Radial waves.svg"}
                                 alt={" "}
                                 height={2000}    
                                 width={2000}
                             />
-                        </div>
+                    </div>
+                    <div className="w-[50vw] absolute top-[14vh] left-[5vw]">
+                            <Image
+                                src={"/timeline.svg"}
+                                alt={" "}
+                                height={2000}    
+                                width={2000}
+                            />
+                    </div>
+                    <div className="w-[9vw] absolute top-[14vh] -left-[3vw]">
+                            <Image
+                                src={"/walking.svg"}
+                                alt={" "}
+                                height={2000}    
+                                width={2000}
+                            />
+                    </div>
+                    <div className="w-[10vw] absolute bottom-[10vh] left-[55vw]">
+                            <Image
+                                src={"/church_end.svg"}
+                                alt={" "}
+                                height={2000}    
+                                width={2000}
+                            />
+                    </div>
+                    
                 </div>
                 
             </div>

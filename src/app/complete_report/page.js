@@ -109,7 +109,7 @@ export default function CompleteReport() {
             </div>
             <div className="relative col-span-2 h-[30vh] w-[25vw]  rounded-3xl shadow-lg top-[20vh] left-[1vw]">
                 <div className='flex'>
-                    <div className="relative top-[2vh] left-5 w-[30px]">
+                    <div className="relative top-[2vh] xl:top-[4vh] left-5 xl:left-10 w-[30px]">
                         <Image
                             src={"/google_maps.svg"}
                             alt={" "}
@@ -117,19 +117,19 @@ export default function CompleteReport() {
                             width={400}
                         />
                     </div>
-                    <h1 className='relative top-[3vh] left-10 text-[14px] font-medium text-[#050938] w-3/6'>
+                    <h1 className='relative top-[3vh] left-10 xl:left-16 text-[14px] xl:text-[20px] font-medium xl:font-semibold text-[#050938] w-3/6 xl:w-4/6'>
                         Your Google Maps Search Score
                     </h1>
                 </div>
                
-                <div className='relative m-auto justify-center top-[4vh] left-[10vw] ' style={{zoom:0.6}}>
+                <div className='relative m-auto justify-center top-[4vh] xl:top-[8vh] left-[10vw] ' style={{zoom:0.6}}>
                     <Circularbar value={googleMaps} title={undefined} max_value={250}/>
                 </div>
             </div>
             <div className="relative ">
             </div>
             <div className="relative col-span-4 justify-center justify-items-center shadow-lg rounded-3xl w-[39vw] left-[5vw] top-[3vh] h-[30vh]">
-                <div className="relative top-1 w-[90px] m-auto">
+                <div className="relative top-1 xl:top-3 w-[90px] m-auto">
                     <Image
                         src={"/pin_map.svg"}
                         alt={" "}
@@ -137,16 +137,16 @@ export default function CompleteReport() {
                         width={400}
                     />
                 </div>
-                <h1 className='relative top-2 text-[#050938] w-4/5 left-0 text-[18px] font-medium text-center m-auto'>
+                <h1 className='relative top-2 xl:top-5 text-[#050938] w-4/5 left-0 text-[18px] font-medium text-center m-auto'>
                     What is your <a className='text-[#0179FF]'>Digital Maps </a>Score & Why it’s Important
                 </h1>
-                <h2 className='relative top-4 text-[#75778B] w-5/6 left-0 text-[13px] lg:text-[10px] xl:text-[15px] 2xl:text-[15px]  font-medium text-center m-auto'>
+                <h2 className='relative top-4 xl:top-8 text-[#75778B] w-5/6 left-0 text-[13px] lg:text-[10px] xl:text-[15px] 2xl:text-[15px]  font-medium text-center m-auto'>
                     From where we eat to where we visit, digital maps are more important in our lives than ever before. The Digital Maps Score reflects how likely your church is to show up on these digital navigation apps when someone searches for “churches near me,” If your church information isn’t listed correctly, they won’t find you.
                 </h2>
             </div>
             <div className="relative col-span-2 h-[30vh] w-[25vw] rounded-3xl shadow-lg left-[1vw] top-[3vh]">
                 <div className='flex'>
-                    <div className="relative top-10 left-5 w-[45px]">
+                    <div className="relative top-10 xl:top-[4vh] left-5 xl:left-10 w-[45px]">
                         <Image
                             src={"/apple_mps.svg"}
                             alt={" "}
@@ -154,11 +154,11 @@ export default function CompleteReport() {
                             width={400}
                         />
                     </div>
-                    <h1 className='relative top-10 left-10 text-[14px] font-medium text-[#050938] w-3/6'>
+                    <h1 className='relative top-10 left-10 xl:left-16 text-[14px] xl:text-[20px] font-medium xl:font-semibold text-[#050938] w-3/6 xl:w-4/6'>
                         Your Apple Maps Search Score
                     </h1>
                 </div>
-                <div className='relative m-auto justify-center left-[10vw] top-14' style={{zoom : 0.6}}>
+                <div className='relative m-auto justify-center left-[10vw] top-[4vh] xl:top-[8vh]' style={{zoom : 0.6}}>
                     <Circularbar value={appleMaps} title={undefined} max_value={250}/>
                 </div>
             </div>
