@@ -1,10 +1,13 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Link from 'next/link'
+
 import 'next/router'
-import { useRouter } from 'next/navigation'
+
+import { Controls, Player } from '@lottiefiles/react-lottie-player'
+import React, { useEffect, useState } from 'react'
+
 import Image from 'next/image'
-import { Player, Controls } from '@lottiefiles/react-lottie-player'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const church_sizes = ['0-99', '100-299', '300-499', '500-999', '1,000-1,999', '2,000-4,999', '5,000-9,999', '10,000+']
@@ -181,14 +184,14 @@ export default function Page() {
                   <input
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
                     type=" text"
-                    name="churchState"
-                    placeholder="State"
+                    name="churchCity"
+                    placeholder="City"
                   />
                   <input
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
                     type=" text"
-                    name="churchCity"
-                    placeholder="City"
+                    name="churchState"
+                    placeholder="State"
                   />
                   <input
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
