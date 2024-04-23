@@ -3,7 +3,7 @@
 import 'next/router'
 
 import { Controls, Player } from '@lottiefiles/react-lottie-player'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -19,6 +19,59 @@ export default function Page() {
   const [map, setMap] = useState('')
 
   const [email, set_email] = useState('')
+
+  const states = [
+    { id: 'AL', title: 'Alabama' },
+    { id: 'AK', title: 'Alaska' },
+    { id: 'AZ', title: 'Arizona' },
+    { id: 'AR', title: 'Arkansas' },
+    { id: 'CA', title: 'California' },
+    { id: 'CO', title: 'Colorado' },
+    { id: 'CT', title: 'Connecticut' },
+    { id: 'DE', title: 'Delaware' },
+    { id: 'FL', title: 'Florida' },
+    { id: 'GA', title: 'Georgia' },
+    { id: 'HI', title: 'Hawaii' },
+    { id: 'ID', title: 'Idaho' },
+    { id: 'IL', title: 'Illinois' },
+    { id: 'IN', title: 'Indiana' },
+    { id: 'IA', title: 'Iowa' },
+    { id: 'KS', title: 'Kansas' },
+    { id: 'KY', title: 'Kentucky' },
+    { id: 'LA', title: 'Louisiana' },
+    { id: 'ME', title: 'Maine' },
+    { id: 'MD', title: 'Maryland' },
+    { id: 'MA', title: 'Massachusetts' },
+    { id: 'MI', title: 'Michigan' },
+    { id: 'MN', title: 'Minnesota' },
+    { id: 'MS', title: 'Mississippi' },
+    { id: 'MO', title: 'Missouri' },
+    { id: 'MT', title: 'Montana' },
+    { id: 'NE', title: 'Nebraska' },
+    { id: 'NV', title: 'Nevada' },
+    { id: 'NH', title: 'New Hampshire' },
+    { id: 'NJ', title: 'New Jersey' },
+    { id: 'NM', title: 'New Mexico' },
+    { id: 'NY', title: 'New York' },
+    { id: 'NC', title: 'North Carolina' },
+    { id: 'ND', title: 'North Dakota' },
+    { id: 'OH', title: 'Ohio' },
+    { id: 'OK', title: 'Oklahoma' },
+    { id: 'OR', title: 'Oregon' },
+    { id: 'PA', title: 'Pennsylvania' },
+    { id: 'RI', title: 'Rhode Island' },
+    { id: 'SC', title: 'South Carolina' },
+    { id: 'SD', title: 'South Dakota' },
+    { id: 'TN', title: 'Tennessee' },
+    { id: 'TX', title: 'Texas' },
+    { id: 'UT', title: 'Utah' },
+    { id: 'VT', title: 'Vermont' },
+    { id: 'VA', title: 'Virginia' },
+    { id: 'WA', title: 'Washington' },
+    { id: 'WV', title: 'West Virginia' },
+    { id: 'WI', title: 'Wisconsin' },
+    { id: 'WY', title: 'Wyoming' },
+  ]
 
   useEffect(() => {
     if (submitted) {
@@ -41,6 +94,55 @@ export default function Page() {
         </div>
       </div>
     )
+  }
+
+  async function parseAddress() {
+    setTimeout(() => {
+      const address = document.forms[0].churchAddress.value
+      fetch(
+        `https://api.geoapify.com/v1/geocode/search?text=${address}&filter=countrycode:us,ca&format=json&apiKey=db974c6b48e44e5a822f9b88a9c267b1`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data)
+          if (!data || !data.results || data.results.length === 0) return
+          const results = data.results
+          if (results.length > 0 && results[0]?.rank?.confidence === 1) {
+            const address = results[0].address_line1
+            const city = results[0].city
+            const state = results[0].state_code
+            const zip = results[0].postcode
+            document.forms[0].churchAddress.value = address
+            document.forms[0].churchCity.value = city
+            document.forms[0].churchState.value = state
+            document.forms[0].churchZipCode.value = zip
+          }
+        })
+        .catch((error) => console.log('error', error))
+    }, 4)
+  }
+
+  async function lookupZipCode(event) {
+    let zip = event.target.value
+    if (!zip || !zip.trim()) return
+    zip = zip.trim().toUpperCase()
+    try {
+      const country = 'US'
+      fetch(`https://api.zippopotam.us/${country}/${zip.split(' ')[0]}`)
+        .then((res) => {
+          if (res.status == 200) {
+            return res.json()
+          }
+        })
+        .then((data) => {
+          if (data && data.places && data.places.length > 0) {
+            document.forms[0].churchState.value = data.places[0]['state abbreviation']
+            document.forms[0].churchCity.value = data.places[0]['place name']
+          }
+        })
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   async function onSubmit(event) {
@@ -180,27 +282,34 @@ export default function Page() {
                     type=" text"
                     name="churchAddress"
                     placeholder="Church Address"
+                    onPaste={() => parseAddress(this)}
                   />
                 </div>
                 <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
                   <input
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
                     type=" text"
+                    name="churchZipCode"
+                    placeholder="Zip Code"
+                    onBlur={lookupZipCode}
+                  />
+                  <input
+                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
+                    type=" text"
                     name="churchCity"
                     placeholder="City"
                   />
-                  <input
+                  <select
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
                     name="churchState"
-                    placeholder="State"
-                  />
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchZipCode"
-                    placeholder="Zip Code"
-                  />
+                  >
+                    <option value=""> State </option>
+                    {states.map((state) => (
+                      <option key={state.id} value={state.id}>
+                        {state.title}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
                   <input
