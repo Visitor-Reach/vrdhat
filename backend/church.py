@@ -734,39 +734,41 @@ class church:
         if len(organic_results) > 0:
             for organic_result in organic_results:
                 name_simil.append(self.name_similarity(organic_result.get("title", "")))
-        
-        organic_result_simil_idx = np.argmax(np.array(name_simil))
-        most_similar_result = organic_results[organic_result_simil_idx]
-        place_id = most_similar_result.get("place_ids", "")[0]
 
-        params = {
-        "api_key": SERPAPI_API_KEY,
-        "engine": "yelp_place",
-        "place_id": place_id
-        }
+            print(organic_results)
+            
+            organic_result_simil_idx = np.argmax(np.array(name_simil))
+            most_similar_result = organic_results[organic_result_simil_idx]
+            place_id = most_similar_result.get("place_ids", "")[0]
 
-        search = GoogleSearch(params)
-        result = search.get_dict()
-        place_result = result.get("place_results", "")
+            params = {
+            "api_key": SERPAPI_API_KEY,
+            "engine": "yelp_place",
+            "place_id": place_id
+            }
 
-        self.yelp_name = place_result.get("name")
-        try:
-            self.yelp_address =  place_result.get("address", "").split(",")[0]
-            self.yelp_city = place_result.get("address", "").split(",")[0].split(" ")[-1]          
-            self.yelp_state = states_dic[self.find_all_letters(place_result.get("address", "").split(",")[1].split(" "))[0]]
-            self.yelp_zipcode = place_result.get("address", "").split(",")[1].split(" ")[-1]
-        except IndexError:
-            pass
-        allowed_chars = string.digits
-        self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
-        self.yelp_webpage = place_result.get("website")
-        self.yelp_rating = place_result.get("rating", "")
-        
-        self.yelp_category = [category.get("title", "") for category in place_result.get("categories", "")]
-        self.yelp_description = place_result.get("about", "")
+            search = GoogleSearch(params)
+            result = search.get_dict()
+            place_result = result.get("place_results", "")
 
-        if len(place_result.get("operation_hours", "")) > 0:
-            self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
-        
+            self.yelp_name = place_result.get("name")
+            try:
+                self.yelp_address =  place_result.get("address", "").split(",")[0]
+                self.yelp_city = place_result.get("address", "").split(",")[0].split(" ")[-1]          
+                self.yelp_state = states_dic[self.find_all_letters(place_result.get("address", "").split(",")[1].split(" "))[0]]
+                self.yelp_zipcode = place_result.get("address", "").split(",")[1].split(" ")[-1]
+            except IndexError:
+                pass
+            allowed_chars = string.digits
+            self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
+            self.yelp_webpage = place_result.get("website")
+            self.yelp_rating = place_result.get("rating", "")
+            
+            self.yelp_category = [category.get("title", "") for category in place_result.get("categories", "")]
+            self.yelp_description = place_result.get("about", "")
+
+            if len(place_result.get("operation_hours", "")) > 0:
+                self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
+            
 
 
