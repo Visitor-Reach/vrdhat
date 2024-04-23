@@ -98,7 +98,7 @@ export default function Page() {
 
   async function parseAddress() {
     setTimeout(() => {
-      document.getElementById('spinner').style.display = 'block'
+      // document.getElementById('spinner').style.display = 'block'
       const address = document.forms[0].churchAddress.value
       fetch(
         `https://api.geoapify.com/v1/geocode/search?text=${address}&filter=countrycode:us,ca&format=json&apiKey=db974c6b48e44e5a822f9b88a9c267b1`
@@ -117,7 +117,7 @@ export default function Page() {
             document.forms[0].churchCity.value = city
             document.forms[0].churchState.value = state
             document.forms[0].churchZipCode.value = zip
-            document.getElementById('spinner').style.display = 'none'
+            // document.getElementById('spinner').style.display = 'none'
           }
         })
         .catch((error) => console.log('error', error))
@@ -287,7 +287,7 @@ export default function Page() {
                       placeholder="Church Address"
                       onPaste={() => parseAddress(this)}
                     />
-                    <div id="spinner" className="hidden lds-spinner absolute right-[20px] top-[16px]">
+                    {/* <div id="spinner" className="hidden lds-spinner absolute right-[20px] top-[16px]">
                       <div></div>
                       <div></div>
                       <div></div>
@@ -300,7 +300,7 @@ export default function Page() {
                       <div></div>
                       <div></div>
                       <div></div>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
