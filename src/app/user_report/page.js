@@ -95,9 +95,9 @@ export default function SimpleResult() {
           <div className="m-auto mb-20  text-center  pt-10  w-full">
             <p className="text-xl text-vr-body-color font-medium block">
               Did you know there are{' '}
-              <span className="text-xl text-vr-title-second font-medium block">{last_month_searches} </span> Google
-              searches for "churches near me" in{' '}
-              <span className="text-xl text-vr-title-second font-medium block">
+              <span className="text-xl text-vr-title-second font-medium">{last_month_searches} monthly </span> Google searches for 
+              <br/>"churches near me" in{' '}
+              <span className="text-xl text-vr-title-second font-medium">
                 {loc_city}, {loc_state}
               </span>
               ?
