@@ -15,8 +15,8 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = "glenn@visitorreach.com"
-app.config['MAIL_PASSWORD'] = "zunl umkl dcyk uoyh"
+app.config['MAIL_USERNAME'] = "digital.health@visitorreach.com"
+app.config['MAIL_PASSWORD'] = "rtww mkhu xrio zytj"
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['WTF_CSRF_ENABLED'] = False
@@ -37,7 +37,7 @@ def close_connection(cur, connection):
 
 def retrieve_email_missing_pdf():
     cur, connection = init_connection()
-    cur.execute(f""" 
+    cur.execute(f"""
                     SELECT email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1
                 """)
     try:
@@ -51,7 +51,7 @@ def retrieve_email_missing_pdf():
 
 def update_sent_pdf(email):
     cur, connection = init_connection()
-    cur.execute(f""" 
+    cur.execute(f"""
                     UPDATE Users
                     SET
                             pdf_sent = 1
@@ -70,7 +70,7 @@ def update_sent_pdf(email):
 def get_map_id(email):
     cur, connection = init_connection()
     cur.execute(f"""
-                        EXPLAIN QUERY PLAN 
+                        EXPLAIN QUERY PLAN
                         SELECT
                             *
                         FROM
