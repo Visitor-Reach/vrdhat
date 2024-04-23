@@ -98,7 +98,7 @@ export default function Page() {
 
   async function parseAddress() {
     setTimeout(() => {
-      // document.getElementById('spinner').style.display = 'block'
+      document.getElementById('spinner1').style.display = 'block'
       const address = document.forms[0].churchAddress.value
       fetch(
         `https://api.geoapify.com/v1/geocode/search?text=${address}&filter=countrycode:us,ca&format=json&apiKey=db974c6b48e44e5a822f9b88a9c267b1`
@@ -117,10 +117,14 @@ export default function Page() {
             document.forms[0].churchCity.value = city
             document.forms[0].churchState.value = state
             document.forms[0].churchZipCode.value = zip
-            // document.getElementById('spinner').style.display = 'none'
           }
         })
-        .catch((error) => console.log('error', error))
+        .catch((error) => {
+          console.log('error', error)
+        })
+        .finally(() => {
+          document.getElementById('spinner1').style.display = 'none'
+        })
     }, 4)
   }
 
@@ -128,23 +132,27 @@ export default function Page() {
     let zip = event.target.value
     if (!zip || !zip.trim()) return
     zip = zip.trim().toUpperCase()
-    try {
-      const country = 'US'
-      fetch(`https://api.zippopotam.us/${country}/${zip.split(' ')[0]}`)
-        .then((res) => {
-          if (res.status == 200) {
-            return res.json()
-          }
-        })
-        .then((data) => {
-          if (data && data.places && data.places.length > 0) {
-            document.forms[0].churchState.value = data.places[0]['state abbreviation']
-            document.forms[0].churchCity.value = data.places[0]['place name']
-          }
-        })
-    } catch (err) {
-      console.log(err)
-    }
+
+    document.getElementById('spinner2').style.display = 'block'
+    const country = 'US'
+    fetch(`https://api.zippopotam.us/${country}/${zip.split(' ')[0]}`)
+      .then((res) => {
+        if (res.status == 200) {
+          return res.json()
+        }
+      })
+      .then((data) => {
+        if (data && data.places && data.places.length > 0) {
+          document.forms[0].churchState.value = data.places[0]['state abbreviation']
+          document.forms[0].churchCity.value = data.places[0]['place name']
+        }
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+      .finally(() => {
+        document.getElementById('spinner2').style.display = 'none'
+      })
   }
 
   async function onSubmit(event) {
@@ -287,30 +295,50 @@ export default function Page() {
                       placeholder="Church Address"
                       onPaste={() => parseAddress(this)}
                     />
-                    {/* <div id="spinner" className="hidden lds-spinner absolute right-[20px] top-[16px]">
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                      <div></div>
-                    </div> */}
+                    <div id="spinner1" className="hidden absolute right-[20px] top-[16px]">
+                      <div className="lds-spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchZipCode"
-                    placeholder="Zip Code"
-                    onBlur={lookupZipCode}
-                  />
+                  <div className="flex-row relative phone:w-full tablet-vertical:w-full">
+                    <input
+                      className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
+                      type=" text"
+                      name="churchZipCode"
+                      placeholder="Zip Code"
+                      onBlur={lookupZipCode}
+                    />
+                    <div id="spinner2" className="hidden absolute right-[20px] top-[16px]">
+                      <div className="lds-spinner">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  </div>
                   <input
                     className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
                     type=" text"
