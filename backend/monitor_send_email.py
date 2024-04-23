@@ -15,8 +15,8 @@ mail = Mail(app)
 
 app.config['MAIL_SERVER'] = "smtp.gmail.com"
 app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = "digital.health@visitorreach.com"
-app.config['MAIL_PASSWORD'] = "rtww mkhu xrio zytj"
+app.config['MAIL_USERNAME'] = os.environ.get('GOOGLE_MAIL_USER')
+app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_MAIL_PASS')
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 app.config['WTF_CSRF_ENABLED'] = False
