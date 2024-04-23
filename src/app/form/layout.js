@@ -13,8 +13,8 @@ const poppins = Poppins({
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Visitor Reach - Digital Health Assessment Tool',
-  description: 'Created for Visitor Reach',
+  title: 'Digital Health Assessment Tool - Visitor Reach',
+  description: 'Created by Visitor Reach',
 }
 
 export default function FormLayout({ children }) {
