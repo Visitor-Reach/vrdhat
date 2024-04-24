@@ -735,7 +735,7 @@ class church:
             for organic_result in organic_results:
                 name_simil.append(self.name_similarity(organic_result.get("title", "")))
 
-            print(organic_results)
+
             
             organic_result_simil_idx = np.argmax(np.array(name_simil))
             most_similar_result = organic_results[organic_result_simil_idx]

@@ -48,11 +48,11 @@ def get_User_table():
     results = cur.fetchall()
     connection.commit()
     close_connection(cur, connection)
-    print(results)
+
 
 
 def insert_User(first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keyworkds):
-    print(f"'{keyworkds}'")
+
     cur, connection = init_connection()
     query = f"""
                     INSERT OR REPLACE INTO Users (first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords) VALUES
@@ -79,7 +79,7 @@ def insert_User(first_name, last_name, mobile_phone, email, name, size, address,
 
 
 def retrieve_User_complete_report(email):
-    print(email)
+
     cur, connection = init_connection()
     query = f""" 
                     SELECT last_month_searches, digital_voice, google_maps, apple_maps, social_clarity, website_authority, state, city, zipcode, webpage, name, address, keywords  FROM Users WHERE email = '{email}'

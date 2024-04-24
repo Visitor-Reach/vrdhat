@@ -50,18 +50,22 @@ def post_contact_hubspot(church_obj):
     conn.request("POST", f"/crm/v3/objects/contacts?{HUBSPOT_API_KEY}", payload, headers)
     res = conn.getresponse()
     data = res.read()
+    print("New contact: ", data)
    
     conn = http.client.HTTPSConnection("api.hubapi.com")
     payload = json.dumps({
     "properties": {
-        "company": church_obj.name,
-        "company_size" : church_obj.size,
+        "name": church_obj.name,
+        "church_size" : church_obj.size,
         "phone" : church_obj.phone,
         "city" : church_obj.city,
+        "state" : church_obj.state,
         "country" : "United States",
        
     }
     })
+    print("Payload", payload)
+
     headers = {
     'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
     'Content-Type': 'application/json',
@@ -70,6 +74,7 @@ def post_contact_hubspot(church_obj):
     conn.request("POST", f"/crm/v3/objects/companies?{HUBSPOT_API_KEY}", payload, headers)
     res = conn.getresponse()
     data = res.read()
+    print("New company: ", data)
     return (data.decode("utf-8"))
 
 

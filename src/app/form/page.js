@@ -7,7 +7,7 @@ import Image from 'next/image'
 import { Player, Controls } from '@lottiefiles/react-lottie-player';
 
 export default function Page() {
-  const church_sizes = ['0-99', '100-299', '300-499', '500-999', '1,000-1,999', '2,000-4,999', '5,000-9,999', '10,000+']
+  const church_sizes = ['0-100', '100-300', '300-500', '500-1000', '+1000', '2,000-4,999', '5,000-9,999', '10,000+']
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [showAnimation, setShowAnimation] = useState(false)
