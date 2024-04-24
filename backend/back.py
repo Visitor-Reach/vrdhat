@@ -146,7 +146,7 @@ def handle_form_submission():
                                 church_obj.domain_organic_keywords
                             )
         if map_index is not None:
-            church_obj.get_map_image(map_index)
+            church_obj.get_map_image(church_obj.email)
             print("Map index: ", map_index)
             print("New user created")
             return jsonify({'map_index': f'{map_index}'})

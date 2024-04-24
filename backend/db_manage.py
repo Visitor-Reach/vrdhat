@@ -44,8 +44,26 @@ def create_User_table():
 
 def get_User_table():
     cur, connection = init_connection()
-    cur.execute('''PRAGMA table_info(Users) ''')
+    cur.execute(''' SELECT * FROM Users ''')
     results = cur.fetchall()
+    print(results)
+    connection.commit()
+    close_connection(cur, connection)
+
+def get_User_email_index(email):
+    cur, connection = init_connection()
+    cur.execute(f"""
+                        EXPLAIN QUERY PLAN 
+                        SELECT
+                            *
+                        FROM
+                            Users
+                      WHERE
+                        email = "{email}"
+
+                """)
+    results = cur.fetchall()
+    print(results)
     connection.commit()
     close_connection(cur, connection)
 

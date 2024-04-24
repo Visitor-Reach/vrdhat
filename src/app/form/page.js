@@ -54,15 +54,7 @@ export default function Page() {
       setIsSubmitting(true)
       console.log("submitted form")
       
-      /* const formData = new FormData(event.currentTarget)
- 
-       const response = await fetch('http://localhost:8080/submit-form', {
-        method: 'POST',
-        body: formData,
-      })
-      console.log(formData)
-      const data = await response.json() 
-      console.log(data) */
+      
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Access-Control-Allow-Origin", "*")
