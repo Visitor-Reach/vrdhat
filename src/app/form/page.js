@@ -10,7 +10,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 export default function Page() {
-  const church_sizes = ['0-99', '100-299', '300-499', '500-999', '1,000-1,999', '2,000-4,999', '5,000-9,999', '10,000+']
+  const church_sizes = ['0-100', '100-300', '300-500', '500-1000', '+1000', '2,000-4,999', '5,000-9,999', '10,000+']
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const [showAnimation, setShowAnimation] = useState(false)
@@ -162,15 +162,6 @@ export default function Page() {
       setIsSubmitting(true)
       console.log('submitted form')
 
-      /* const formData = new FormData(event.currentTarget)
- 
-       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
-        method: 'POST',
-        body: formData,
-      })
-      console.log(formData)
-      const data = await response.json() 
-      console.log(data) */
       const myHeaders = new Headers()
       myHeaders.append('Content-Type', 'application/json')
       myHeaders.append('Access-Control-Allow-Origin', '*')

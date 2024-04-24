@@ -1,9 +1,11 @@
 'use client'
-import React, { useState, useEffect } from 'react'
-import Image from 'next/image'
-import NavBar from '../components/navbar.js'
+
+import React, { useEffect, useState } from 'react'
+
 import Circularbar from '../../../app/components/Circularbar1.js'
+import Image from 'next/image'
 import Link from 'next/link.js'
+import NavBar from '../components/navbar.js'
 import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useSearchParams } from 'next/navigation'
 
@@ -37,7 +39,7 @@ export default function CompleteReportPage1() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
+        const response = await fetch('http://localhost:8080/api/fetch-data', {
           method: 'POST',
           body: JSON.stringify({ user_key: user_key }),
           headers: myHeaders,
@@ -83,20 +85,22 @@ export default function CompleteReportPage1() {
         <h2 className="absolute left-[78px] top-[303px] text-[60px] font-medium bg-gradient-to-br from-[#6ECAF8] via-[#0179FF] via-50% to-[#2246E2] inline-block text-transparent bg-clip-text">
           Digital Health Assessment
         </h2>
-        <h1 className="absolute left-[71px] top-[381px] text-black text-[140px] font-medium">{church_name}</h1>
+        <h1 className="absolute left-[71px] top-[381px] text-black text-[90px] font-medium">
+          The Father's House - Vacaville
+        </h1>
         <div className="">
           <div className="">
-            <div className="absolute left-[89px] top-[574px] w-[21.8px]">
+            <div className="absolute left-[89px] top-[574px] w-[21px]">
               <Image src={'/location_icon.svg'} alt={' '} height={400} width={400} />
             </div>
-            <p className="absolute left-[129px] top-[570px] text-[#75778B] text-[30px] font-medium">
+            <p className="absolute left-[129px] top-[560px] text-[#75778B] text-[30px] font-medium">
               {loc_address}, {loc_city}, {loc_state} {loc_zipcode}
             </p>
           </div>
-          <div className="absolute left-[89px] top-[635px] w-[23.8px] text-[#75778B] text-[30px] font-medium">
+          <div className="absolute left-[89px] top-[625px] w-[23px] text-[#75778B] text-[30px] font-medium">
             <Image src={'/website_icon.svg'} alt={' '} height={400} width={400} />
           </div>
-          <p className="absolute left-[129.5px] top-[625px] text-[#75778B] text-[30px] font-medium">{webpage}</p>
+          <p className="absolute left-[129px] top-[615px] text-[#75778B] text-[30px] font-medium">{webpage}</p>
         </div>
         <p className="block w-full absolute left-[89px] bottom-[100px] text-[#75778B] text-[20px] font-medium">
           {' '}
