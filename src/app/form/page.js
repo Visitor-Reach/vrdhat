@@ -117,6 +117,10 @@ export default function Page() {
             document.forms[0].churchCity.value = city
             document.forms[0].churchState.value = state
             document.forms[0].churchZipCode.value = zip
+            document.forms[0].churchAddress.style.border = '2px solid rgb(228, 231, 234)'
+            document.forms[0].churchZipCode.style.border = '2px solid rgb(228, 231, 234)'
+            document.forms[0].churchState.style.border = '2px solid rgb(228, 231, 234)'
+            document.forms[0].churchCity.style.border = '2px solid rgb(228, 231, 234)'
           }
         })
         .catch((error) => {
@@ -145,6 +149,8 @@ export default function Page() {
         if (data && data.places && data.places.length > 0) {
           document.forms[0].churchState.value = data.places[0]['state abbreviation']
           document.forms[0].churchCity.value = data.places[0]['place name']
+          document.forms[0].churchState.style.border = '2px solid rgb(228, 231, 234)'
+          document.forms[0].churchCity.style.border = '2px solid rgb(228, 231, 234)'
         }
       })
       .catch((error) => {
@@ -155,13 +161,117 @@ export default function Page() {
       })
   }
 
+  function getFormErrors() {
+    let errors = []
+    const form = document.forms[0]
+    const firstName = form.firstName.value
+    const lastName = form.lastName.value
+    const mobilePhone = form.mobilePhone.value
+    const email = form.email.value
+    const churchName = form.churchName.value
+    const churchWebsite = form.churchWebsite.value
+    const churchSize = form.churchSize.value
+    const churchPhone = form.churchPhone.value
+    const churchAddress = form.churchAddress.value
+    const churchState = form.churchState.value
+    const churchCity = form.churchCity.value
+    const churchZipCode = form.churchZipCode.value
+    const churchFacebook = form.churchFacebook.value
+    const churchInstagram = form.churchInstagram.value
+
+    if (!firstName || !firstName.trim()) {
+      errors.push({ msg: 'First Name is required', field: 'firstName' })
+    }
+    if (!lastName || !lastName.trim()) {
+      errors.push({ msg: 'Last Name is required', field: 'lastName' })
+    }
+    if (!mobilePhone || !mobilePhone.trim()) {
+      errors.push({ msg: 'Mobile Phone is required', field: 'mobilePhone' })
+    }
+    if (!email || !email.trim()) {
+      errors.push({ msg: 'Email is required', field: 'email' })
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (email && email.trim() && !emailRegex.test(email)) {
+      errors.push({ msg: 'Email is the wrong format', field: 'email' })
+    }
+    if (!churchName || !churchName.trim()) {
+      errors.push({ msg: 'Church Name is required', field: 'churchName' })
+    }
+    if (!churchWebsite || !churchWebsite.trim()) {
+      errors.push({ msg: 'Church Website is required', field: 'churchWebsite' })
+    }
+    if (!churchSize || !churchSize == 'Church Size') {
+      errors.push({ msg: 'Church Size is required', field: 'churchSize' })
+    }
+    if (!churchPhone || !churchPhone.trim()) {
+      errors.push({ msg: 'Church Phone is required', field: 'churchPhone' })
+    }
+    if (!churchAddress || !churchAddress.trim()) {
+      errors.push({ msg: 'Church Address is required', field: 'churchAddress' })
+    }
+    if (!churchState || !churchState == 'State') {
+      errors.push({ msg: 'State is required', field: 'churchState' })
+    }
+    if (!churchCity || !churchCity.trim()) {
+      errors.push({ msg: 'City is required', field: 'churchCity' })
+    }
+    if (!churchZipCode || !churchZipCode.trim()) {
+      errors.push({ msg: 'Zip Code is required', field: 'churchZipCode' })
+    }
+    if (!churchFacebook || !churchFacebook.trim()) {
+      errors.push({ msg: 'Church Facebook is required', field: 'churchFacebook' })
+    }
+    if (!churchInstagram || !churchInstagram.trim()) {
+      errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
+    }
+
+    return errors
+  }
+
+  function onInputBlur(event) {
+    const errors = getFormErrors()
+    const element = document.forms[0][event.target.name]
+    element.style.border = '2px solid rgb(228, 231, 234)'
+    if (errors.length > 0) {
+      if (element && errors.find((error) => error.field === event.target.name)) {
+        element.style.border = '2px solid red'
+      }
+    }
+    // helpfully add https:// to the church website if it's missing
+    if (
+      document.forms[0].churchWebsite.value &&
+      !document.forms[0].churchWebsite.value.startsWith('http://') &&
+      !document.forms[0].churchWebsite.value.startsWith('https://')
+    ) {
+      document.forms[0].churchWebsite.value = 'https://' + document.forms[0].churchWebsite.value
+    }
+  }
+
   async function onSubmit(event) {
     event.preventDefault()
 
     try {
       setIsSubmitting(true)
-      console.log('submitted form')
+      // reset field errors
+      for (let i = 0; i < document.forms[0].elements.length; i++) {
+        let element = document.forms[0].elements[i]
+        element.style.border = '2px solid rgb(228, 231, 234)'
+      }
+      // validate fields
+      const errors = getFormErrors()
+      if (errors.length > 0) {
+        errors.forEach((error) => {
+          document.getElementsByName(error.field)[0].style.border = '2px solid red'
+        })
+        setIsSubmitting(false)
+        const message = errors.map((error) => error.msg).join('\n')
+        document.getElementById('dialogcontent').innerText = message
+        document.querySelector('dialog').showModal()
+        return
+      }
 
+      // we survived validation, let's submit the form
       const myHeaders = new Headers()
       myHeaders.append('Content-Type', 'application/json')
       myHeaders.append('Access-Control-Allow-Origin', '*')
@@ -201,199 +311,238 @@ export default function Page() {
   }
 
   return (
-    <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-20">
-      {isLoading ? (
-        <div className="pt loading flex-grow flex flex-col justify-center items-center">
-          <div className="flex flex-col items-center w-2/12"></div>
-        </div>
-      ) : isSubmitting ? (
-        <LoadingAnimation />
-      ) : (
-        <form onSubmit={onSubmit}>
-          <div className="">
-            <h1 className="relative tablet-vertical:top-36 phone:top-20 phone::left-20 tablet-vertical:left-44 tablet-vertical:text-6xl phone:text-2xl w-2/3 text-vr-form-title font-medium">
-              Let's get some information for your report
-            </h1>
-            <div className="m-auto mt-60 flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  w-5/6">
-              <div className="flex flex-wrap m-auto w-full phone:gap-1 ">
-                <div className="grid grid-cols-2 m-auto justify-center justify-items-center w-10/12 mt-5 gap-5">
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="firstName"
-                    placeholder="First Name"
-                  />
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="lastName"
-                    placeholder="Last Name"
-                  />
-                </div>
-                <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="mobilePhone"
-                    placeholder="Mobile Phone"
-                  />
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="email"
-                    placeholder="Email"
-                  />
-                </div>
-                <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchName"
-                    placeholder="Church Name"
-                  />
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchWebsite"
-                    placeholder="Church Website"
-                  />
-                </div>
-                <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <select
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    name="churchSize"
-                  >
-                    <option value=""> Church Size </option>
-                    {church_sizes.map((church_sizes) => (
-                      <option key={church_sizes} value={church_sizes}>
-                        {church_sizes}
-                      </option>
-                    ))}
-                  </select>
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchPhone"
-                    placeholder="Church Phone"
-                  />
-                </div>
-                <div className="grid grid-cols-1 m-auto justify-center  w-10/12 mt-5 gap-5">
-                  <div className="flex-row relative">
+    <>
+      <dialog id="dialog" className="p-5 w-1/3 rounded-xl shadow-2xl text-center">
+        <h1 className="text-lb mb-2 font-bold text-center">Please review &amp; update these fields...</h1>
+        <p id="dialogcontent"></p>
+        <button
+          onClick={() => document.querySelector('dialog').close()}
+          className="w-60 h-10 mt-5 rounded-full text-white text-xl bg-gray-500 hover:bg-gray-400"
+          type="button"
+        >
+          Close
+        </button>
+      </dialog>
+
+      <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-20">
+        {isLoading ? (
+          <div className="pt loading flex-grow flex flex-col justify-center items-center">
+            <div className="flex flex-col items-center w-2/12"></div>
+          </div>
+        ) : isSubmitting ? (
+          <LoadingAnimation />
+        ) : (
+          <form onSubmit={onSubmit}>
+            <div className="">
+              <h1 className="relative tablet-vertical:top-20 phone:top-20 phone::left-20 tablet-vertical:left-44 tablet-vertical:text-6xl phone:text-2xl w-2/3 text-vr-form-title font-medium">
+                Let's get some information for your report
+              </h1>
+
+              <div className="m-auto mt-40 flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  w-5/6">
+                <div className="flex flex-wrap m-auto w-full phone:gap-1 ">
+                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center w-10/12 mt-5 gap-5">
                     <input
-                      className="w-full pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-1full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
                       type=" text"
-                      name="churchAddress"
-                      placeholder="Church Address"
-                      onPaste={() => parseAddress(this)}
+                      name="firstName"
+                      placeholder="First Name"
+                      onBlur={onInputBlur}
                     />
-                    <div id="spinner1" className="hidden absolute right-[20px] top-[16px]">
-                      <div className="lds-spinner">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="lastName"
+                      placeholder="Last Name"
+                      onBlur={onInputBlur}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="mobilePhone"
+                      placeholder="Mobile Phone"
+                      onBlur={onInputBlur}
+                    />
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="email"
+                      placeholder="Email"
+                      onBlur={onInputBlur}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchName"
+                      placeholder="Church Name"
+                      onBlur={onInputBlur}
+                    />
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchWebsite"
+                      placeholder="Church Website"
+                      onBlur={onInputBlur}
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                    <div className="relative phone:w-full tablet-vertical:w-full">
+                      <select
+                        className="pl-5 appearance-none rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-500"
+                        name="churchSize"
+                        onBlur={onInputBlur}
+                      >
+                        <option value=""> Church Size </option>
+                        {church_sizes.map((church_sizes) => (
+                          <option key={church_sizes} value={church_sizes}>
+                            {church_sizes}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                    </div>
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchPhone"
+                      placeholder="Church Phone"
+                      onBlur={onInputBlur}
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 m-auto justify-center  w-10/12 mt-5 gap-5">
+                    <div className="flex-row relative">
+                      <input
+                        className="placeholder:text-slate-400 w-full pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-1full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                        type=" text"
+                        name="churchAddress"
+                        placeholder="Church Address"
+                        onPaste={() => parseAddress(this)}
+                        onBlur={onInputBlur}
+                      />
+                      <div id="spinner1" className="hidden absolute right-[20px] top-[16px]">
+                        <div className="lds-spinner">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <div className="flex-row relative phone:w-full tablet-vertical:w-full">
-                    <input
-                      className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                      type=" text"
-                      name="churchZipCode"
-                      placeholder="Zip Code"
-                      onBlur={lookupZipCode}
-                    />
-                    <div id="spinner2" className="hidden absolute right-[20px] top-[16px]">
-                      <div className="lds-spinner">
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
-                        <div></div>
+                  <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                    <div className="flex-row relative phone:w-full tablet-vertical:w-full">
+                      <input
+                        className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                        type=" text"
+                        name="churchZipCode"
+                        placeholder="Zip Code"
+                        onBlur={lookupZipCode}
+                        onBlur={(e) => {
+                          onInputBlur(e)
+                          lookupZipCode(e)
+                        }}
+                      />
+                      <div id="spinner2" className="hidden absolute right-[20px] top-[16px]">
+                        <div className="lds-spinner">
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                          <div></div>
+                        </div>
                       </div>
                     </div>
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchCity"
+                      placeholder="City"
+                      onBlur={onInputBlur}
+                    />
+                    <div className="relative phone:w-full tablet-vertical:w-full">
+                      <select
+                        className="pl-5 appearance-none rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-500"
+                        name="churchState"
+                        onBlur={onInputBlur}
+                      >
+                        <option value=""> State </option>
+                        {states.map((state) => (
+                          <option key={state.id} value={state.id}>
+                            {state.title}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                    </div>
                   </div>
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchCity"
-                    placeholder="City"
-                  />
-                  <select
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    name="churchState"
+                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchInstagram"
+                      placeholder="Church Instagram Handle"
+                      onBlur={onInputBlur}
+                    />
+                    <input
+                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      type=" text"
+                      name="churchFacebook"
+                      placeholder="Church Facebook Handle"
+                      onBlur={onInputBlur}
+                    />
+                  </div>
+                  <div className="pt-10 w-10/12 m-auto">
+                    <label className="phone:text-sm tablet-vertical:text-2xl text-slate-700">
+                      By submitting this form, you agree to VisitorReach's{' '}
+                      <Link
+                        href="https://www.visitorreach.com/terms-of-use"
+                        className="phone:text-md tablet-vertical:text-2xl font-bold hover:text-blue-500 text-slate-700"
+                      >
+                        Terms of Use
+                      </Link>
+                      , 
+                      <Link
+                        href="https://www.visitorreach.com/privacy-policy"
+                        className="phone:text-md tablet-vertical:text-2xl font-bold hover:text-blue-500 text-slate-700"
+                      >
+                        Privacy Policy
+                      </Link>
+                      , and VisitorReach contacting you via text and email.
+                    </label>
+                  </div>
+                </div>
+
+                <div className="pt-10 pl-24 pb-10 flex-row">
+                  <button
+                    className="w-60 h-14 rounded-full text-white text-2xl bg-vr-title-second hover:bg-slate-100 hover:text-vr-title-second hover:shadow-sm"
+                    type="submit"
                   >
-                    <option value=""> State </option>
-                    {states.map((state) => (
-                      <option key={state.id} value={state.id}>
-                        {state.title}
-                      </option>
-                    ))}
-                  </select>
+                    Create Report
+                  </button>
                 </div>
-                <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchInstagram"
-                    placeholder="Church Instagram Handle"
-                  />
-                  <input
-                    className="pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400"
-                    type=" text"
-                    name="churchFacebook"
-                    placeholder="Church Facebook Handle"
-                  />
-                </div>
-                <div className="pt-10 w-10/12 m-auto">
-                  <label className="phone:text-sm tablet-vertical:text-2xl text-slate-700">
-                    By submitting this form, you agree to VisitorReach's{' '}
-                    <Link
-                      href="https://www.visitorreach.com/terms-of-use"
-                      className="phone:text-md tablet-vertical:text-2xl font-bold hover:text-blue-500 text-slate-700"
-                    >
-                      Terms of Use
-                    </Link>
-                    , 
-                    <Link
-                      href="https://www.visitorreach.com/privacy-policy"
-                      className="phone:text-md tablet-vertical:text-2xl font-bold hover:text-blue-500 text-slate-700"
-                    >
-                      Privacy Policy
-                    </Link>
-                    , and VisitorReach contacting you via text and email.
-                  </label>
-                </div>
-              </div>
-              <div className="pt-10 pl-10 pb-10">
-                <button
-                  className="w-60 h-14 rounded-full text-white text-2xl bg-vr-title-second hover:bg-slate-100 hover:text-vr-title-second hover:shadow-sm"
-                  type="submit"
-                >
-                  Create Report
-                </button>
               </div>
             </div>
-          </div>
-        </form>
-      )}
-    </div>
+          </form>
+        )}
+      </div>
+    </>
   )
 }
