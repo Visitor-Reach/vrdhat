@@ -134,7 +134,7 @@ export default function CompleteReportPage3() {
                             are optimized for voice search. If your church’s digital presence isn’t optimized for voice search, people won’t be able to find and visit your church!
                         </h2>
                         
-                        <Link href={{pathname:"www.visitorreach.com"}}>
+                        <Link href={{pathname:"https://www.visitorreach.com"}}>
                             <h3 className='text-[#0179FF] text-[12px] font-regular relative top-[7vh] m-auto grid justify-center w-4/6 mt-5 pb-10'>
                                 Source: VisitorReach
                             </h3>

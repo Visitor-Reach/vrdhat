@@ -115,10 +115,10 @@ export default function CompleteReportPage8() {
                     </div>
                 </div>
                 <div className='col-span-7 row-span-4 relative left-14 top-5'>
-                    <h1 className='text-[#0179FF] text-[30px] font-medium '>
+                    <h1 className='text-[#0179FF] text-[30px] font-medium relative top-8'>
                         The VisitorReach Process - 
                     </h1>
-                    <h1 className='text-[30px] font-medium text-[#050938]'>Created for Pastors, by Pastors</h1>
+                    <h1 className='text-[30px] font-medium text-[#050938] relative top-6'>Created for Pastors, by Pastors</h1>
                     <div className="w-[60vw] absolute -bottom-[40vh] left-[30vw]">
                             <Image
                                 src={"/Radial waves.svg"}

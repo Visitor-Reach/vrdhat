@@ -9,7 +9,7 @@ export default function NavBar({user_key, map}) {
   return (
     <div className=''>
         <div className='round-full w-full relative top-[262px]'>
-            <Link href={{pathname:'/complete_report?user_key='+user_key+'&map_key='+map}}>
+            <Link href={{pathname:"/complete_report/3?user_key="+user_key+"&map_key="+map}}>
                 <button className='text-gray-500 text-[20px] bg-white h-12 w-80 relative left-8 rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Digital Voice Score</button>
                 <div className="relative left-10 -top-10 w-[30px]">
                     <Image
@@ -22,7 +22,7 @@ export default function NavBar({user_key, map}) {
             </Link>
         </div>
         <div className='round-full w-full relative top-[262px] '>
-            <Link href={{pathname:'/complete_report?user_key='+user_key+'&map_key='+map}}>
+            <Link href={{pathname:"/complete_report/4?user_key="+user_key+"&map_key="+map}}>
                 <button className='text-gray-500 text-[20px] bg-white h-12 w-80 relative left-8 rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Digital Maps Score</button>
                 <div className="relative left-10 -top-10 w-[30px]">
                     <Image
@@ -36,7 +36,7 @@ export default function NavBar({user_key, map}) {
         </div>
         
         <div className='round-full w-full relative top-[262px] '>
-            <Link href={{pathname:"'/complete_report?user_key='+user_key+'&map_key='+map"}}>
+            <Link href={{pathname:"/complete_report/6?user_key="+user_key+"&map_key="+map}}>
                 <button className='text-gray-500 text-[20px] bg-white h-12 w-80 relative left-8 text rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Website Authority Score</button>
                 <div className="relative left-10 -top-10 w-[30px]">
                     <Image
@@ -49,7 +49,7 @@ export default function NavBar({user_key, map}) {
             </Link>
         </div>
         <div className='round-full w-full relative top-[262px] '>
-            <Link href={{pathname:"/complete_report?user_key='+user_key+'&map_key='+map"}}>
+            <Link href={{pathname:"/complete_report/7?user_key="+user_key+"&map_key="+map}}>
                 <button className='text-gray-500 text-[20px] bg-white h-12 w-80 relative left-8 text rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Digital Health Score</button>
                 <div className="relative left-10 -top-10 w-[30px]">
                     <Image
@@ -62,7 +62,7 @@ export default function NavBar({user_key, map}) {
             </Link>
         </div>
         <div className='w-full relative top-[262px] '>
-            <Link href={{pathname:"/complete_report?user_key="+user_key+"&map_key="+map}}>
+            <Link href={{pathname:"/complete_report/8?user_key="+user_key+"&map_key="+map}}>
                 <button className='text-gray-500 text-[20px] bg-white h-12 w-80 relative left-8 text rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Visitor Reach Process</button>
                     <div className="relative left-12 -top-10 w-[25px]">
                     <Image
