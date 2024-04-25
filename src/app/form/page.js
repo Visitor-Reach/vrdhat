@@ -447,7 +447,6 @@ export default function Page() {
                         type=" text"
                         name="churchZipCode"
                         placeholder="Zip Code"
-                        onBlur={lookupZipCode}
                         onBlur={(e) => {
                           onInputBlur(e)
                           lookupZipCode(e)
