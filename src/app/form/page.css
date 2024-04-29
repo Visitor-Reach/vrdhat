@@ -1,0 +1,22 @@
+@tailwind base; 
+@tailwind components;
+
+.form-page-title {
+    width: 100%;
+}
+
+.fields-container {
+    margin-top: 80px;
+}
+
+.form-page-input-row {
+    @apply flex flex-wrap m-auto w-full px-[5px] gap-5;
+}
+
+.form-page-input {
+    @apply max-md:text-[12pt] pl-5 rounded-3xl h-10 md:h-16 bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400 w-full max-w-[320px];
+}
+
+.form-page-input-sm {
+    @apply max-md:text-[12pt] pl-5 rounded-3xl h-10 md:h-16 bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400 w-full max-w-[266px];
+}
