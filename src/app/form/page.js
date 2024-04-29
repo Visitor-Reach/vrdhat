@@ -109,9 +109,9 @@ export default function Page() {
 <LoadingAnimation />
       ) : (
 <form onSubmit={onSubmit}>
-  <div className="text-2xl text-vr-form-title font-medium">
-    <h1 className="form-page-title text-vr-form-title">Let's get some information for your report</h1>
-    <div className='fields-container m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  w-full overflow-hidden'>
+  <div className="flex flex-col justify-center items-center text-2xl text-vr-form-title font-medium">
+    <h1 className="max-md:w-full w-2/3 text-vr-form-title max-md:text-4xl text-6xl">Let's get some information for your report</h1>
+    <div className='fields-container m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-10/12 overflow-hidden'>
       <div className="flex flex-wrap m-auto w-full p-[10px] gap-5">
         <div className="form-page-input-row">
           <input className="form-page-input" type=" text" name="firstName" placeholder="First Name" />
