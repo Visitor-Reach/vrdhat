@@ -38,16 +38,12 @@ const ScoreBar = ({ score, avgscore, label }) => {
   const avgscorePosition = `${avgscore_percentage-5}%`;
 
   return (
-<div className="mb-0 grid grid-cols-2 gap-5 mt-3 w-full">
-  <div className="mb-0 h-20">
-    <span className="text-slate-800 w-full block font-regular text-md relative top-2 left-5">
-      {label}
-    </span>
-    <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5">
-      Visitor Reach Church Average
-    </span>
-  </div>
-  <div className="">
+<div className="max-md:mb-[50px] grid md:grid-cols-2 max-md:grid-cols-1 max-md:gap-2 mt-3 w-full">
+    <div className="max-md:mb-[10px]">
+      <span className="text-slate-800 w-full block font-regular text-md relative top-6 left-5">
+        {label}
+      </span>
+    </div>
     <div className="">
       <span
         className="text-black relative text-sm text-semibold"
@@ -63,6 +59,11 @@ const ScoreBar = ({ score, avgscore, label }) => {
           ></div>
         </div>
       </div>
+    </div>
+    <div className="max-md:mb-[15px]">
+      <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5">
+        Visitor Reach Church Average
+      </span>
     </div>
     <div className="">
       <span
@@ -80,7 +81,6 @@ const ScoreBar = ({ score, avgscore, label }) => {
         </div>
       </div>
     </div>
-  </div>
   
 </div>
   );
@@ -97,13 +97,13 @@ const ScoreSummary = ({
   avgWebsiteAuthorityScore,
 }) => {
   return (
-    <div className='grid grid-cols-3 bg-white rounded-3xl w-11/12 p-4 shadow-2xl'>
+    <div className='max-md:flex max-md:flex-col max-md:flex-wrap md:grid md:grid-cols-3 bg-white rounded-3xl max-md:w-full w-11/12 p-4 shadow-2xl'>
       <div className='col-span-2'>
         <h2 className="text-2xl m-4 text-black font-medium ">
           Digital Health Score Summary
         </h2>
         <div className=''>
-          <div className='w-11/12 h-11/12'>
+          <div className='max-md:w-full max-md:h-full w-11/12 h-11/12'>
             <ScoreBar
               score={digitalVoiceScore}
               avgscore={avgDigitalVoiceScore}

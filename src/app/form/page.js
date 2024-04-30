@@ -39,7 +39,7 @@ export default function Page() {
                     autoplay
                     loop
                     src="/Message Loading 1.json"
-                    style={{ width: '800px', height: '800px' }}
+                    style={{ width: '100%' }}
                 >
                 <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
                 </Player>
@@ -110,22 +110,22 @@ export default function Page() {
       ) : (
 <form onSubmit={onSubmit}>
   <div className="flex flex-col justify-center items-center text-2xl text-vr-form-title font-medium">
-    <h1 className="max-md:w-full w-2/3 text-vr-form-title max-md:text-4xl text-6xl">Let's get some information for your report</h1>
+    <h1 className="w-2/3 text-vr-form-title max-md:text-4xl text-6xl">Let's get some information for your report</h1>
     <div className='fields-container m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-10/12 overflow-hidden'>
       <div className="flex flex-wrap m-auto w-full p-[10px] gap-5">
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-2-elements">
           <input className="form-page-input" type=" text" name="firstName" placeholder="First Name" />
           <input className="form-page-input" type=" text" name="lastName" placeholder="Last Name" />
         </div>
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-2-elements">
           <input className="form-page-input" type=" text" name="mobilePhone" placeholder="Mobile Phone" />
           <input className="form-page-input" type=" text" name="email" placeholder="Email"/>
         </div>
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-2-elements">
             <input className="form-page-input" type=" text" name="churchName" placeholder="Church Name"/>
             <input className="form-page-input" type=" text" name="churchWebsite" placeholder="Church Website"/>
         </div>
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-2-elements">
             <select className="form-page-input" name="churchSize">
                 <option value=""> Church Size </option>
                 {church_sizes.map((church_sizes) => (
@@ -136,15 +136,15 @@ export default function Page() {
             </select>
             <input className="form-page-input" type=" text" name="churchPhone" placeholder="Church Phone"/>
         </div>
-        <div className="form-page-input-row">
-            <input className="form-page-input" type=" text" name="churchAddress" placeholder="Church Address"/>
+        <div className="form-page-input-row-1-element">
+            <input className="form-page-input-full" type=" text" name="churchAddress" placeholder="Church Address"/>
         </div>
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-3-elements">
             <input className="form-page-input-sm" type=" text" name="churchState" placeholder="State"/>
             <input className="form-page-input-sm" type=" text" name="churchCity" placeholder="City"/>
             <input className="form-page-input-sm" type=" text" name="churchZipCode" placeholder="Zip Code"/>
         </div>
-        <div className="form-page-input-row">
+        <div className="form-page-input-row-2-elements">
             <input className="form-page-input" type=" text" name="churchInstagram" placeholder="Church Instagram Handle"/>
             <input className="form-page-input" type=" text" name="churchFacebook" placeholder="Church Facebook Handle"/>
         </div>

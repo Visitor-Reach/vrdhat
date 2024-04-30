@@ -18,16 +18,16 @@ export const metadata = {
 
 export default function UserLayout({ children }) {
   return (
-    <div>
+    <div className="w-[100%] min-w-[320px]]">
         <Image
           src={"VR Logo Small.svg"}
-          className="absolute top-10 -left-20 h-5 phone:h-5 phone:top-5 phone:left-0"
+          className="mt-10 h-5"
           alt="VR Logo"
           width={500}
           height={500}
           /> 
           
-          {children}
+        {children}
     </div>
     
   );
