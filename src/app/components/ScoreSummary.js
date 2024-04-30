@@ -61,7 +61,7 @@ const ScoreBar = ({ score, avgscore, label }) => {
       </div>
     </div>
     <div className="max-md:mb-[15px]">
-      <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5">
+      <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5 px-[10px]">
         Visitor Reach Church Average
       </span>
     </div>
