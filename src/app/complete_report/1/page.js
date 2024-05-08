@@ -73,7 +73,7 @@ export default function CompleteReportPage1() {
 
     return (
 
-            <div id="cr_page1" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] bg-white overflow-hidden">
+            <div id="cr_page1" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto bg-white overflow-hidden">
                 <div className="">
                     <div className="mt-[93px] ml-[71px]">
                         <Image className='w-[339px] h-[42px]'

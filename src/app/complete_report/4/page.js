@@ -74,7 +74,7 @@ export default function CompleteReportPage4() {
     return (
         <div className="">
 
-            <div id="cr_page4" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden" >
+            <div id="cr_page4" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden" >
                 <div className="absolute left-[40px] top-[77px] w-[200px] z-[1000]">
                     <Image
                         src={"/full_report_logo.svg"}
@@ -98,7 +98,7 @@ export default function CompleteReportPage4() {
                             </h1>
                         </div>
 
-                        <div className="w-[376px] h-[430px] bg-[url('/sample_map.png')] bg-cover rounded-3xl shadow-2xl pt-[40px] pl-[30px] card-shadow">
+                        <div className="w-[376px] h-[430px] bg-[url('/sample_map.png')] bg-cover rounded-3xl pt-[40px] pl-[30px] card-shadow">
                             <h1 className='text-[#050938] w-[319px] text-[32px] font-medium leading-[130%] tracking-[-1.2px]'>
                                 Nearly <a className='text-[#0179FF]'>2 billion </a>people use Google Maps every month
                             </h1>

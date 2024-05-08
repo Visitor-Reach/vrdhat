@@ -72,7 +72,7 @@ export default function CompleteReportPage9() {
 
     return (
         <div className="">
-            <div id="cr_page9" className='relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] grid grid-cols-2 overflow-hidden'>
+            <div id="cr_page9" className='relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto grid grid-cols-2 overflow-hidden'>
                 <div className='flex ml-[116px]'> 
                     <div className='flex flex-col'>
                         

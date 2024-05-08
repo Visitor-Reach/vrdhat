@@ -61,9 +61,13 @@ def generate(church_name, email, map_name):
             os.makedirs(path)
         email_reform = email
         converter.convert(f'http://localhost:3000/complete_report/{str(dir)}?user_key={email_reform}&map_key={map_name}', path + "\\page" + str(dir) + ".pdf", print_options={"printBackground": True,
-                                                                                                                              "paperHeight" : 5.4,
-                                                                                                                              "paperWidth" : 11,
-                                                                                                                              "scale" : 0.4})
+                                                                                                                              "paperHeight" : 5.7,
+                                                                                                                              "paperWidth" : 10,
+                                                                                                                              "marginBottom": 0,
+                                                                                                                              "marginTop": 0,
+                                                                                                                              "marginLeft": 0,
+                                                                                                                              "marginRight": 0,
+                                                                                                                              "scale" : 0.5})
     # Create a list of image file paths
     pdf_pages = [
         f"{church_name}\\page1.pdf",

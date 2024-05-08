@@ -74,7 +74,7 @@ export default function CompleteReportPage3() {
     return (
         <div className="">
             
-            <div id="cr_page3" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] grid grid-cols-9 justify-center bg-white overflow-hidden" >
+            <div id="cr_page3" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto grid grid-cols-9 justify-center bg-white overflow-hidden" >
                 <div className="absolute left-[40px] top-[77px] w-[200px] z-[1000]">
                     <Image
                         src={"/full_report_logo.svg"}
@@ -116,7 +116,7 @@ export default function CompleteReportPage3() {
 
                     
                 </div>
-                <div className='col-span-3 flex flex-col justify-center items-center'>
+                <div className='col-span-3 flex flex-col justify-center items-center bg-[#F9FCFD]'>
                     <div className=" w-[453px] h-[880px] rounded-3xl ml-[0px] py-[66px] vertical-card-shadow">
                         <h1 className='text-[#050938] w-[353px] m-auto text-center font-[570] text-[32px] justify-center justify-items-center leading-[115%] tracking-[-1.3px]'>Your Digital Voice Score</h1>
                         <div className='m-auto grid justify-center mt-[30px]'>

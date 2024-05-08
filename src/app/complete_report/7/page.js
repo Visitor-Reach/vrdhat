@@ -76,7 +76,7 @@ export default function CompleteReportPage7() {
     return (
 
             
-            <div id="cr_page7" className='relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden'>
+            <div id="cr_page7" className='relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto grid grid-cols-9 grid-rows-2 justify-center bg-white overflow-hidden'>
                 <div className="absolute left-[40px] top-[77px] w-[200px] z-[1000]">
                     <Image
                         src={"/full_report_logo.svg"}

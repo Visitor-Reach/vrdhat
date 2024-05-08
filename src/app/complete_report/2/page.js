@@ -75,7 +75,7 @@ export default function CompleteReportPage2() {
     return (
         <div className="">
             
-            <div id="cr_page2" className={`relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] overflow-hidden` }>
+            <div id="cr_page2" className={`relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto overflow-hidden` }>
                 <div className="absolute w-[1920px] map-container ">
                     <Image
                         style={{ maxWidth: 'none' }}
