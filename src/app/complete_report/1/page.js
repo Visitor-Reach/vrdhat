@@ -6,6 +6,7 @@ import Circularbar from "../../../app/components/Circularbar1.js";
 import Link from 'next/link.js';
 import Summary from "../../../app/components/ScoreSummarySimple.js"
 import { useSearchParams } from 'next/navigation'
+import './1.css';
 
 export default function CompleteReportPage1() {
     const timeElapsed = Date.now();
@@ -72,18 +73,19 @@ export default function CompleteReportPage1() {
 
     return (
 
-            <div id="cr_page1" className="relative w-full h-[100vh] bg-white overflow-hidden">
+            <div id="cr_page1" className="relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] bg-white overflow-hidden">
                 <div className="">
-                    <div className="absolute left-[71px] top-[93px]">
-                        <Image
+                    <div className="mt-[93px] ml-[71px]">
+                        <Image className='w-[339px] h-[42px]'
                             src={"/full_report_logo.svg"}
-                            alt={" "}
+                            alt={"visitorreach logo"}
                             height={400}
                             width={400}
                         />
                     </div>
-                    <div className="absolute right-[0px] top-[426px] w-1/2 bg-clip-content">
+                    <div className="absolute right-[0px] top-[445px] bg-clip-content">
                         <Image
+                            className='h-[630px] w-full'
                             src={"/Omnichannel.png"}
                             alt={" "}
                             height={700}
@@ -91,11 +93,11 @@ export default function CompleteReportPage1() {
                         />
                     </div>
                     
-                    <h2 className="absolute left-[78px] top-[303px] text-[55px] font-medium bg-gradient-to-br from-[#6ECAF8] via-[#0179FF] via-50% to-[#2246E2] inline-block text-transparent bg-clip-text">Digital Health Assessment</h2>
-                    <h1 className="absolute left-[71px] top-[381px] text-black text-[65px] font-medium">{church_name}</h1>
+                    <h2 className="mt-[168px] ml-[78px] text-[60px] font-medium bg-gradient-to-br from-[#6ECAF8] via-[#0179FF] via-50% to-[#2246E2] inline-block text-transparent bg-clip-text">Digital Health Assessment</h2>
+                    <h1 className="ml-[74px] mt-[-30px] p-[0] text-[140px] text-black text-[65px] font-medium">{church_name}</h1>
                     <div className="">
-                        <div className="">
-                            <div className="absolute left-[89px] top-[574px] w-[21.8px]">
+                        <div className="flex items-center gap-[18px] ml-[78px] mt-[18px]">
+                            <div className="w-[21.8px]">
                                 <Image
                                     src={"/location_icon.svg"}
                                     alt={" "}
@@ -103,20 +105,22 @@ export default function CompleteReportPage1() {
                                     width={400}
                                 />
                             </div>
-                            <p  className="absolute left-[129px] top-[570px] text-[#75778B] text-[30px] font-medium">{loc_address}, {loc_city}, {loc_state} {loc_zipcode}</p>
+                            <p  className="text-[#75778B] text-[30px] font-medium">{loc_address}, {loc_city}, {loc_state} {loc_zipcode}</p>
                         </div>
-                        <div className="absolute left-[89px] top-[635px] w-[23.8px] text-[#75778B] text-[30px] font-medium">
-                            <Image
-                                src={"/website_icon.svg"}
-                                alt={" "}
-                                height={400}
-                                width={400}
-                            />
+                        <div className="flex items-center gap-[18px] ml-[78px] mt-[18px]">
+                            <div className="w-[23.8px] text-[#75778B] text-[30px] font-medium">
+                                <Image
+                                    src={"/website_icon.svg"}
+                                    alt={" "}
+                                    height={400}
+                                    width={400}
+                                />
+                            </div>
+                            <p className="text-[#75778B] text-[30px] font-medium">{webpage}</p>
                         </div>
-                        <p className="absolute left-[129.5px] top-[625px] text-[#75778B] text-[30px] font-medium">{webpage}</p>
                         
                     </div>
-                    <p className="block w-full absolute left-[89px] bottom-[100px] text-[#75778B] text-[20px] font-medium"> Assessment performed on <a className="font-semibold">{today.toDateString()}</a> </p>
+                    <p className="block w-full mt-[318px] ml-[78px] text-[#75778B] text-[24px] font-medium"> Assessment performed on <a className="font-semibold">{today.toDateString()}</a> </p>
                 </div>
             </div>
            

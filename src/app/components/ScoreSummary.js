@@ -97,7 +97,7 @@ const ScoreSummary = ({
   avgWebsiteAuthorityScore,
 }) => {
   return (
-    <div className='max-md:flex max-md:flex-col max-md:flex-wrap md:grid md:grid-cols-3 bg-white rounded-3xl max-md:w-full w-11/12 p-4 shadow-2xl'>
+    <div className='max-md:flex max-md:flex-col max-md:flex-wrap md:grid md:grid-cols-3 bg-white rounded-3xl max-md:w-full w-full p-4 shadow-2xl'>
       <div className='col-span-2'>
         <h2 className="text-2xl m-4 text-black font-medium ">
           Digital Health Score Summary

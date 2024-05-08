@@ -63,7 +63,7 @@ def generate(church_name, email, map_name):
         converter.convert(f'http://localhost:3000/complete_report/{str(dir)}?user_key={email_reform}&map_key={map_name}', path + "\\page" + str(dir) + ".pdf", print_options={"printBackground": True,
                                                                                                                               "paperHeight" : 5.4,
                                                                                                                               "paperWidth" : 11,
-                                                                                                                              "scale" : 0.5})
+                                                                                                                              "scale" : 0.4})
     # Create a list of image file paths
     pdf_pages = [
         f"{church_name}\\page1.pdf",
@@ -76,6 +76,9 @@ def generate(church_name, email, map_name):
         f"{church_name}\\page9.pdf",
     ]                                                                                                                       
     merge_pdf(church_name, pdf_pages)
+    
+if __name__ == '__main__':
+    generate('Dreamers Church', 'alexanderlopezp@gmail.com', '3')
         
  
  

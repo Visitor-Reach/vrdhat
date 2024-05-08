@@ -25,11 +25,11 @@ const ScoreBar = ({ score, avgscore, label }) => {
 
   return (
 <div className="mb-0 grid grid-cols-2 gap-5 mt-3 w-full">
-  <div className="mb-0 h-20">
-    <span className="text-slate-800 w-full block font-regular text-md relative top-2 left-5">
+  <div className="grid place-items-end">
+    <span className="text-slate-800 w-full block font-regular text-md">
       {label}
     </span>
-    <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5">
+    <span className="text-slate-400 w-full block font-regular text-md">
       Visitor Reach Church Average
     </span>
   </div>
@@ -83,12 +83,12 @@ const ScoreSummarySimple = ({
   avgWebsiteAuthorityScore,
 }) => {
   return (
-    <div className='grid grid-cols-3 bg-white rounded-3xl w-11/12 p-4 shadow-2xl'>
+    <div className='grid grid-cols-3 bg-white rounded-3xl w-full p-4 h-[430px]'>
       <div className='col-span-3 '>
-        <h2 className="text-2xl m-4 text-black font-medium ">
+        <h2 className="m-4 text-black font-medium text-center text-[30px] leading-[115%] tracking-[-1.2px]">
           Digital Health Score Summary
         </h2>
-        <div className=''>
+        <div className='mt-[50px]'>
           <div className='w-11/12 h-11/12 cl'>
             <ScoreBar
               score={digitalVoiceScore}
