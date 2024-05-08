@@ -93,7 +93,7 @@ export default function CompleteReportPage1() {
                         />
                     </div>
                     
-                    <h2 className="mt-[168px] ml-[78px] text-[60px] font-medium bg-gradient-to-br from-[#6ECAF8] via-[#0179FF] via-50% to-[#2246E2] inline-block text-transparent bg-clip-text">Digital Health Assessment</h2>
+                    <h2 className="mt-[168px] ml-[78px] text-[60px] font-medium text-[#0179FF] inline-block bg-clip-text">Digital Health Assessment</h2>
                     <h1 className="ml-[74px] mt-[-30px] p-[0] text-[140px] text-black text-[65px] font-medium">{church_name}</h1>
                     <div className="">
                         <div className="flex items-center gap-[18px] ml-[78px] mt-[18px]">

@@ -92,7 +92,7 @@ export default function CompleteReportPage8() {
                 </div>
                 <div className='col-span-7 row-span-2 bg-[#F9FCFD] pt-[80px] pl-[80px] overflow-hidden'>
                     <div className='relative z-[2000]'>
-                        <h1 className='text-[#0179FF] text-[48px] font-[500]'><span className='name'>VisitorReach™</span><a className='text-[#050938]'>—Your Digital Outreach Platform</a></h1>
+                        <h1 className='text-[#0179FF] text-[48px] font-[500]'><span className='text-[#0179FF]'>VisitorReach™</span><a className='text-[#050938]'>—Your Digital Outreach Platform</a></h1>
                         <h2 className='mt-[50px] text-[24px] font-regular text-[#050938] w-[1178px] leading-[143%] tracking-[-0.9px]'>
                             VisitorReach is much more than just a website optimization platform or advertising agency. It’s a digital outreach program empowering pastors to have continual and consistent 1:1 SMS <a className='text-[#0179FF]'>conversations with seekers and new people to your city</a>. Churches that partner with VisitorReach average 40–160 new conversations every month and see new visitors walking through their doors every week.
                         </h2>
@@ -129,7 +129,7 @@ export default function CompleteReportPage8() {
                         <h1 className='text-[#050938] text-[48px] font-[500] mt-[50px] leading-[115%] tracking-[-1.9px]'>
                             The VisitorReach Process - 
                         </h1>
-                        <h1 className='text-[48px] font-[500] leading-[115%] tracking-[-1.9px] name'>Created for Pastors, by Pastors</h1>
+                        <h1 className='text-[48px] font-[500] leading-[115%] tracking-[-1.9px] text-[#0179FF]'>Created for Pastors, by Pastors</h1>
                     </div>
                     <div className='relative z-[1000]'>
                         <Image
