@@ -47,9 +47,10 @@ def post_contact_hubspot(church_obj):
     'Content-Type': 'application/json',
     'Authorization' : f'Bearer {HUBSPOT_API_KEY}'
     }
-    conn.request("POST", f"/crm/v3/objects/contacts?{HUBSPOT_API_KEY}", payload, headers)
+    conn.request("POST", f"/crm/v3/objects/contacts", payload, headers)
     res = conn.getresponse()
     data = res.read()
+    #print("DATA: ", payload)
     print("New contact: ", data)
    
     conn = http.client.HTTPSConnection("api.hubapi.com")
@@ -71,11 +72,13 @@ def post_contact_hubspot(church_obj):
     'Content-Type': 'application/json',
     'Authorization' : f'Bearer {HUBSPOT_API_KEY}'
     }
-    conn.request("POST", f"/crm/v3/objects/companies?{HUBSPOT_API_KEY}", payload, headers)
+    conn.request("POST", f"/crm/v3/objects/companies", payload, headers)
     res = conn.getresponse()
     data = res.read()
+    #print("COMPANY DATA: ", payload)
     print("New company: ", data)
-    return (data.decode("utf-8"))
+    #return (data.decode("utf-8"))
+    return 0
 
 
 def send_email(church_obj):
