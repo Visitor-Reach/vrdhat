@@ -119,7 +119,7 @@ export default function SimpleResult() {
           </div>
         </section>
 
-        <Link href="connect.visitorreach.com/digital-health-follow-up">
+        <Link href="https://connect.visitorreach.com/digital-health-follow-up">
           <button className="max-md:text-1xl md:text-2xl  font-medium text-white rounded-full hover:bg-white bg-gradient-to-br from-vr-button-first via-vr-button-second to-vr-button-third hover:text-vr-button-third mt-[20px] h-16 max-md:w-full w-[550px] max-md:p-[10px] ">
             schedule a 15 minute call to learn more
           </button>
