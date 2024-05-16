@@ -1,6 +1,7 @@
 'use client'
 
 import 'next/router'
+import './page.css'
 
 import { Controls, Player } from '@lottiefiles/react-lottie-player'
 import React, { useEffect, useRef, useState } from 'react'
@@ -88,7 +89,7 @@ export default function Page() {
     return (
       <div className="pt loading flex-grow flex flex-col justify-center items-center">
         <div className=" ">
-          <Player autoplay loop src="/Message Loading 1.json" style={{ width: '800px', height: '800px' }}>
+          <Player autoplay loop src="/Message Loading 1.json" style={{ width: '100%' }}>
             <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
           </Player>
         </div>
@@ -333,68 +334,64 @@ export default function Page() {
           <LoadingAnimation />
         ) : (
           <form onSubmit={onSubmit}>
-            <div className="">
-              <h1 className="relative tablet-vertical:top-20 phone:top-20 phone::left-20 tablet-vertical:left-44 tablet-vertical:text-6xl phone:text-2xl w-2/3 text-vr-form-title font-medium">
+            <div className="flex flex-col justify-center items-center text-2xl text-vr-form-title font-medium">
+              <h1 className="w-2/3 text-vr-form-title max-md:text-4xl text-6xl">
                 Let's get some information for your report
               </h1>
 
-              <div className="m-auto mt-40 flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  w-5/6">
-                <div className="flex flex-wrap m-auto w-full phone:gap-1 ">
-                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center w-10/12 mt-5 gap-5">
+              <div className="fields-container m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-10/12 overflow-hidden">
+                <div className="flex flex-wrap m-auto w-full p-[10px] gap-5">
+                  <div className="form-page-input-row-2-elements">
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="firstName"
                       placeholder="First Name"
                       onBlur={onInputBlur}
                     />
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="lastName"
                       placeholder="Last Name"
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-2-elements">
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="mobilePhone"
                       placeholder="Mobile Phone"
                       onBlur={onInputBlur}
                     />
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="email"
                       placeholder="Email"
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-2-elements">
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchName"
                       placeholder="Church Name"
                       onBlur={onInputBlur}
                     />
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchWebsite"
                       placeholder="Church Website"
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-2-elements">
                     <div className="relative phone:w-full tablet-vertical:w-full">
-                      <select
-                        className="pl-5 appearance-none rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-500"
-                        name="churchSize"
-                        onBlur={onInputBlur}
-                      >
+                      <select className="form-page-input appearance-none" name="churchSize" onBlur={onInputBlur}>
                         <option value=""> Church Size </option>
                         {church_sizes.map((church_sizes) => (
                           <option key={church_sizes} value={church_sizes}>
@@ -405,17 +402,17 @@ export default function Page() {
                       <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
                     </div>
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchPhone"
                       placeholder="Church Phone"
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="grid grid-cols-1 m-auto justify-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-1-element">
                     <div className="flex-row relative">
                       <input
-                        className="placeholder:text-slate-400 w-full pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-1full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                        className="form-page-input"
                         type=" text"
                         name="churchAddress"
                         placeholder="Church Address"
@@ -440,10 +437,10 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-3 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-3-elements">
                     <div className="flex-row relative phone:w-full tablet-vertical:w-full">
                       <input
-                        className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                        className="form-page-input"
                         type=" text"
                         name="churchZipCode"
                         placeholder="Zip Code"
@@ -470,18 +467,14 @@ export default function Page() {
                       </div>
                     </div>
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchCity"
                       placeholder="City"
                       onBlur={onInputBlur}
                     />
                     <div className="relative phone:w-full tablet-vertical:w-full">
-                      <select
-                        className="pl-5 appearance-none rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-500"
-                        name="churchState"
-                        onBlur={onInputBlur}
-                      >
+                      <select className="form-page-input appearance-none" name="churchState" onBlur={onInputBlur}>
                         <option value=""> State </option>
                         {states.map((state) => (
                           <option key={state.id} value={state.id}>
@@ -492,16 +485,16 @@ export default function Page() {
                       <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 m-auto justify-center justify-items-center  w-10/12 mt-5 gap-5">
+                  <div className="form-page-input-row-2-elements">
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchInstagram"
                       placeholder="Church Instagram Handle"
                       onBlur={onInputBlur}
                     />
                     <input
-                      className="placeholder:text-slate-400 pl-5 rounded-3xl h-16 phone:text-sm phone:h-10 phone:w-full tablet-vertical:text-xl tablet-vertical:w-full bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-600"
+                      className="form-page-input"
                       type=" text"
                       name="churchFacebook"
                       placeholder="Church Facebook Handle"
@@ -529,7 +522,7 @@ export default function Page() {
                   </div>
                 </div>
 
-                <div className="pt-10 pl-24 pb-10 flex-row">
+                <div className="pt-10 pl-10 pb-10">
                   <button
                     className="w-60 h-14 rounded-full text-white text-2xl bg-vr-title-second hover:bg-slate-100 hover:text-vr-title-second hover:shadow-sm"
                     type="submit"

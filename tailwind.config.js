@@ -24,11 +24,6 @@ module.exports = {
         "vr-button-third": "#2246E2"
       },
       screens: {
-        'tablet-vertical': {"min":"760px"},
-        // => @media (min-width: 640px) { ... }
-
-        'phone': {"max":"500px"},
-        // => @media (min-width: 1024px) { ... }
 
       },
       

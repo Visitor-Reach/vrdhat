@@ -1,0 +1,17 @@
+.page-7-shadow-box-1 {
+    border: 1px solid var(--Stroke-Color, #EFF0F6);
+    /*box-shadow: 0px 51px 14px 0px rgba(0, 0, 0, 0.00), 0px 33px 13px 0px rgba(0, 0, 0, 0.00), 0px 18px 11px 0px rgba(0, 0, 0, 0.01), 0px 8px 8px 0px rgba(0, 0, 0, 0.02), 0px 2px 5px 0px rgba(0, 0, 0, 0.03);
+    -webkit-box-shadow: 0px 51px 14px 0px rgba(0, 0, 0, 0.00), 0px 33px 13px 0px rgba(0, 0, 0, 0.00), 0px 18px 11px 0px rgba(0, 0, 0, 0.01), 0px 8px 8px 0px rgba(0, 0, 0, 0.02), 0px 2px 5px 0px rgba(0, 0, 0, 0.03);*/
+}
+
+.page-7-shadow-box-2 {
+    border: 1px solid var(--Stroke-Color, #EFF0F6);
+    /*box-shadow: 0px 51px 14px 0px rgba(0, 0, 0, 0.00), 0px 33px 13px 0px rgba(0, 0, 0, 0.00), 0px 18px 11px 0px rgba(0, 0, 0, 0.01), 0px 8px 8px 0px rgba(0, 0, 0, 0.02), 0px 2px 5px 0px rgba(0, 0, 0, 0.03);
+    -webkit-box-shadow: 0px 51px 14px 0px rgba(0, 0, 0, 0.00), 0px 33px 13px 0px rgba(0, 0, 0, 0.00), 0px 18px 11px 0px rgba(0, 0, 0, 0.01), 0px 8px 8px 0px rgba(0, 0, 0, 0.02), 0px 2px 5px 0px rgba(0, 0, 0, 0.03);*/
+}
+
+.page-7-shadow-box-3 {
+    border: 1px solid var(--Stroke-Color, #EFF0F6);
+    /*box-shadow: 38px 83px 26px 0px rgba(162, 208, 236, 0.00), 24px 53px 23px 0px rgba(162, 208, 236, 0.03), 14px 30px 20px 0px rgba(162, 208, 236, 0.11), 6px 13px 15px 0px rgba(162, 208, 236, 0.18), 2px 3px 8px 0px rgba(162, 208, 236, 0.21);
+    -webkit-box-shadow: 38px 83px 26px 0px rgba(162, 208, 236, 0.00), 24px 53px 23px 0px rgba(162, 208, 236, 0.03), 14px 30px 20px 0px rgba(162, 208, 236, 0.11), 6px 13px 15px 0px rgba(162, 208, 236, 0.18), 2px 3px 8px 0px rgba(162, 208, 236, 0.21);*/
+}

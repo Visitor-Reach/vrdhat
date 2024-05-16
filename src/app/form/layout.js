@@ -1,4 +1,5 @@
 import '../globals.css'
+import './layout.css'
 
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
@@ -19,14 +20,8 @@ export const metadata = {
 
 export default function FormLayout({ children }) {
   return (
-    <div>
-      <Image
-        src={'VR Logo Small.svg'}
-        className="absolute top-20 left-0 h-6 phone:h-5 phone:top-5 phone:left-0"
-        alt="VR Logo"
-        width={500}
-        height={500}
-      />
+    <div className="layout-container">
+      <Image src={'VR Logo Small.svg'} className="mt-100 h-5" alt="VR Logo" width={500} height={500} />
 
       {children}
     </div>

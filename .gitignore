@@ -36,3 +36,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 backend/__pycache__
+
+variables
+venv
+backend/__pycache__/church.cpython-311.pyc
+*.pyc

@@ -9,13 +9,13 @@ const ScoreBar = ({ score, avgscore, label }) => {
 
 
   if (score_percentage >= 75) {
-    barColor = 'bg-green-500';
+    barColor = 'bg-[#2246E2]';
   } else if (score_percentage >= 50) {
     barColor = 'bg-orange-500';
   }
 
   if (avgscore_percentage >= 75) {
-    avgbarColor = 'bg-green-500';
+    avgbarColor = 'bg-[#2246E2]';
   } else if (avgscore_percentage >= 50) {
     avgbarColor = 'bg-orange-500';
   }
@@ -25,24 +25,24 @@ const ScoreBar = ({ score, avgscore, label }) => {
 
   return (
 <div className="mb-0 grid grid-cols-2 gap-5 mt-3 w-full">
-  <div className="mb-0 h-20">
-    <span className="text-slate-800 w-full block font-regular text-md relative top-2 left-5">
+  <div className="grid place-items-end">
+    <span className="text-slate-800 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px] relative top-[12px]">
       {label}
     </span>
-    <span className="text-slate-400 w-full block font-regular text-md relative top-6 left-5">
+    <span className="text-slate-400 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px]">
       Visitor Reach Church Average
     </span>
   </div>
   <div className="">
-    <div className="">
+    <div className="h-[28px]">
       <span
         className="text-black relative text-sm text-semibold"
-        style={{ left: scorePosition }}
+        style={{ left: scorePosition, top: "10px" }}
       >
         {score}
       </span>
       <div className="grid place-items-center mb-0 h-5 m-auto">
-        <div className="h-4 bg-gray-300 rounded-full w-full overflow-hidden relative">
+        <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
           <div
             className={`h-full rounded-l-full ${barColor} mb-5`}
             style={{ width: `${score_percentage}%` }}
@@ -53,12 +53,12 @@ const ScoreBar = ({ score, avgscore, label }) => {
     <div className="">
       <span
         className="text-black relative text-sm text-semibold"
-        style={{ left: avgscorePosition }}
+        style={{ left: avgscorePosition, top: "10px" }}
       >
         {avgscore}
       </span>
       <div className="grid place-items-center mb-0 h-5 m-auto">
-        <div className="h-4 bg-gray-300 rounded-full w-full overflow-hidden relative">
+        <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
           <div
             className={`h-full rounded-l-full ${avgbarColor} mb-0`}
             style={{ width: `${avgscore_percentage}%` }}
@@ -83,12 +83,12 @@ const ScoreSummarySimple = ({
   avgWebsiteAuthorityScore,
 }) => {
   return (
-    <div className='grid grid-cols-3 bg-white rounded-3xl w-11/12 p-4 shadow-2xl'>
+    <div className='grid grid-cols-3 bg-white rounded-3xl w-full p-4 h-[430px]'>
       <div className='col-span-3 '>
-        <h2 className="text-2xl m-4 text-black font-medium ">
+        <h2 className="m-4 text-black font-medium text-center text-[30px] leading-[115%] tracking-[-1.2px]">
           Digital Health Score Summary
         </h2>
-        <div className=''>
+        <div className='mt-[50px]'>
           <div className='w-11/12 h-11/12 cl'>
             <ScoreBar
               score={digitalVoiceScore}
