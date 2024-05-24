@@ -7,6 +7,8 @@ import time
 import threading
 import pdf_gen
 import os
+import re
+import shutil
 
 
 # Configure Flask-Mail (replace with your app instance)
@@ -89,13 +91,14 @@ def get_map_id(email):
 
 
 def send_email_with_pdf(recipient_email, pdf_bytes, church_name, first_name):
-    church_name = (church_name).replace(" ", "_").lower()
+    church_name = church_name.lower().replace(" ", "_")
+    church_name = re.sub(r'[^\w\s]', '', church_name)
     msg = Message(
         "Check your Digital Health Assessment report for your church: " + church_name,
         sender='digitalhealth@visitorreach.com',
         recipients=[recipient_email, "digitalhealth@visitorreach.com"]
     )
-    with app.open_resource("reports\\" + church_name + ".pdf") as pdf_file:
+    with app.open_resource("reports/" + church_name + "/" + church_name + ".pdf") as pdf_file:
         msg.attach(f"{church_name}.pdf", "application/pdf", pdf_file.read())
     msg.html = render_template("email.html", first_name=first_name)
     mail.send(msg)
@@ -110,12 +113,15 @@ def check_and_send_emails(app):
 
         for user in users:
             email, church_name, first_name, pdf_sent = user
+            church_name = church_name.lower().replace(" ", "_")
+            church_name = re.sub(r'[^\w\s]', '', church_name)
             map_id = get_map_id(email)
             pdf_bytes = pdf_gen.generate(church_name, email, map_id)
             with app.app_context():
                 send_email_with_pdf(email, pdf_bytes, church_name, first_name)
 
             update_sent_pdf(email)
+            shutil.rmtree('reports/' + church_name)
         procesando = False
 
 
@@ -123,7 +129,7 @@ def check_and_send_emails(app):
 scheduler = BackgroundScheduler()
 
 # Schedule the send_email function to run every 2 minutes
-scheduler.add_job(check_and_send_emails, 'interval', minutes=1, args=[app])
+scheduler.add_job(check_and_send_emails, 'interval', seconds=30, args=[app])
 
 # Start the scheduler
 scheduler.start()

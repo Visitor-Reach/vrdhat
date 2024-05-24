@@ -11,6 +11,7 @@ import requests
 import pdf_gen
 import db_manage
 
+
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
 
 app = Flask(__name__)
@@ -90,7 +91,7 @@ def send_email(church_obj):
         recipients=[church_obj.email]
     )
     pdf_gen.generate(church_obj.name)
-    with app.open_resource("reports\\" + (church_obj.name).replace(" ", "_") + ".pdf") as pdf_file:
+    with app.open_resource("reports/" + (church_obj.name).replace(" ", "_") + ".pdf") as pdf_file:
         msg.attach(church_obj.name + ".pdf",
                    "application/pdf", pdf_file.read())
     msg.html = render_template("email.html", first_name=church_obj.first_name)
@@ -125,6 +126,7 @@ def handle_form_submission():
     except:
         pass
     church_obj.get_digital_search_assesment_score()
+    church_obj.write_object_to_json()
     post_contact_hubspot(church_obj)
     # send_email(church_obj)
     map_index = db_manage.insert_User(json_data.get("firstName"),
@@ -152,8 +154,6 @@ def handle_form_submission():
                                       )
     if map_index is not None:
         church_obj.get_map_image(church_obj.email)
-        print("Map index: ", map_index)
-        print("New user created")
         return jsonify({'map_index': f'{map_index}'})
     else:
         pass
@@ -167,7 +167,6 @@ def handle_form_submission():
 @app.route('/api/fetch-data', methods=['POST'])
 def fetch_data():
     data = request.get_json()
-    print(data)
     try:
         user_key = data.get("user_key")
         user_info = db_manage.retrieve_User_complete_report(user_key)
@@ -191,7 +190,6 @@ def fetch_data():
             'keywords': user_info[12]
         }
 
-        print("Fetched Data")
         return jsonify(response_json)
     except Exception as error_msg:
         print("Error: ", error_msg)
