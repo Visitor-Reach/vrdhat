@@ -8,6 +8,8 @@ import requests
 import os
 import json
 import re
+from requests.structures import CaseInsensitiveDict
+from urllib.parse import quote, unquote
 
 states_dic = {
     'AK': 'Alaska',
@@ -68,7 +70,6 @@ states_dic = {
     'WV': 'West Virginia',
     'WY': 'Wyoming'
 }
-
 
 SEMRUSH_API_KEY = os.environ.get('SEMRUSH_API_KEY')
 SERPAPI_API_KEY = os.environ.get('SERPAPI_API_KEY')
@@ -174,13 +175,19 @@ class church:
         self.yelp_description_score = 0
         self.yelp_schedule_score = 0
 
-        self.maps_score = 22
-        self.google_score = 0
-        self.apple_score = 0
-        self.voice_score = 34
+        self.parsed_address = ""
+        self.original_address = ""
+        self.google_parsed_address = ""
+        self.apple_parsed_address = ""
+        self.yelp_parsed_address = ""
 
-        self.domain_trust_score = 0
+        self.church_search_results = ""
+
         self.domain_organic_keywords = []
+
+        self.maps_score = 12
+        self.voice_score = 34
+        self.domain_trust_score = 0
 
         self.digital_search_assesment_score = 0
 
@@ -263,20 +270,25 @@ class church:
         return self.domain_organic_keywords
 
     def get_digital_search_assesment_score(self):
+        self.standarize_initial_address()
         self.set_coordinates()
         self.get_semrush_domain_organic_results()
-        self.get_semrush_authority_score()
+        # self.get_semrush_authority_score()
+        self.get_domain_trust_score()
         self.get_maps_score()
         self.get_voice_score()
-        self.digital_search_assesment_score += self.domain_trust_score + \
-            self.maps_score + self.voice_score
+        self.digital_search_assesment_score += \
+            self.domain_trust_score + \
+            self.maps_score + \
+            self.voice_score
 
     def set_coordinates(self):
-        location_retriever = pgeocode.Nominatim(country='us')
-        location_info_zipcode = location_retriever.query_postal_code(
-            self.zipcode)
-        self.coordinates = (
-            location_info_zipcode["latitude"], location_info_zipcode["longitude"])
+        if self.coordinates == "":
+            location_retriever = pgeocode.Nominatim(country='us')
+            location_info_zipcode = location_retriever.query_postal_code(
+                self.zipcode)
+            self.coordinates = (
+                location_info_zipcode["latitude"], location_info_zipcode["longitude"])
 
     def find_all_letters(self, text_list):
         """
@@ -426,20 +438,43 @@ class church:
         """
 
         # Clean both addresses
-        cleaned_customer_address = self.clean_address(self.address)
-        cleaned_map_address = self.clean_address(map_adress)
+        # cleaned_customer_address = self.clean_address(self.address)
+        # cleaned_map_address = self.clean_address(map_adress)
+        response = self.parse_address(map_adress)
 
-        self.address_clean = cleaned_customer_address
-        if type == "google":
-            self.google_address_clean = self.clean_address(map_adress)
-        elif type == "apple":
-            self.apple_address_clean = self.clean_address(map_adress)
-        elif type == "yelp":
-            self.yelp_address_clean = self.clean_address(map_adress)
+        # self.address_clean = cleaned_customer_address
+        if response.get('results') != None:
+            if len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
+                result = response.get('results')[0]
+
+                if type == "google":
+                    self.google_parsed_address = result
+                    self.google_address = result.get('address_line1')
+                    self.google_city = result.get('city')
+                    self.google_state = result.get('state')
+                    self.google_zipcode = result.get('postcode')
+                    self.google_coordinates = (
+                        result.get('lat'), result.get('lon'))
+                elif type == "apple":
+                    self.apple_parsed_address = result
+                    self.apple_address = result.get('address_line1')
+                    self.apple_city = result.get('city')
+                    self.apple_state = result.get('state')
+                    self.apple_zipcode = result.get('postcode')
+                    self.apple_coordinates = (
+                        result.get('lat'), result.get('lon'))
+                elif type == "yelp":
+                    self.yelp_parsed_address = result
+                    self.yelp_address = result.get('address_line1')
+                    self.yelp_city = result.get('city')
+                    self.yelp_state = result.get('state')
+                    self.yelp_zipcode = result.get('postcode')
+                    self.yelp_coordinates = (
+                        result.get('lat'), result.get('lon'))
 
         # Calculate similarity score using Levenshtein distance
         address_similarity = self.text_similarity(
-            cleaned_customer_address, cleaned_map_address)
+            self.address, result.get('address_line1'))
         return address_similarity
 
     def get_yelp_name_score(self):
@@ -461,7 +496,7 @@ class church:
     def get_yelp_schedule_score(self):
         for sched_el in self.yelp_schedule:
             if (sched_el.get("day")).lower() == "sun":
-                if len(sched_el.get("hours")) > 0:
+                if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
                     self.yelp_schedule_score = 27
                     return self.yelp_schedule_score
 
@@ -519,10 +554,10 @@ class church:
 
     def get_google_schedule_score(self):
         for sched_el in self.google_schedule:
-            if len(sched_el.get("sunday", "")) > 0:
-                if len(sched_el.get("hours", "")) > 0:
-                    self.google_schedule_score = 14
-                    return self.google_schedule_score
+            if sched_el.get("sunday", "") != None and sched_el.get("sunday", "") != "Closed":
+                # if len(sched_el.get("hours", "")) > 0:
+                self.google_schedule_score = 14
+                return self.google_schedule_score
 
     def get_google_webpage_score(self):
         if self.text_similarity(self.webpage, self.google_webpage) >= 85:
@@ -535,30 +570,33 @@ class church:
             return self.google_phone_score
 
     def get_google_addres_score(self):
-
         if self.address_similarity(self.google_address, 'google') >= 85:
             self.google_address_score = 14
             return self.google_address_score
 
     def get_google_state_score(self):
         if self.text_similarity(self.state, self.google_state) >= 95:
-            self.google_state_score = 27
+            self.google_state_score = 14
             return self.google_state_score
 
     def get_google_score(self):
         self.set_google_maps_att()
-        self.get_google_name_score()  # 20
-        self.get_google_category_score()  # 14
-        self.get_google_about_score()  # 15
-        self.get_google_schedule_score()  # 0
-        self.get_google_webpage_score()  # 14
-        self.get_google_phone_score()  # 0
-        self.get_google_addres_score()  # 0
-        self.get_google_state_score()  # 0
+        self.get_google_addres_score()
+        self.get_google_name_score()
+        self.get_google_category_score()
+        self.get_google_about_score()
+        self.get_google_schedule_score()
+        self.get_google_webpage_score()
+        self.get_google_phone_score()
+        self.get_google_state_score()
 
     def get_apple_name_score(self):
+        self.apple_name = unquote(self.apple_name).replace("’", "'")
         name_similarity_value = self.name_similarity(self.apple_name)
         self.apple_name_score = 20 * (name_similarity_value > 95)
+        if self.apple_name_score == 0 and self.apple_name in self.name:
+            self.apple_name_score = 20
+
         return self.apple_name_score
 
     def get_apple_category_score(self):
@@ -595,33 +633,44 @@ class church:
 
     def get_apple_state_score(self):
         if self.text_similarity(self.state, self.apple_state) >= 95:
-            self.apple_state_score = 27
+            self.apple_state_score = 14
             return self.apple_state_score
 
     def get_apple_score(self):
         self.set_duckduckgo_maps_att()
-        self.get_apple_name_score()  # 0
-        self.get_apple_category_score()  # 14
-        self.get_apple_about_score()  # 15
-        self.get_apple_schedule_score()  # 14
-        self.get_apple_webpage_score()  # 14
-        self.get_apple_phone_score()  # 0
-        self.get_apple_addres_score()  # 14
-        self.get_apple_state_score()  # 0
+        self.get_apple_addres_score()
+        self.get_apple_name_score()
+        self.get_apple_category_score()
+        self.get_apple_about_score()
+        self.get_apple_schedule_score()
+        self.get_apple_webpage_score()
+        self.get_apple_phone_score()
+        self.get_apple_state_score()
 
     def get_maps_score(self):
         self.get_google_score()
         self.get_apple_score()
-        self.apple_maps_score += self.apple_name_score + self.apple_category_score + \
-            self.apple_description_score + self.apple_schedule_score + self.apple_webpage_score
-        self.apple_maps_score += self.apple_phone_score + \
-            self.apple_address_score + self.apple_state_score
-        self.google_maps_score += (self.google_name_score + self.google_category_score + self.google_description_score + self.google_schedule_score +
-                                   self.google_webpage_score + self.google_phone_score + self.google_address_score + self.google_state_score)
+        self.apple_maps_score += \
+            self.apple_name_score + \
+            self.apple_category_score + \
+            self.apple_description_score + \
+            self.apple_schedule_score + \
+            self.apple_webpage_score + \
+            self.apple_phone_score + \
+            self.apple_address_score + \
+            self.apple_state_score
+        self.google_maps_score += \
+            self.google_name_score + \
+            self.google_category_score + \
+            self.google_description_score + \
+            self.google_schedule_score + \
+            self.google_webpage_score + \
+            self.google_phone_score + \
+            self.google_address_score + \
+            self.google_state_score
         self.maps_score += (self.apple_maps_score + self.google_maps_score)
 
     def set_duckduckgo_maps_att(self):
-
         params = {
             "engine": "duckduckgo_maps",
             "q": self.name,
@@ -650,21 +699,23 @@ class church:
                             local_results[0]["gps_coordinates"]["latitude"], local_results[0]["gps_coordinates"]["longitude"])
                         try:
                             self.apple_address = local_results[0].get(
-                                "address", "").split(",")[0]
-                            if states_dic.get(local_results[0].get("address", "").split(", ")[2].split(" ")[0], "") == "":
-                                self.apple_state = states_dic[local_results[0].get(
-                                    "address", "").split(", ")[3].split(" ")[0]]
-                                self.apple_city = local_results[0].get(
-                                    "address", "").split(",")[2]
-                                self.apple_zipcode = local_results[0].get(
-                                    "address", "").split(",")[3].split(" ")[1]
-                            else:
-                                self.apple_state = states_dic[local_results[0].get(
-                                    "address", "").split(", ")[2].split(" ")[0]]
-                                self.apple_city = local_results[0].get(
-                                    "address", "").split(",")[1]
-                                self.apple_zipcode = local_results[0].get(
-                                    "address", "").split(",")[2].split(" ")[1]
+                                'address', '')
+                            # self.apple_address = local_results[0].get(
+                            #     "address", "").split(",")[0]
+                            # if states_dic.get(local_results[0].get("address", "").split(", ")[2].split(" ")[0], "") == "":
+                            #     self.apple_state = states_dic[local_results[0].get(
+                            #         "address", "").split(", ")[3].split(" ")[0]]
+                            #     self.apple_city = local_results[0].get(
+                            #         "address", "").split(",")[2]
+                            #     self.apple_zipcode = local_results[0].get(
+                            #         "address", "").split(",")[3].split(" ")[1]
+                            # else:
+                            #     self.apple_state = states_dic[local_results[0].get(
+                            #         "address", "").split(", ")[2].split(" ")[0]]
+                            #     self.apple_city = local_results[0].get(
+                            #         "address", "").split(",")[1]
+                            #     self.apple_zipcode = local_results[0].get(
+                            #         "address", "").split(",")[2].split(" ")[1]
 
                         except IndexError:
                             pass
@@ -683,7 +734,6 @@ class church:
                             "operating_hours", "")
 
     def set_google_maps_att(self):
-
         params = {
             "engine": "google_maps",
             "google_domain": "google.com",
@@ -719,14 +769,14 @@ class church:
                     place_results["gps_coordinates"]["latitude"], place_results["gps_coordinates"]["longitude"])
 
                 try:
-                    self.google_address = place_results.get(
-                        "address", "").split(",")[0]
-                    self.google_city = place_results.get(
-                        "address", "").split(",")[1]
-                    self.google_state = states_dic[self.find_all_letters(
-                        place_results.get("address", "").split(",")[2].split(" "))[0]]
-                    self.google_zipcode = self.extract_zipcode(
-                        place_results.get("address", ""))
+                    self.google_address = place_results.get('address', '')
+                    # self.google_address = place_results.get("address", "").split(",")[0]
+                    # self.google_city = place_results.get(
+                    #     "address", "").split(",")[1]
+                    # self.google_state = states_dic[self.find_all_letters(
+                    #     place_results.get("address", "").split(",")[2].split(" "))[0]]
+                    # self.google_zipcode = self.extract_zipcode(
+                    #     place_results.get("address", ""))
                 except IndexError:
                     pass
                 allowed_chars = string.digits
@@ -747,14 +797,15 @@ class church:
                     place_results["gps_coordinates"]["latitude"], place_results["gps_coordinates"]["longitude"])
 
                 try:
-                    self.google_address = place_results.get(
-                        "address", "").split(",")[0]
-                    self.google_city = place_results.get(
-                        "address", "").split(",")[1]
-                    self.google_state = states_dic[self.find_all_letters(
-                        place_results.get("address", "").split(",")[2].split(" "))[0]]
-                    self.google_zipcode = self.extract_zipcode(
-                        place_results.get("address", ""))
+                    self.google_address = place_results.get('address', '')
+                    # self.google_address = place_results.get(
+                    #     "address", "").split(",")[0]
+                    # self.google_city = place_results.get(
+                    #     "address", "").split(",")[1]
+                    # self.google_state = states_dic[self.find_all_letters(
+                    #     place_results.get("address", "").split(",")[2].split(" "))[0]]
+                    # self.google_zipcode = self.extract_zipcode(
+                    #     place_results.get("address", ""))
                 except IndexError:
                     pass
                 allowed_chars = string.digits
@@ -801,14 +852,15 @@ class church:
 
             self.yelp_name = place_result.get("name")
             try:
-                self.yelp_address = place_result.get(
-                    "address", "").split(",")[0]
-                self.yelp_city = place_result.get("address", "").split(",")[
-                    0].split(" ")[-1]
-                self.yelp_state = states_dic[self.find_all_letters(
-                    place_result.get("address", "").split(",")[1].split(" "))[0]]
-                self.yelp_zipcode = place_result.get("address", "").split(",")[
-                    1].split(" ")[-1]
+                self.yelp_address = place_result.get("address", "")
+                # self.yelp_address = place_result.get(
+                #     "address", "").split(",")[0]
+                # self.yelp_city = place_result.get("address", "").split(",")[
+                #     0].split(" ")[-1]
+                # self.yelp_state = states_dic[self.find_all_letters(
+                #     place_result.get("address", "").split(",")[1].split(" "))[0]]
+                # self.yelp_zipcode = place_result.get("address", "").split(",")[
+                #     1].split(" ")[-1]
             except IndexError:
                 pass
             allowed_chars = string.digits
@@ -835,3 +887,46 @@ class church:
         # Write the dictionary to a JSON file
         with open(self.clean_name(self.name) + '.json', 'w') as f:
             json.dump(data, f)
+
+    def standarize_initial_address(self):
+        full_address = f'{self.address} {
+            self.city} {self.state} {self.zipcode}'
+
+        response = self.parse_address(full_address)
+        if response.get('results') != None and len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
+            result = response.get('results')[0]
+            self.parsed_address = result
+            self.original_address = full_address
+            self.address = result.get('address_line1')
+            self.city = result.get('city')
+            self.state = result.get('state')
+            self.zipcode = result.get('postcode')
+            self.coordinates = (result.get('lat'), result.get('lon'))
+        else:
+            print(response.json())
+
+    def parse_address(self, addressString):
+        url = 'https://api.geoapify.com/v1/geocode/search?text=' + quote(addressString) + \
+            '&filter=countrycode:us&format=json&apiKey=db974c6b48e44e5a822f9b88a9c267b1'
+        headers = CaseInsensitiveDict()
+        headers["Accept"] = "application/json"
+        response = requests.get(url, headers=headers)
+        return response.json()
+
+    def get_domain_trust_score(self):
+        url = f"https://serpapi.com/search?engine=google_maps&google_domain=google.com&q=church&ll=@{
+            self.coordinates[0]},{self.coordinates[1]},15.1z&api_key={SERPAPI_API_KEY}&hl=en&type=search"
+        response = requests.request("GET", url)
+        results = response.json()
+        self.church_search_results = []
+        for result in results.get("local_results"):
+            if (result.get("position") > 10):
+                break
+            self.church_search_results.append(
+                f"{result.get("position")} - {result.get("title")}")
+            if self.name_similarity(result.get("title")) > 95:
+                self.domain_trust_score = 275 - result.get("position") * 25
+                break
+        if self.domain_trust_score < 0:
+            self.domain_trust_score = 0
+        return self.domain_trust_score

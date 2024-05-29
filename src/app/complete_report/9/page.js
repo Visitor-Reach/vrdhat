@@ -81,7 +81,7 @@ export default function CompleteReportPage9() {
         <div className="flex ml-[116px]">
           <div className="flex flex-col">
             <div className="mt-[74px] flex justify-start">
-              <Image className="h-[58px]" src={'/Logo.svg'} alt={' '} height={58} width={393} />
+              <Image className="h-[58px]" src={'/Logo-2.svg'} alt={' '} height={58} width={393} />
             </div>
 
             <h1 className="mt-[122px] text-[#050938] font-medium w-[863px] text-[100px] font-[500] leading-[125%] tracking-[-4px]">
