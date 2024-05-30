@@ -398,6 +398,9 @@ class church:
             bool: True if the addresses are similar, False otherwise.
         """
 
+        if text_1 == "" or text_2 == "":
+            return 0
+        
         # Clean both addresses
         cleaned_text_1 = self.clean_address(text_1)
         cleaned_text_2 = self.clean_address(text_2)
@@ -476,10 +479,11 @@ class church:
                     return self.yelp_schedule_score
 
     def get_yelp_webpage_score(self):
-        self.yelp_webpage_similarity_score = self.text_similarity(self.webpage, self.yelp_webpage)
-        if self.yelp_webpage_similarity_score >= 85:
-            self.yelp_webpage_score = 27
-            return self.yelp_webpage_score
+        if self.yelp_webpage != "" and self.yelp_webpage != None:
+            self.yelp_webpage_similarity_score = self.text_similarity(self.webpage, self.yelp_webpage)
+            if self.yelp_webpage_similarity_score >= 85:
+                self.yelp_webpage_score = 27
+                return self.yelp_webpage_score
 
     def get_yelp_phone_score(self):
         self.phone = self.clean_phone_number(self.phone)
@@ -803,25 +807,23 @@ class church:
             }
 
             search = GoogleSearch(params)
-            result = search.get_dict()
-            place_result = result.get("place_results", "")
-
-            self.yelp_name = place_result.get("name")
             try:
+                result = search.get_dict()
+                place_result = result.get("place_results", "")
+                self.yelp_name = place_result.get("name")
                 self.yelp_address = place_result.get("address", "")
+                allowed_chars = string.digits
+                self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
+                self.yelp_webpage = place_result.get("website")
+                # self.yelp_rating = place_result.get("rating", "")
 
-            except IndexError:
+                self.yelp_category = [category.get("title", "") for category in place_result.get("categories", "")]
+                self.yelp_description = place_result.get("about", "")
+
+                if len(place_result.get("operation_hours", "")) > 0:
+                    self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
+            except:
                 pass
-            allowed_chars = string.digits
-            self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
-            self.yelp_webpage = place_result.get("website")
-            # self.yelp_rating = place_result.get("rating", "")
-
-            self.yelp_category = [category.get("title", "") for category in place_result.get("categories", "")]
-            self.yelp_description = place_result.get("about", "")
-
-            if len(place_result.get("operation_hours", "")) > 0:
-                self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
 
     def write_object_to_json(self):
         # Create a dictionary that only includes the object's properties
@@ -848,8 +850,8 @@ class church:
             self.state = result.get('state')
             self.zipcode = result.get('postcode')
             self.coordinates = (result.get('lat'), result.get('lon'))
-        else:
-            print(response)
+        # else:
+        #     print(json.dumps(response, indent=4))
 
     def parse_address(self, addressString):
         url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + quote(addressString) + \

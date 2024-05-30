@@ -128,6 +128,9 @@ def handle_form_submission():
     church_obj.get_digital_search_assesment_score()
     church_obj.write_object_to_json()
 
+    # dev short-circuit
+    return jsonify({'message': 'Success'})
+
     post_contact_hubspot(church_obj)
 
     map_index = db_manage.insert_User(json_data.get("firstName"),
