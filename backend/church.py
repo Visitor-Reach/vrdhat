@@ -867,7 +867,7 @@ class church:
         for result in results.get("local_results"):
             if (result.get("position") > 10):
                 break
-            self.church_search_results.append(f"{result.get("position")} - {result.get("title")} - {str(self.name_similarity(result.get("title")))}")
+            self.church_search_results.append(f"{result.get('position')} - {result.get('title')} - {str(self.name_similarity(result.get('title')))}")
             if self.name_similarity(result.get("title")) > 95:
                 self.domain_trust_score = 275 - result.get("position") * 25
                 break
