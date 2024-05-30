@@ -13,7 +13,7 @@ export default function Data({ params }) {
         {fileData.map((file, index) => (
           <div key={index} className="flex justify-between hover:bg-gray-100">
             <div className="w-1/3">{file.displayName}</div>
-            <div>{moment(file.date).format("MMM DD YYYY, h:mm:ss a")}</div>
+            <div>{moment(file.date).local(true).format("MMM DD YYYY, h:mm:ss a")}</div>
             <div>
               <a href={`/data/${file.id}`} className="text-blue-500">View</a>
             </div>
