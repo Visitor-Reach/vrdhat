@@ -836,8 +836,7 @@ class church:
             return json.dumps(data)
 
     def standarize_initial_address(self):
-        full_address = f'{self.address} {
-            self.city} {self.state} {self.zipcode}'
+        full_address = f'{self.address} {self.city} {self.state} {self.zipcode}'
 
         response = self.parse_address(full_address)
         if response.get('results') != None and len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
