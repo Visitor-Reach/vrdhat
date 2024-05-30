@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <div className="h-[100vh] bg-gradient-to-br from-sky-200 from-5% via-white to-white">
       <div className="relative left-[80px] top-16 w-[320px]">
-        <Image src={'Logo.svg'} alt="VR Logo" width={500} height={500} />
+        <Image src={'Logo-2.svg'} alt="VR Logo" width={500} height={500} />
       </div>
       <div className="">
         <div style={{ position: 'absolute', right: '-300px', bottom: '-450px', overflow: 'hidden' }}>
