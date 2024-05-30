@@ -60,8 +60,7 @@ def generate(church_name, email, map_name):
     for dir in dirs:
         if not os.path.exists(path):
             os.makedirs(path)
-        url = f'http://localhost:3000/complete_report/{
-            str(dir)}?user_key={email}'
+        url = f'http://localhost:3000/complete_report/{str(dir)}?user_key={email}'
         print(url)
         converter.convert(url, path + "/page" + str(dir) + ".pdf", print_options={"printBackground": True,
                                                                                   "paperHeight": 5.7,
