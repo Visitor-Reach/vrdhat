@@ -6,7 +6,7 @@ export default function Data({ params }) {
 
   return (
     <div className="m-10 w-1/2">
-      <h1 className="text-xl font-bold">{data.name}</h1>
+      <h1 className="text-xl font-bold"><a href="/data" className="text-blue-500">DHA Data Files</a> / {data.name}</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
         <h3 className="text-base font-semibold leading-6 text-gray-900 mb-2">Church Info</h3>

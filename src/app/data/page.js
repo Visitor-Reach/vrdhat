@@ -18,7 +18,7 @@ export default function Data() {
 
   return (
     <div className="m-10 w-2/3">
-      <h1 className="text-xl font-bold">List the files</h1>
+      <h1 className="text-xl font-bold">DHA Data Files</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
         {fileData.map((file, index) => (
