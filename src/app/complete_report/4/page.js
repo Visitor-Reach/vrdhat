@@ -111,7 +111,7 @@ export default function CompleteReportPage4() {
                 </h1>
               </div>
               <div className="mt-[40px]">
-                <Circularbar value={googleMaps} title={undefined} max_value={250} />
+                <Circularbar value={googleMaps} title={undefined} max_value={125} />
               </div>
             </div>
           </div>
@@ -142,7 +142,7 @@ export default function CompleteReportPage4() {
                 </h1>
               </div>
               <div className="mt-[40px]">
-                <Circularbar value={appleMaps} title={undefined} max_value={250} />
+                <Circularbar value={appleMaps} title={undefined} max_value={125} />
               </div>
             </div>
           </div>

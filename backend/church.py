@@ -74,6 +74,7 @@ states_dic = {
 SEMRUSH_API_KEY = os.environ.get('SEMRUSH_API_KEY')
 SERPAPI_API_KEY = os.environ.get('SERPAPI_API_KEY')
 GOOGLE_MAPS_KEY = os.environ.get('GOOGLE_MAPS_KEY')
+GEOAPIFY_API_KEY = os.environ.get('GEOAPIFY_API_KEY')
 
 
 class church:
@@ -82,7 +83,6 @@ class church:
         self.name = name
         self.coordinates = ""
         self.address = address
-        self.address_clean = ""
         self.city = city
         self.state = state
         self.phone = phone
@@ -96,96 +96,87 @@ class church:
         self.mobile_phone = mobile_phone
         self.email = email
 
-        self.apple_name = ""
-        self.apple_coordinates = ""
-        self.apple_address = ""
-        self.apple_address_clean = ""
-        self.apple_city = ""
-        self.apple_state = ""
-        self.apple_zipcode = ""
-        self.apple_phone = ""
-        self.apple_webpage = ""
-        self.apple_rating = ""
-        self.apple_category = []
-        self.apple_description = ""
-        self.apple_schedule = ""
-
-        self.apple_name_score = 0
-        self.apple_coordinates_score = 0
-        self.apple_address_score = 0
-        self.apple_city_score = 0
-        self.apple_state_score = 0
-        self.apple_zipcode_score = 0
-        self.apple_phone_score = 0
-        self.apple_webpage_score = 0
-        self.apple_rating_score = 0
-        self.apple_category_score = 0
-        self.apple_description_score = 0
-        self.apple_schedule_score = 0
-        self.apple_maps_score = 0
-
-        self.google_name = ""
-        self.google_coordinates = ""
-        self.google_address = ""
-        self.google_address_clean = ""
-        self.google_city = ""
-        self.google_state = ""
-        self.google_zipcode = ""
-        self.google_phone = ""
-        self.google_webpage = ""
-        self.google_rating = ""
-        self.google_category = []
-        self.google_description = ""
-        self.google_schedule = ""
-
-        self.google_name_score = 0
-        self.google_coordinates_score = 0
-        self.google_address_score = 0
-        self.google_city_score = 0
-        self.google_state_score = 0
-        self.google_zipcode_score = 0
-        self.google_phone_score = 0
-        self.google_webpage_score = 0
-        self.google_rating_score = 0
-        self.google_category_score = 0
-        self.google_description_score = 0
-        self.google_schedule_score = 0
-        self.google_maps_score = 0
-
-        self.yelp_name = ""
-        self.yelp_coordinates = ""
-        self.yelp_address = ""
-        self.yelp_address_clean = ""
-        self.yelp_city = ""
-        self.yelp_state = ""
-        self.yelp_zipcode = ""
-        self.yelp_phone = ""
-        self.yelp_webpage = ""
-        self.yelp_rating = ""
-        self.yelp_category = []
-        self.yelp_description = ""
-        self.yelp_schedule = ""
-
-        self.yelp_name_score = 0
-        self.yelp_address_score = 0
-        self.yelp_state_score = 0
-        self.yelp_phone_score = 0
-        self.yelp_webpage_score = 0
-        self.yelp_category_score = 0
-        self.yelp_description_score = 0
-        self.yelp_schedule_score = 0
-
         self.parsed_address = ""
         self.original_address = ""
         self.google_parsed_address = ""
         self.apple_parsed_address = ""
         self.yelp_parsed_address = ""
 
-        self.church_search_results = ""
+        self.apple_name = ""
+        self.apple_name_score = 0
+        self.apple_name_similarity_score = 0
+        self.apple_address = ""
+        self.apple_address_score = 0
+        self.apple_address_similarity_score = 0
+        self.apple_state = ""
+        self.apple_state_score = 0
+        self.apple_state_similarity_score = 0
+        self.apple_phone = ""
+        self.apple_phone_score = 0
+        self.apple_phone_similarity_score = 0
+        self.apple_webpage = ""
+        self.apple_webpage_score = 0
+        self.apple_webpage_similarity_score = 0
+        self.apple_category = []
+        self.apple_category_score = 0
+        self.apple_description = ""
+        self.apple_description_score = 0
+        self.apple_description_similarity_score = 0
+        self.apple_schedule = ""
+        self.apple_schedule_score = 0
+        self.apple_maps_score = 6
 
+        self.google_name = ""
+        self.google_name_score = 0
+        self.google_name_similarity_score = 0
+        self.google_coordinates = ""
+        self.google_address = ""
+        self.google_address_score = 0
+        self.google_address_similarity_score = 0
+        self.google_state = ""
+        self.google_state_score = 0
+        self.google_state_similarity_score = 0
+        self.google_phone = ""
+        self.google_phone_score = 0
+        self.google_phone_similarity_score = 0
+        self.google_webpage = ""
+        self.google_webpage_score = 0
+        self.google_webpage_similarity_score = 0
+        self.google_category = []
+        self.google_category_score = 0
+        self.google_description = ""
+        self.google_description_score = 0
+        self.google_description_similarity_score = 0
+        self.google_schedule = ""
+        self.google_schedule_score = 0
+        self.google_maps_score = 6
+
+        self.yelp_name = ""
+        self.yelp_name_score = 0
+        self.yelp_name_similarity_score = 0
+        self.yelp_address = ""
+        self.yelp_address_score = 0
+        self.yelp_address_similarity_score = 0
+        self.yelp_state = ""
+        self.yelp_state_score = 0
+        self.yelp_state_similarity_score = 0
+        self.yelp_phone = ""
+        self.yelp_phone_score = 0
+        self.yelp_phone_similarity_score = 0
+        self.yelp_webpage = ""
+        self.yelp_webpage_score = 0
+        self.yelp_webpage_similarity_score = 0
+        self.yelp_category = []
+        self.yelp_category_score = 0
+        self.yelp_description = ""
+        self.yelp_description_score = 0
+        self.yelp_schedule = ""
+        self.yelp_schedule_score = 0
+
+        self.church_search_results = []
         self.domain_organic_keywords = []
 
-        self.maps_score = 12
+        self.maps_score = 0
         self.voice_score = 34
         self.domain_trust_score = 0
 
@@ -277,6 +268,12 @@ class church:
         self.get_domain_trust_score()
         self.get_maps_score()
         self.get_voice_score()
+
+        # test
+        self.domain_trust_score = self.domain_trust_score / 2
+        self.maps_score = self.maps_score / 2
+        self.voice_score = self.voice_score / 2
+
         self.digital_search_assesment_score += \
             self.domain_trust_score + \
             self.maps_score + \
@@ -394,6 +391,9 @@ class church:
         cleaned_text = text.lower()
         return cleaned_text
 
+    def clean_phone_number(self, phone_number):
+        return re.sub(r'\D', '', phone_number)
+
     def text_similarity(self, text_1, text_2, threshold=80):
         """
         Calculates the similarity between two addresses using fuzzy matching.
@@ -425,24 +425,7 @@ class church:
         return similarity_score
 
     def address_similarity(self, map_adress, type):
-        """
-        Calculates the similarity between two addresses using fuzzy matching.
-
-        Args:
-            customer_address (str): The address provided by the customer.
-            map_address (str): The address retrieved from Google Maps.
-            threshold (int, optional): The minimum similarity score for addresses to be considered similar. Defaults to 80.
-
-        Returns:
-            bool: True if the addresses are similar, False otherwise.
-        """
-
-        # Clean both addresses
-        # cleaned_customer_address = self.clean_address(self.address)
-        # cleaned_map_address = self.clean_address(map_adress)
         response = self.parse_address(map_adress)
-
-        # self.address_clean = cleaned_customer_address
         if response.get('results') != None:
             if len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
                 result = response.get('results')[0]
@@ -450,32 +433,33 @@ class church:
                 if type == "google":
                     self.google_parsed_address = result
                     self.google_address = result.get('address_line1')
-                    self.google_city = result.get('city')
+                    # self.google_city = result.get('city')
                     self.google_state = result.get('state')
-                    self.google_zipcode = result.get('postcode')
+                    # self.google_zipcode = result.get('postcode')
                     self.google_coordinates = (
                         result.get('lat'), result.get('lon'))
                 elif type == "apple":
                     self.apple_parsed_address = result
                     self.apple_address = result.get('address_line1')
-                    self.apple_city = result.get('city')
+                    # self.apple_city = result.get('city')
                     self.apple_state = result.get('state')
-                    self.apple_zipcode = result.get('postcode')
-                    self.apple_coordinates = (
-                        result.get('lat'), result.get('lon'))
+                    # self.apple_zipcode = result.get('postcode')
+                    # self.apple_coordinates = (
+                    #     result.get('lat'), result.get('lon'))
                 elif type == "yelp":
                     self.yelp_parsed_address = result
                     self.yelp_address = result.get('address_line1')
-                    self.yelp_city = result.get('city')
+                    # self.yelp_city = result.get('city')
                     self.yelp_state = result.get('state')
-                    self.yelp_zipcode = result.get('postcode')
-                    self.yelp_coordinates = (
-                        result.get('lat'), result.get('lon'))
+                    # self.yelp_zipcode = result.get('postcode')
+                    # self.yelp_coordinates = (
+                    #     result.get('lat'), result.get('lon'))
 
-        # Calculate similarity score using Levenshtein distance
-        address_similarity = self.text_similarity(
-            self.address, result.get('address_line1'))
-        return address_similarity
+                # Calculate similarity score using Levenshtein distance
+                address_similarity = self.text_similarity(
+                    self.address, result.get('address_line1'))
+                return address_similarity
+        return 0
 
     def get_yelp_name_score(self):
         name_similarity_value = self.name_similarity(self.yelp_name)
@@ -506,6 +490,7 @@ class church:
             return self.yelp_webpage_score
 
     def get_yelp_phone_score(self):
+        self.phone = self.clean_phone_number(self.phone)
         if self.text_similarity(self.phone, self.yelp_phone) >= 95:
             self.yelp_phone_score = 27
             return self.yelp_phone_score
@@ -537,8 +522,12 @@ class church:
                              self.yelp_webpage_score + self.yelp_phone_score + self.yelp_address_score + self.yelp_state_score)
 
     def get_google_name_score(self):
+        self.google_name = unquote(self.google_name).replace("’", "'")
         name_similarity_value = self.name_similarity(self.google_name)
+        self.google_name_similarity_score = name_similarity_value
         self.google_name_score = 20 * (name_similarity_value > 95)
+        if self.google_name_score == 0 and self.name in self.google_name:
+            self.google_name_score = 20
         return self.google_name_score
 
     def get_google_category_score(self):
@@ -548,7 +537,9 @@ class church:
                 return self.google_category_score
 
     def get_google_about_score(self):
-        if self.text_similarity(self.google_description, self.apple_description) >= 90:
+        self.google_description_similarity_score = self.text_similarity(
+            self.google_description, self.apple_description)
+        if self.google_description_similarity_score >= 90:
             self.google_description_score = 15
             return self.google_description_score
 
@@ -560,22 +551,31 @@ class church:
                 return self.google_schedule_score
 
     def get_google_webpage_score(self):
-        if self.text_similarity(self.webpage, self.google_webpage) >= 85:
+        self.google_webpage_similarity_score = self.text_similarity(
+            self.webpage, self.google_webpage)
+        if self.google_webpage_similarity_score >= 80:
             self.google_webpage_score = 14
             return self.google_webpage_score
 
     def get_google_phone_score(self):
-        if self.text_similarity(self.phone, self.google_phone) >= 95:
+        self.phone = self.clean_phone_number(self.phone)
+        self.google_phone_similarity_score = self.text_similarity(
+            self.phone, self.google_phone)
+        if self.google_phone_similarity_score >= 95:
             self.google_phone_score = 14
             return self.google_phone_score
 
     def get_google_addres_score(self):
-        if self.address_similarity(self.google_address, 'google') >= 85:
+        self.google_address_similarity_score = self.address_similarity(
+            self.google_address, 'google')
+        if self.google_address_similarity_score >= 85:
             self.google_address_score = 14
             return self.google_address_score
 
     def get_google_state_score(self):
-        if self.text_similarity(self.state, self.google_state) >= 95:
+        self.google_state_similarity_score = self.text_similarity(
+            self.state, self.google_state)
+        if self.google_state_similarity_score >= 95:
             self.google_state_score = 14
             return self.google_state_score
 
@@ -593,10 +593,10 @@ class church:
     def get_apple_name_score(self):
         self.apple_name = unquote(self.apple_name).replace("’", "'")
         name_similarity_value = self.name_similarity(self.apple_name)
+        self.apple_name_similarity_score = name_similarity_value
         self.apple_name_score = 20 * (name_similarity_value > 95)
         if self.apple_name_score == 0 and self.apple_name in self.name:
             self.apple_name_score = 20
-
         return self.apple_name_score
 
     def get_apple_category_score(self):
@@ -606,6 +606,8 @@ class church:
                 return self.apple_category_score
 
     def get_apple_about_score(self):
+        self.apple_description_similarity_score = self.text_similarity(
+            self.apple_description, self.google_description)
         if self.text_similarity(self.apple_description, self.google_description) >= 90:
             self.apple_description_score = 15
             return self.apple_description_score
@@ -617,22 +619,31 @@ class church:
                 return self.apple_schedule_score
 
     def get_apple_webpage_score(self):
-        if self.text_similarity(self.webpage, self.apple_webpage) >= 85:
+        self.apple_webpage_similarity_score = self.text_similarity(
+            self.webpage, self.apple_webpage)
+        if self.text_similarity(self.webpage, self.apple_webpage) >= 80:
             self.apple_webpage_score = 14
             return self.apple_webpage_score
 
     def get_apple_phone_score(self):
+        self.phone = self.clean_phone_number(self.phone)
+        self.apple_phone_similarity_score = self.text_similarity(
+            self.phone, self.apple_phone)
         if self.text_similarity(self.phone, self.apple_phone) >= 95:
             self.apple_phone_score = 14
             return self.apple_phone_score
 
     def get_apple_addres_score(self):
-        if self.address_similarity(self.apple_address, 'apple') >= 85:
+        self.apple_address_similarity_score = self.address_similarity(
+            self.apple_address, 'apple')
+        if self.apple_address_similarity_score >= 85:
             self.apple_address_score = 14
             return self.apple_address_score
 
     def get_apple_state_score(self):
-        if self.text_similarity(self.state, self.apple_state) >= 95:
+        self.apple_state_similarity_score = self.text_similarity(
+            self.state, self.apple_state)
+        if self.apple_state_similarity_score >= 95:
             self.apple_state_score = 14
             return self.apple_state_score
 
@@ -695,35 +706,18 @@ class church:
                     if "apple" in source_name.lower():
 
                         self.apple_name = local_results[0].get("title")
-                        self.apple_coordinates = (
-                            local_results[0]["gps_coordinates"]["latitude"], local_results[0]["gps_coordinates"]["longitude"])
+                        # self.apple_coordinates = (
+                        #     local_results[0]["gps_coordinates"]["latitude"], local_results[0]["gps_coordinates"]["longitude"])
                         try:
                             self.apple_address = local_results[0].get(
                                 'address', '')
-                            # self.apple_address = local_results[0].get(
-                            #     "address", "").split(",")[0]
-                            # if states_dic.get(local_results[0].get("address", "").split(", ")[2].split(" ")[0], "") == "":
-                            #     self.apple_state = states_dic[local_results[0].get(
-                            #         "address", "").split(", ")[3].split(" ")[0]]
-                            #     self.apple_city = local_results[0].get(
-                            #         "address", "").split(",")[2]
-                            #     self.apple_zipcode = local_results[0].get(
-                            #         "address", "").split(",")[3].split(" ")[1]
-                            # else:
-                            #     self.apple_state = states_dic[local_results[0].get(
-                            #         "address", "").split(", ")[2].split(" ")[0]]
-                            #     self.apple_city = local_results[0].get(
-                            #         "address", "").split(",")[1]
-                            #     self.apple_zipcode = local_results[0].get(
-                            #         "address", "").split(",")[2].split(" ")[1]
-
                         except IndexError:
                             pass
                         allowed_chars = string.digits
                         self.apple_phone = re.sub(
                             r"[^\w\s" + allowed_chars + "]", "", local_results[0].get("phone", ""))
                         self.apple_webpage = local_results[0].get("website")
-                        self.apple_rating = local_results[0].get("rating", "")
+                        # self.apple_rating = local_results[0].get("rating", "")
                         self.apple_category = [
                             category for category in local_results[0].get("types")]
                         self.apple_category.append(
@@ -770,20 +764,14 @@ class church:
 
                 try:
                     self.google_address = place_results.get('address', '')
-                    # self.google_address = place_results.get("address", "").split(",")[0]
-                    # self.google_city = place_results.get(
-                    #     "address", "").split(",")[1]
-                    # self.google_state = states_dic[self.find_all_letters(
-                    #     place_results.get("address", "").split(",")[2].split(" "))[0]]
-                    # self.google_zipcode = self.extract_zipcode(
-                    #     place_results.get("address", ""))
+
                 except IndexError:
                     pass
                 allowed_chars = string.digits
                 self.google_phone = re.sub(
                     r"[^\w\s" + allowed_chars + "]", "", place_results.get("phone", "")).replace(" ", "")
                 self.google_webpage = place_results.get("website")
-                self.google_rating = place_results.get("rating", "")
+                # self.google_rating = place_results.get("rating", "")
                 self.google_category = [
                     category for category in place_results.get("type")]
                 self.google_description = place_results.get("description", "")
@@ -798,21 +786,14 @@ class church:
 
                 try:
                     self.google_address = place_results.get('address', '')
-                    # self.google_address = place_results.get(
-                    #     "address", "").split(",")[0]
-                    # self.google_city = place_results.get(
-                    #     "address", "").split(",")[1]
-                    # self.google_state = states_dic[self.find_all_letters(
-                    #     place_results.get("address", "").split(",")[2].split(" "))[0]]
-                    # self.google_zipcode = self.extract_zipcode(
-                    #     place_results.get("address", ""))
+
                 except IndexError:
                     pass
                 allowed_chars = string.digits
                 self.google_phone = re.sub(
                     r"[^\w\s" + allowed_chars + "]", "", place_results.get("phone", "")).replace(" ", "")
                 self.google_webpage = place_results.get("website")
-                self.google_rating = place_results.get("rating", "")
+                # self.google_rating = place_results.get("rating", "")
                 self.google_category = [
                     category for category in place_results.get("type")]
                 self.google_description = place_results.get("description", "")
@@ -853,21 +834,14 @@ class church:
             self.yelp_name = place_result.get("name")
             try:
                 self.yelp_address = place_result.get("address", "")
-                # self.yelp_address = place_result.get(
-                #     "address", "").split(",")[0]
-                # self.yelp_city = place_result.get("address", "").split(",")[
-                #     0].split(" ")[-1]
-                # self.yelp_state = states_dic[self.find_all_letters(
-                #     place_result.get("address", "").split(",")[1].split(" "))[0]]
-                # self.yelp_zipcode = place_result.get("address", "").split(",")[
-                #     1].split(" ")[-1]
+
             except IndexError:
                 pass
             allowed_chars = string.digits
             self.yelp_phone = re.sub(
                 r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
             self.yelp_webpage = place_result.get("website")
-            self.yelp_rating = place_result.get("rating", "")
+            # self.yelp_rating = place_result.get("rating", "")
 
             self.yelp_category = [category.get(
                 "title", "") for category in place_result.get("categories", "")]
@@ -885,8 +859,9 @@ class church:
         self.name = self.name.lower().replace(" ", "_")
         self.name = re.sub(r'[^\w\s]', '', self.name)
         # Write the dictionary to a JSON file
-        with open(self.clean_name(self.name) + '.json', 'w') as f:
+        with open('../public/data/' + self.clean_name(self.name) + '.json', 'w') as f:
             json.dump(data, f)
+            return json.dumps(data)
 
     def standarize_initial_address(self):
         full_address = f'{self.address} {
@@ -903,11 +878,11 @@ class church:
             self.zipcode = result.get('postcode')
             self.coordinates = (result.get('lat'), result.get('lon'))
         else:
-            print(response.json())
+            print(response)
 
     def parse_address(self, addressString):
-        url = 'https://api.geoapify.com/v1/geocode/search?text=' + quote(addressString) + \
-            '&filter=countrycode:us&format=json&apiKey=db974c6b48e44e5a822f9b88a9c267b1'
+        url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + quote(addressString) + \
+            '&filter=countrycode:us&format=json&apiKey=' + GEOAPIFY_API_KEY
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
         response = requests.get(url, headers=headers)
@@ -923,8 +898,12 @@ class church:
             if (result.get("position") > 10):
                 break
             self.church_search_results.append(
-                f"{result.get("position")} - {result.get("title")}")
+                f"{result.get("position")} - {result.get("title")} - {str(self.name_similarity(result.get("title")))}")
+
             if self.name_similarity(result.get("title")) > 95:
+                self.domain_trust_score = 275 - result.get("position") * 25
+                break
+            if self.name in result.get("title"):
                 self.domain_trust_score = 275 - result.get("position") * 25
                 break
         if self.domain_trust_score < 0:

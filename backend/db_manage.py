@@ -1,9 +1,11 @@
 import sqlite3
 
+
 def init_connection():
     connection = sqlite3.connect("info/digital_assessment.db")
     cur = connection.cursor()
     return cur, connection
+
 
 def close_connection(cur, connection):
     cur.close()
@@ -42,6 +44,7 @@ def create_User_table():
     connection.commit()
     close_connection(cur, connection)
 
+
 def get_User_table():
     cur, connection = init_connection()
     cur.execute(''' SELECT * FROM Users ''')
@@ -50,16 +53,17 @@ def get_User_table():
     connection.commit()
     close_connection(cur, connection)
 
+
 def get_User_email_index(email):
     cur, connection = init_connection()
     cur.execute(f"""
-                        EXPLAIN QUERY PLAN 
+                        EXPLAIN QUERY PLAN
                         SELECT
                             *
                         FROM
                             Users
-                      WHERE
-                        email = "{email}"
+                        WHERE
+                            email = "{email}"
 
                 """)
     results = cur.fetchall()
@@ -68,23 +72,23 @@ def get_User_email_index(email):
     close_connection(cur, connection)
 
 
-
-def insert_User(first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keyworkds):
+def insert_User(first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords):
 
     cur, connection = init_connection()
     query = f"""
-                    INSERT OR REPLACE INTO Users (first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords) VALUES
-                        ("{first_name}", "{last_name}", "{mobile_phone}", "{email}", "{name}", "{size}", "{address}", "{city}", "{state}", "{zipcode}", "{webpage}", "{phone}", "{facebook_profile}", "{instagram_profile}", {digital_voice}, {google_maps}, {apple_maps}, {social_clarity}, {website_authority}, {last_month_searches}, {pdf_sent}, "{keyworkds}")
-                """
+        INSERT OR REPLACE INTO Users (first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords) 
+        VALUES ("{first_name}", "{last_name}", "{mobile_phone}", "{email}", "{name}", "{size}", "{address}", "{city}", "{state}", "{zipcode}", "{webpage}", "{phone}", "{facebook_profile}", "{instagram_profile}", {digital_voice}, {google_maps}, {apple_maps}, {social_clarity}, {website_authority}, {last_month_searches}, {pdf_sent}, "{keywords}")
+    """
+    print(query)
     cur.execute(query)
     cur.execute(f"""
-                        EXPLAIN QUERY PLAN 
+                        EXPLAIN QUERY PLAN
                         SELECT
                             *
                         FROM
                             Users
                         WHERE
-                        email = "{email}"
+                            email = "{email}"
 
                 """)
     try:
@@ -99,7 +103,7 @@ def insert_User(first_name, last_name, mobile_phone, email, name, size, address,
 def retrieve_User_complete_report(email):
 
     cur, connection = init_connection()
-    query = f""" 
+    query = f"""
                     SELECT last_month_searches, digital_voice, google_maps, apple_maps, social_clarity, website_authority, state, city, zipcode, webpage, name, address, keywords  FROM Users WHERE email = '{email}'
                 """
     cur.execute(query)
@@ -110,4 +114,3 @@ def retrieve_User_complete_report(email):
         return results
     except Exception as error:
         return None
-

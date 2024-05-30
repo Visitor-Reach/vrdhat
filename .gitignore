@@ -41,3 +41,5 @@ variables
 venv
 backend/__pycache__/church.cpython-311.pyc
 *.pyc
+public/map_background_report/*.*
+public/data/*.json
