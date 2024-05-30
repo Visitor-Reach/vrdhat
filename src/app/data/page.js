@@ -1,4 +1,5 @@
 import fs from 'fs'
+import moment from 'moment'
 import path from 'path'
 
 export default function Data({ params }) {
@@ -12,7 +13,7 @@ export default function Data({ params }) {
         {fileData.map((file, index) => (
           <div key={index} className="flex justify-between hover:bg-gray-100">
             <div className="w-1/3">{file.displayName}</div>
-            <div>{file.date.toDateString('en-US')} {file.date.toLocaleTimeString('en-US')}</div>
+            <div>{moment(file.date).format("MMM DD YYYY, h:mm:ss a")}</div>
             <div>
               <a href={`/data/${file.id}`} className="text-blue-500">View</a>
             </div>
