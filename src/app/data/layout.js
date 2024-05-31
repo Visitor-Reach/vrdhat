@@ -19,7 +19,7 @@ export const metadata = {
 
 export default function DataLayout({ children }) {
   return (
-      <div className={`${poppins.className} antialiased bg-gray-100 flex h-[100vh]`}>
+      <div className={`${poppins.className} antialiased bg-gray-100 flex h-full`}>
         <Suspense>{children}</Suspense>
       </div>
   )

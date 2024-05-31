@@ -5,6 +5,7 @@ module.exports = {
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/flowbite/**/*.js"
   ],
   theme: {
     extend: {
@@ -29,7 +30,9 @@ module.exports = {
       
     },
   },
-  plugins: [],
+  plugins: [
+      require('flowbite/plugin')
+  ],
   safelist: ["text-vr-form-title", "vr-form-field-bg", "tablet-vertical", "phone", "bg-vr-title-second", "from-vr-button-first", "via-vr-button-second", "to-vr-button-third", "text-vr-button-third"]
 
 };

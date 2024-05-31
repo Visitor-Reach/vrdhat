@@ -129,7 +129,7 @@ def handle_form_submission():
     church_obj.write_object_to_json()
 
     # dev short-circuit
-    # return jsonify({'message': 'Success'})
+    return jsonify({'message': 'Success'})
 
     post_contact_hubspot(church_obj)
 

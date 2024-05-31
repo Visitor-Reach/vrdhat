@@ -20,7 +20,7 @@ export default function Data() {
     <div className="m-10 w-2/3">
       <h1 className="text-xl font-bold">DHA Data Files</h1>
       
-      <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
+      <div className="rounded-lg border-gray-500 border-spacing-1 p-5 my-3 shadow-sm bg-white">
         {fileData.map((file, index) => (
           <div key={index} className="flex justify-between hover:bg-gray-100">
             <div className="w-1/3">{file.displayName}</div>

@@ -557,7 +557,7 @@ class church:
 
     def get_google_webpage_score(self):
         self.google_webpage_similarity_score = self.text_similarity(self.webpage, self.google_webpage)
-        if self.google_webpage_similarity_score >= 80:
+        if self.google_webpage_similarity_score >= 85:
             self.google_webpage_score = 14
             return self.google_webpage_score
 
@@ -798,6 +798,8 @@ class church:
 
             organic_result_simil_idx = np.argmax(np.array(name_simil))
             most_similar_result = organic_results[organic_result_simil_idx]
+            if name_simil[organic_result_simil_idx] < 95:
+                return
             place_id = most_similar_result.get("place_ids", "")[0]
 
             params = {
