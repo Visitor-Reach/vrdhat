@@ -17,7 +17,7 @@ export default function Data() {
   },[])
 
   return (
-    <div className="m-10 w-2/3">
+    <div className="m-10 w-2/3 h-[100vh]">
       <h1 className="text-xl font-bold">DHA Data Files</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 my-3 shadow-sm bg-white">
