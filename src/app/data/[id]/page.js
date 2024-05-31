@@ -453,9 +453,8 @@ export default function Data({ params }) {
         <table className="text-gray-700 w-2/3">
           <thead>
             <tr>
-              <th className="w-1/5 text-left text-md">Position</th>
-              <th className="w-1/8 text-left text-md">Church Name</th>
-              <th className="w-1/8 text-left text-md">Similarity</th>
+              <th className="w-1/4 text-left text-md">Position</th>
+              <th className="w-3/4 text-left text-md">Church Name</th>
             </tr>
           </thead>
           <tbody>
@@ -463,7 +462,6 @@ export default function Data({ params }) {
                 <tr key={i} className={i % 2 !== 0 ? 'bg-gray-100' : ''}>
                   <td className="text-left">{result.split(' - ')[0]}</td>
                   <td className="text-left">{result.split(' - ')[1]}</td>
-                  <td className="text-left">{result.split(' - ')[2]}</td>
                 </tr>
             ))}
           </tbody>
