@@ -31,11 +31,12 @@ export default function CompleteReportPage2() {
   const [loc_address, setLoc_address] = useState('')
   const [loc_state, setLoc_state] = useState('')
   const [webpage, setWebpage] = useState('')
+  const [map_image, setMap_image] = useState('')
 
   const searchParams = useSearchParams()
-  const user_key = searchParams.get('user_key')
+  const user_key = searchParams.get('user_key').replace(' ', '+')
   const map = searchParams.get('map_key')
-  console.log(`/map_background_report/map_back_${user_key}.png`)
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -66,6 +67,7 @@ export default function CompleteReportPage2() {
         setLoc_zipcode(data.loc_zipcodesetLoc_ziploc_zipcode)
         setLoc_state(data.loc_state)
         setWebpage(data.website)
+        setMap_image(data.map_image)
         console.log('Sucess fetching data: ', data)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -82,14 +84,16 @@ export default function CompleteReportPage2() {
         className={`relative min-w-[1920px] w-[1920px] min-h-[1080px] h-[1080px] m-auto overflow-hidden`}
       >
         <div className="absolute w-[1920px] map-container ">
-          <Image
-            style={{ maxWidth: 'none' }}
-            className="w-[2100px] h-full"
-            src={`/map_background_report/map_back_${user_key}.png`}
-            alt={' '}
-            height={2000}
-            width={2000}
-          />
+          {map_image && (
+            <Image
+              style={{ maxWidth: 'none' }}
+              className="w-[2100px] h-full"
+              src={`https://vr-digital-health-files.s3.us-west-2.amazonaws.com/map_images/${map_image}`}
+              alt={' '}
+              height={2000}
+              width={2000}
+            />
+          )}
         </div>
         <div className="absolute w-full h-full bg-gradient-to-br from-white from-10% to-white/30">
           <h1 className="ml-[107px] mt-[110px] w-[1429px] text-[#050938] text-[75px] font-medium w-4/6 leading-[150%] tracking-[-3px]">

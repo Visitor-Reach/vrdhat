@@ -17,7 +17,7 @@ export default function Page() {
   const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [map, setMap] = useState('')
+  const [id, setId] = useState('')
 
   const [email, set_email] = useState('')
 
@@ -78,7 +78,7 @@ export default function Page() {
     if (submitted) {
       const timeoutId = setTimeout(() => {
         setShowAnimation(true)
-        router.push('/user_report?user_key=' + email + '&map_key=' + map)
+        router.push('/user_report?id=' + id)
       }, 8000)
 
       return () => clearTimeout(timeoutId)
@@ -220,12 +220,12 @@ export default function Page() {
     if (!churchZipCode || !churchZipCode.trim()) {
       errors.push({ msg: 'Zip Code is required', field: 'churchZipCode' })
     }
-    if (!churchFacebook || !churchFacebook.trim()) {
-      errors.push({ msg: 'Church Facebook is required', field: 'churchFacebook' })
-    }
-    if (!churchInstagram || !churchInstagram.trim()) {
-      errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
-    }
+    // if (!churchFacebook || !churchFacebook.trim()) {
+    //   errors.push({ msg: 'Church Facebook is required', field: 'churchFacebook' })
+    // }
+    // if (!churchInstagram || !churchInstagram.trim()) {
+    //   errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
+    // }
 
     return errors
   }
@@ -301,7 +301,7 @@ export default function Page() {
       })
 
       const data = await response.json()
-      setMap(data.map_index)
+      setId(data.id)
 
       setSubmitted(true)
     } catch (error) {

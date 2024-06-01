@@ -10,6 +10,8 @@ import json
 import re
 from requests.structures import CaseInsensitiveDict
 from urllib.parse import quote, unquote
+import boto3
+import uuid
 
 states_dic = {
     'AK': 'Alaska',
@@ -76,7 +78,6 @@ SERPAPI_API_KEY = os.environ.get('SERPAPI_API_KEY')
 GOOGLE_MAPS_KEY = os.environ.get('GOOGLE_MAPS_KEY')
 GEOAPIFY_API_KEY = os.environ.get('GEOAPIFY_API_KEY')
 
-
 class church:
 
     def __init__(self, name='', address='', city='', state='', zipcode='', webpage='', phone='', size='', facebook_profile='', instagram_profile='', first_name='', last_name='', mobile_phone='', email='') -> None:
@@ -95,6 +96,8 @@ class church:
         self.last_name = last_name
         self.mobile_phone = mobile_phone
         self.email = email
+        self.map_image = ""
+        self.data_file = ""
 
         self.parsed_address = ""
         self.original_address = ""
@@ -182,7 +185,8 @@ class church:
 
         self.digital_search_assesment_score = 0
 
-    def get_map_image(self, email):
+    def get_map_image(self):
+        file_name = str(uuid.uuid4()) + '.png'
         base_url = "https://maps.googleapis.com/maps/api/staticmap?"
         style = "&format=png&maptype=roadmap&style=visibility:simplified&style=element:geometry%7Ccolor:0xf5f5f5&style=element:labels.icon%7Cvisibility:off&style=element:labels.text%7Csaturation:-5%7Clightness:-5&style=element:labels.text.fill%7Ccolor:0xb5b5b5&style=element:labels.text.stroke%7Ccolor:0xf5f5f5&style=feature:administrative.land_parcel%7Celement:labels%7Cvisibility:off&style=feature:administrative.land_parcel%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:poi%7Celement:geometry%7Ccolor:0xeeeeee&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.park%7Celement:geometry%7Ccolor:0xe5e5e5&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:road%7Celement:geometry%7Ccolor:0xffffff&style=feature:road.arterial%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:road.highway%7Celement:geometry%7Ccolor:0xdadada&style=feature:road.highway%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:road.local%7Celement:labels%7Cvisibility:off&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:transit.line%7Celement:geometry%7Ccolor:0xe5e5e5&style=feature:transit.station%7Celement:geometry%7Ccolor:0xeeeeee&style=feature:water%7Celement:geometry%7Ccolor:0xc9c9c9&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x9e9e9e"
         center = str(self.coordinates[0]) + "," + str(self.coordinates[1])
@@ -194,11 +198,21 @@ class church:
             str(zoom) + "&size=640x360&scale=2&key=" + \
             GOOGLE_MAPS_KEY + style + marker
         request_map = requests.get(complete_url)
-        image_name = f"../public/map_background_report/map_back_{email}"
-        image_file = open(image_name + '.png', 'wb')
+        image_name = f"../public/map_background_report/{file_name}"
+        image_file = open(image_name, 'wb')
         image_file.write(request_map.content)
         image_file.close()
 
+        s3 = boto3.client('s3')
+        bucket_name = 'vr-digital-health-files'
+        key = 'map_images/' + file_name
+        s3.upload_file(image_name, bucket_name, key, ExtraArgs={'ContentType': 'image/png'})
+        print(f'Image uploaded to https://s3.amazonaws.com/{bucket_name}/{key}')
+
+        os.remove(image_name)
+        self.map_image = file_name
+        return file_name
+        
     def get_weighted_average(self, request_result):
 
         data_string = request_result.decode('utf-8')
@@ -798,7 +812,7 @@ class church:
 
             organic_result_simil_idx = np.argmax(np.array(name_simil))
             most_similar_result = organic_results[organic_result_simil_idx]
-            if name_simil[organic_result_simil_idx] < 95:
+            if name_simil[organic_result_simil_idx] < 75:
                 return
             place_id = most_similar_result.get("place_ids", "")[0]
 
@@ -828,16 +842,22 @@ class church:
                 pass
 
     def write_object_to_json(self):
-        # Create a dictionary that only includes the object's properties
+        file_name = str(uuid.uuid4()) + '.json'
         data = {key: value for key, value in self.__dict__.items()
                 if not callable(value)}
 
-        self.name = self.name.lower().replace(" ", "_")
-        self.name = re.sub(r'[^\w\s]', '', self.name)
-        # Write the dictionary to a JSON file
-        with open('../public/data/' + self.clean_name(self.name) + '.json', 'w') as f:
+        with open('../public/data/' + file_name, 'w') as f:
             json.dump(data, f)
-            return json.dumps(data)
+        
+        s3 = boto3.client('s3')
+        bucket_name = 'vr-digital-health-files'
+        key = 'data/' + file_name
+        s3.upload_file('../public/data/' + file_name, bucket_name, key, ExtraArgs={'ContentType': 'application/json'})
+        print(f'Image uploaded to /{bucket_name}/{key}')
+
+        # os.remove('../public/data/' + file_name)
+        self.data_file = file_name
+        return file_name
 
     def standarize_initial_address(self):
         full_address = f'{self.address} {self.city} {self.state} {self.zipcode}'

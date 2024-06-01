@@ -121,19 +121,15 @@ def handle_form_submission():
 
     global volume_search_last_month
     try:
-        volume_search_last_month = metricas.start_historical(
-            church_obj.city, church_obj.state)
+        volume_search_last_month = metricas.start_historical(church_obj.city, church_obj.state)
     except:
         pass
     church_obj.get_digital_search_assesment_score()
+    church_obj.get_map_image()
     church_obj.write_object_to_json()
+    # post_contact_hubspot(church_obj)
 
-    # dev short-circuit
-    return jsonify({'message': 'Success'})
-
-    post_contact_hubspot(church_obj)
-
-    map_index = db_manage.insert_User(json_data.get("firstName"),
+    record_key = db_manage.insert_User(json_data.get("firstName"),
                                       json_data.get("lastName"),
                                       json_data.get("mobilePhone"),
                                       json_data.get("email"),
@@ -153,27 +149,24 @@ def handle_form_submission():
                                       0,
                                       church_obj.domain_trust_score,
                                       volume_search_last_month,
-                                      0,
-                                      church_obj.domain_organic_keywords
+                                      1,
+                                      church_obj.domain_organic_keywords,
+                                      church_obj.map_image,
+                                      church_obj.data_file
                                       )
-    if map_index is not None:
-        church_obj.get_map_image(church_obj.email)
-        return jsonify({'map_index': f'{map_index}'})
+
+    if record_key is not None:
+        return jsonify({'id': f'{record_key}'})
     else:
         pass
-    # except Exception as e:
-    #     exc_type, exc_obj, exc_tb = sys.exc_info()
-    #     fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-    #     print(exc_type, fname, exc_tb.tb_lineno)
+
     return jsonify({'message': 'Error in submission'}), 400
 
 
-@app.route('/api/fetch-data', methods=['POST'])
-def fetch_data():
-    data = request.get_json()
+@app.route('/api/fetch-data/<id>', methods=['GET'])
+def fetch_data(id):
     try:
-        user_key = data.get("user_key")
-        user_info = db_manage.retrieve_User_complete_report(user_key)
+        user_info = db_manage.retrieve_User_complete_report(id)
         response_json = {
             'church_name': user_info[10],
             'digitalVoice': user_info[1],
@@ -191,13 +184,15 @@ def fetch_data():
             'loc_city': user_info[7],
             'loc_state': user_info[6],
             'website': user_info[9],
-            'keywords': user_info[12]
+            'keywords': user_info[12],
+            'map_image': user_info[13],
+            'data_file': user_info[14],
         }
 
         return jsonify(response_json)
     except Exception as error_msg:
         print("Error: ", error_msg)
-        return jsonify({'message': 'Error in submission'}), 400
+        return jsonify({'message': 'Error getting data for id ' + id}), 400
 
 
 @app.route("/test")

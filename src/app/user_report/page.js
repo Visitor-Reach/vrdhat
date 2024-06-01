@@ -27,17 +27,16 @@ export default function SimpleResult() {
   const [webpage, setWebpage] = useState('')
 
   const searchParams = useSearchParams()
-  const user_key = searchParams.get('user_key')
-  console.log(user_key)
+  const id = searchParams.get('id')
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
-          method: 'POST',
-          body: JSON.stringify({ user_key: user_key }),
+        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data/' + id, {
+          method: 'GET',
           headers: myHeaders,
         })
 
