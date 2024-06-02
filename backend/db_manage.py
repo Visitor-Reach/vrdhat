@@ -135,3 +135,17 @@ def retrieve_runs(page, page_size):
         return results
     except Exception as error:
         return None
+    
+def get_total_runs():
+    cur, connection = init_connection()
+    query = f"""
+                SELECT COUNT(id) FROM Users
+            """
+    cur.execute(query)
+    try:
+        results = cur.fetchall()[0][0]
+        connection.commit()
+        close_connection(cur, connection)
+        return results
+    except Exception as error:
+        return None

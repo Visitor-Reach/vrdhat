@@ -209,12 +209,21 @@ def fetch_runs():
             data.append({
                 'id': run[0],
                 'church_name': run[1],
-                'map_image': run[2],
-                'data_file': run[3],
-                'pdf_file': run[4],
+                # 'map_image': run[2],
+                # 'data_file': run[3],
+                # 'pdf_file': run[4],
                 'created_at': run[5]
             })
-        return jsonify(data)
+        total = db_manage.get_total_runs()
+        results = {
+            'page': page,
+            'page_size': page_size,
+            'total': total,
+            'has_more': total > int(page) * int(page_size),
+            'count': len(data),
+            'items': data
+        }
+        return jsonify(results)
     except Exception as error_msg:
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting runs'}), 400
