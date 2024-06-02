@@ -853,7 +853,7 @@ class church:
         bucket_name = 'vr-digital-health-files'
         key = 'data/' + file_name
         s3.upload_file('../public/data/' + file_name, bucket_name, key, ExtraArgs={'ContentType': 'application/json'})
-        print(f'Image uploaded to /{bucket_name}/{key}')
+        print(f'JSON file uploaded to /{bucket_name}/{key}')
 
         # os.remove('../public/data/' + file_name)
         self.data_file = file_name

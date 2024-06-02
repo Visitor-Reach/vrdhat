@@ -10,6 +10,7 @@ import sys
 import requests
 import pdf_gen
 import db_manage
+import time
 
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
@@ -129,7 +130,7 @@ def handle_form_submission():
     church_obj.write_object_to_json()
     # post_contact_hubspot(church_obj)
 
-    record_key = db_manage.insert_User(json_data.get("firstName"),
+    id = db_manage.insert_User(json_data.get("firstName"),
                                       json_data.get("lastName"),
                                       json_data.get("mobilePhone"),
                                       json_data.get("email"),
@@ -149,14 +150,15 @@ def handle_form_submission():
                                       0,
                                       church_obj.domain_trust_score,
                                       volume_search_last_month,
-                                      1,
+                                      0,
                                       church_obj.domain_organic_keywords,
                                       church_obj.map_image,
-                                      church_obj.data_file
+                                      church_obj.data_file,
+                                      ''
                                       )
 
-    if record_key is not None:
-        return jsonify({'id': f'{record_key}'})
+    if id is not None:
+        return jsonify({'id': f'{id}'})
     else:
         pass
 
@@ -187,6 +189,7 @@ def fetch_data(id):
             'keywords': user_info[12],
             'map_image': user_info[13],
             'data_file': user_info[14],
+            'pdf_file': user_info[15]
         }
 
         return jsonify(response_json)
@@ -194,6 +197,17 @@ def fetch_data(id):
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting data for id ' + id}), 400
 
+
+@app.route('/api/fetch-runs', methods=['GET'])
+def fetch_runs():
+    try:
+        page = request.args.get('page') or 1
+        page_size = request.args.get('page_size') or 10
+        runs = db_manage.retrieve_runs(int(page), int(page_size))
+        return jsonify(runs)
+    except Exception as error_msg:
+        print("Error: ", error_msg)
+        return jsonify({'message': 'Error getting runs'}), 400
 
 @app.route("/test")
 def test():

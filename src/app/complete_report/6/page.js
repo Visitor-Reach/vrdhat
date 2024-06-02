@@ -37,7 +37,7 @@ export default function CompleteReportPage6() {
   const [keywords, setKeywords] = useState('')
 
   const searchParams = useSearchParams()
-  const user_key = searchParams.get('user_key')
+  const id = searchParams.get('id')
   const map = searchParams.get('map_key')
 
   useEffect(() => {
@@ -46,9 +46,8 @@ export default function CompleteReportPage6() {
         const myHeaders = new Headers()
         myHeaders.append('Content-Type', 'application/json')
         myHeaders.append('Access-Control-Allow-Origin', '*')
-        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data', {
-          method: 'POST',
-          body: JSON.stringify({ user_key: user_key }),
+        const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-data/' + id, {
+          method: 'GET',
           headers: myHeaders,
         })
 
@@ -90,7 +89,7 @@ export default function CompleteReportPage6() {
       </div>
       <div className="relative col-span-2 row-span-2 menu-shadow">
         <div>
-          <NavBar user_key={user_key} map={map} page={6}></NavBar>
+          <NavBar id={id} map={map} page={6}></NavBar>
         </div>
       </div>
 

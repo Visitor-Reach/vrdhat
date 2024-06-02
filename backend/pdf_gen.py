@@ -29,7 +29,7 @@ def merge_pdf(church_name, pdf_routes):
 
 
 def fix_links(church_name):
-   # Open the PDF file for reading
+    # Open the PDF file for reading
     with open(f"reports/{church_name}.pdf", 'rb') as file:
         reader = PyPDF2.PdfReader(file)
 
@@ -50,7 +50,7 @@ def fix_links(church_name):
         writer.write(output)
 
 
-def generate(church_name, email, map_name):
+def generate(church_name, id):
     dirs = [1, 2, 3, 4, 6, 7, 8, 9]
     church_name = church_name.lower().replace(" ", "_")
     church_name = re.sub(r'[^\w\s]', '', church_name)
@@ -60,7 +60,7 @@ def generate(church_name, email, map_name):
     for dir in dirs:
         if not os.path.exists(path):
             os.makedirs(path)
-        url = f'http://localhost:3000/complete_report/{str(dir)}?user_key={email}'
+        url = f'http://localhost:3000/complete_report/{str(dir)}?id={str(id)}'
         print(url)
         converter.convert(url, path + "/page" + str(dir) + ".pdf", print_options={"printBackground": True,
                                                                                   "paperHeight": 5.7,

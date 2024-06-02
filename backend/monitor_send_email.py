@@ -9,6 +9,8 @@ import pdf_gen
 import os
 import re
 import shutil
+import boto3
+import uuid
 
 
 # Configure Flask-Mail (replace with your app instance)
@@ -40,7 +42,7 @@ def close_connection(cur, connection):
 def retrieve_email_missing_pdf():
     cur, connection = init_connection()
     cur.execute(f"""
-                    SELECT email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1
+                    SELECT id, email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1
                 """)
     try:
         results = cur.fetchall()
@@ -51,14 +53,15 @@ def retrieve_email_missing_pdf():
         return None
 
 
-def update_sent_pdf(email):
+def update_sent_pdf(id, file_name):
     cur, connection = init_connection()
     cur.execute(f"""
                     UPDATE Users
                     SET
-                            pdf_sent = 1
+                            pdf_sent = 1,
+                            pdf_file = "{file_name}"
                     WHERE
-                            email = '{email}'
+                            id = "{id}"
                 """)
     try:
         results = cur.fetchall()
@@ -69,7 +72,7 @@ def update_sent_pdf(email):
         print("Update failed")
 
 
-def get_map_id(email):
+def get_map_id(id):
     cur, connection = init_connection()
     cur.execute(f"""
                         EXPLAIN QUERY PLAN
@@ -78,7 +81,7 @@ def get_map_id(email):
                         FROM
                             Users
                         WHERE
-                        email = "{email}"
+                        id = "{id}"
 
                 """)
     try:
@@ -112,15 +115,22 @@ def check_and_send_emails(app):
         users = retrieve_email_missing_pdf()
 
         for user in users:
-            email, church_name, first_name, pdf_sent = user
+            id, email, church_name, first_name, pdf_sent = user
             church_name = church_name.lower().replace(" ", "_")
             church_name = re.sub(r'[^\w\s]', '', church_name)
-            map_id = get_map_id(email)
-            pdf_bytes = pdf_gen.generate(church_name, email, map_id)
+            # map_id = get_map_id(id)
+            pdf_bytes = pdf_gen.generate(church_name, id)
             with app.app_context():
                 send_email_with_pdf(email, pdf_bytes, church_name, first_name)
 
-            update_sent_pdf(email)
+            file_name = str(uuid.uuid4()) + '.pdf'
+            s3 = boto3.client('s3')
+            bucket_name = 'vr-digital-health-files'
+            key = 'pdf/' + file_name
+            s3.upload_file("reports/" + church_name + "/" + church_name + ".pdf", bucket_name, key, ExtraArgs={'ContentType': 'application/pdf'})
+            print(f'PDF file uploaded to /{bucket_name}/{key}')
+
+            update_sent_pdf(id, file_name)
             shutil.rmtree('reports/' + church_name)
         procesando = False
 
