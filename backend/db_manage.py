@@ -124,8 +124,9 @@ def retrieve_User_complete_report(id):
 def retrieve_runs(page, page_size):
     cur, connection = init_connection()
     query = f"""
-                SELECT * FROM Users ORDER BY created_at DESC LIMIT {page_size} OFFSET {page_size * (page - 1)}
+                SELECT id, name, map_image, data_file, pdf_file, created_at FROM Users ORDER BY created_at DESC LIMIT {page_size} OFFSET {page_size * (page - 1)}
             """
+    print(query)
     cur.execute(query)
     try:
         results = cur.fetchall()

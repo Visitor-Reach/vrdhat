@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "backend-service",
+      "cwd": "./backend",
+      "script": "back.py",
+      "watch": false,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}

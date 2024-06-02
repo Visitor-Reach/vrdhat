@@ -203,11 +203,38 @@ def fetch_runs():
     try:
         page = request.args.get('page') or 1
         page_size = request.args.get('page_size') or 10
+        data = []
         runs = db_manage.retrieve_runs(int(page), int(page_size))
-        return jsonify(runs)
+        for run in runs:
+            data.append({
+                'id': run[0],
+                'church_name': run[1],
+                'map_image': run[2],
+                'data_file': run[3],
+                'pdf_file': run[4],
+                'created_at': run[5]
+            })
+        return jsonify(data)
     except Exception as error_msg:
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting runs'}), 400
+    
+    
+@app.route('/api/fetch-run-data/<jsonFile>', methods=['GET'])
+def fetch_run_data(jsonFile):
+    try:
+        # Fetch the JSON file from the remote URL
+        response = requests.get('https://vr-digital-health-files.s3.us-west-2.amazonaws.com/data/' + jsonFile)
+
+        # Check if the request was successful
+        if response.status_code == 200:
+            # Return the JSON string
+            return response.json()
+        else:
+            return jsonify({'message': 'Error fetching JSON file'}), 400
+    except Exception as error_msg:
+        print("Error: ", error_msg)
+        return jsonify({'message': 'Error getting run data'}), 400
 
 @app.route("/test")
 def test():

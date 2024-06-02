@@ -8,11 +8,11 @@ import moment from 'moment'
 const dateFormatString = "MMM DD YYYY, h:mm:ss a"
 
 export default function Data() {
-  const [fileData, setFileData] = useState([])
+  const [data, setData] = useState([])
 
   useEffect(() => {
-    getDirectory('./public/data').then(data => {
-      setFileData(data)
+    getData(1, 10).then((data) => {
+      setData(data)
     })
   },[])
 
@@ -21,12 +21,12 @@ export default function Data() {
       <h1 className="text-xl font-bold">DHA Data Files</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 my-3 shadow-sm bg-white">
-        {fileData.map((file, index) => (
-          <div key={index} className="flex justify-between hover:bg-gray-100">
-            <div className="w-1/3">{file.displayName}</div>
-            <div className="w-1/3">{moment(file.date).format(dateFormatString)}</div>
+        {data.map((item, i) => (
+          <div key={item.id} className={'flex justify-between hover:bg-gray-200 ' + (i % 2 != 0 ? 'bg-gray-100' : '')}>
+            <div className="w-1/3 font-bold">{item.church_name}</div>
+            <div className="w-1/3">{moment(item.created_at * 1000).format(dateFormatString)}</div>
             <div>
-              <a href={`/data/${file.id}`} className="text-blue-500">View</a>
+              <a href={`/data/${item.id}`} className="text-blue-500">View</a>
             </div>
           </div>
         ))}
@@ -34,5 +34,10 @@ export default function Data() {
 
     </div>
   )
+}
+
+async function getData(page, page_size) {
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROOT}/api/fetch-runs?page=${page}&page_size=${page_size}`)
+  return response.json()
 }
 
