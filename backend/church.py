@@ -78,6 +78,34 @@ SERPAPI_API_KEY = os.environ.get('SERPAPI_API_KEY')
 GOOGLE_MAPS_KEY = os.environ.get('GOOGLE_MAPS_KEY')
 GEOAPIFY_API_KEY = os.environ.get('GEOAPIFY_API_KEY')
 
+YELP_NAME_VALUE = 30
+YELP_CATEGORY_VALUE = 35
+YELP_ABOUT_VALUE = 35
+YELP_SCHEDULE_VALUE = 35
+YELP_WEBPAGE_VALUE = 30
+YELP_PHONE_VALUE = 30
+YELP_ADDRESS_VALUE = 35
+YELP_STATE_VALUE = 20
+
+GOOGLE_NAME_VALUE = 15
+GOOGLE_CATEGORY_VALUE = 20
+GOOGLE_ABOUT_VALUE = 20
+GOOGLE_SCHEDULE_VALUE = 20
+GOOGLE_WEBPAGE_VALUE = 20
+GOOGLE_PHONE_VALUE = 10
+GOOGLE_ADDRESS_VALUE = 10
+GOOGLE_STATE_VALUE = 10
+
+APPLE_NAME_VALUE = 15
+APPLE_CATEGORY_VALUE = 20
+APPLE_ABOUT_VALUE = 20
+APPLE_SCHEDULE_VALUE = 20
+APPLE_WEBPAGE_VALUE = 20
+APPLE_PHONE_VALUE = 10
+APPLE_ADDRESS_VALUE = 10
+APPLE_STATE_VALUE = 10
+
+
 class church:
 
     def __init__(self, name='', address='', city='', state='', zipcode='', webpage='', phone='', size='', facebook_profile='', instagram_profile='', first_name='', last_name='', mobile_phone='', email='') -> None:
@@ -471,51 +499,51 @@ class church:
     def get_yelp_name_score(self):
         name_similarity_value = self.name_similarity(self.yelp_name)
         self.yelp_name_similarity_score = name_similarity_value
-        self.yelp_name_score = 27 * (name_similarity_value > 95)
+        self.yelp_name_score = YELP_NAME_VALUE * (name_similarity_value > 95)
         return self.yelp_name_score
 
     def get_yelp_category_score(self):
         for cat_element in self.yelp_category:
             if "church" in cat_element.lower():
-                self.yelp_category_score = 27
+                self.yelp_category_score = YELP_CATEGORY_VALUE
                 return self.yelp_category_score
 
     def get_yelp_about_score(self):
         if len(self.yelp_description) > 0:
-            self.yelp_description_score = 27
+            self.yelp_description_score = YELP_ABOUT_VALUE
             return self.yelp_description_score
 
     def get_yelp_schedule_score(self):
         for sched_el in self.yelp_schedule:
             if (sched_el.get("day")).lower() == "sun":
                 if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
-                    self.yelp_schedule_score = 27
+                    self.yelp_schedule_score = YELP_SCHEDULE_VALUE
                     return self.yelp_schedule_score
 
     def get_yelp_webpage_score(self):
         if self.yelp_webpage != "" and self.yelp_webpage != None:
             self.yelp_webpage_similarity_score = self.text_similarity(self.webpage, self.yelp_webpage)
             if self.yelp_webpage_similarity_score >= 85:
-                self.yelp_webpage_score = 27
+                self.yelp_webpage_score = YELP_WEBPAGE_VALUE
                 return self.yelp_webpage_score
 
     def get_yelp_phone_score(self):
         self.phone = self.clean_phone_number(self.phone)
         self.yelp_phone_similarity_score = self.text_similarity(self.phone, self.yelp_phone)
         if self.yelp_phone_similarity_score >= 95:
-            self.yelp_phone_score = 27
+            self.yelp_phone_score = YELP_PHONE_VALUE
             return self.yelp_phone_score
 
     def get_yelp_address_score(self):
         self.yelp_address_similarity_score = self.address_similarity(self.yelp_address, 'yelp')
         if self.yelp_address_similarity_score >= 85:
-            self.yelp_address_score = 27
+            self.yelp_address_score = YELP_ADDRESS_VALUE
             return self.yelp_address_score
 
     def get_yelp_state_score(self):
         self.yelp_state_similarity_score = self.text_similarity(self.state, self.yelp_state)
         if self.yelp_state_similarity_score >= 95:
-            self.yelp_state_score = 27
+            self.yelp_state_score = YELP_STATE_VALUE
             return self.yelp_state_score
 
     def get_yelp_score(self):
@@ -545,53 +573,53 @@ class church:
         self.google_name = unquote(self.google_name).replace("’", "'")
         name_similarity_value = self.name_similarity(self.google_name)
         self.google_name_similarity_score = name_similarity_value
-        self.google_name_score = 20 * (name_similarity_value > 95)
+        self.google_name_score = GOOGLE_NAME_VALUE * (name_similarity_value > 95)
         if self.google_name_score == 0 and self.name in self.google_name:
-            self.google_name_score = 20
+            self.google_name_score = GOOGLE_NAME_VALUE
         return self.google_name_score
 
     def get_google_category_score(self):
         for cat_element in self.google_category:
             if "church" in cat_element.lower():
-                self.google_category_score = 14
+                self.google_category_score = GOOGLE_CATEGORY_VALUE
                 return self.google_category_score
 
     def get_google_about_score(self):
         self.google_description_similarity_score = self.text_similarity(self.google_description, self.apple_description)
         if self.google_description_similarity_score >= 90:
-            self.google_description_score = 15
+            self.google_description_score = GOOGLE_ABOUT_VALUE
             return self.google_description_score
 
     def get_google_schedule_score(self):
         for sched_el in self.google_schedule:
             if sched_el.get("sunday", "") != None and sched_el.get("sunday", "") != "Closed":
                 # if len(sched_el.get("hours", "")) > 0:
-                self.google_schedule_score = 14
+                self.google_schedule_score = GOOGLE_SCHEDULE_VALUE
                 return self.google_schedule_score
 
     def get_google_webpage_score(self):
         self.google_webpage_similarity_score = self.text_similarity(self.webpage, self.google_webpage)
         if self.google_webpage_similarity_score >= 85:
-            self.google_webpage_score = 14
+            self.google_webpage_score = GOOGLE_WEBPAGE_VALUE
             return self.google_webpage_score
 
     def get_google_phone_score(self):
         self.phone = self.clean_phone_number(self.phone)
         self.google_phone_similarity_score = self.text_similarity(self.phone, self.google_phone)
         if self.google_phone_similarity_score >= 95:
-            self.google_phone_score = 14
+            self.google_phone_score = GOOGLE_PHONE_VALUE
             return self.google_phone_score
 
     def get_google_addres_score(self):
         self.google_address_similarity_score = self.address_similarity(self.google_address, 'google')
         if self.google_address_similarity_score >= 85:
-            self.google_address_score = 14
+            self.google_address_score = GOOGLE_ADDRESS_VALUE
             return self.google_address_score
 
     def get_google_state_score(self):
         self.google_state_similarity_score = self.text_similarity(self.state, self.google_state)
         if self.google_state_similarity_score >= 95:
-            self.google_state_score = 14
+            self.google_state_score = GOOGLE_STATE_VALUE
             return self.google_state_score
 
     def get_google_score(self):
@@ -609,52 +637,52 @@ class church:
         self.apple_name = unquote(self.apple_name).replace("’", "'")
         name_similarity_value = self.name_similarity(self.apple_name)
         self.apple_name_similarity_score = name_similarity_value
-        self.apple_name_score = 20 * (name_similarity_value > 95)
+        self.apple_name_score = APPLE_NAME_VALUE * (name_similarity_value > 95)
         if self.apple_name_score == 0 and self.apple_name in self.name:
-            self.apple_name_score = 20
+            self.apple_name_score = APPLE_NAME_VALUE
         return self.apple_name_score
 
     def get_apple_category_score(self):
         for cat_element in self.apple_category:
             if "church" in cat_element.lower():
-                self.apple_category_score = 14
+                self.apple_category_score = APPLE_CATEGORY_VALUE
                 return self.apple_category_score
 
     def get_apple_about_score(self):
         self.apple_description_similarity_score = self.text_similarity(self.apple_description, self.google_description)
         if self.text_similarity(self.apple_description, self.google_description) >= 90:
-            self.apple_description_score = 15
+            self.apple_description_score = APPLE_ABOUT_VALUE
             return self.apple_description_score
 
     def get_apple_schedule_score(self):
         if len(self.apple_schedule) > 0:
             if len(self.apple_schedule.get("sunday", "")) > 0:
-                self.apple_schedule_score = 14
+                self.apple_schedule_score = APPLE_SCHEDULE_VALUE
                 return self.apple_schedule_score
 
     def get_apple_webpage_score(self):
         self.apple_webpage_similarity_score = self.text_similarity(self.webpage, self.apple_webpage)
         if self.text_similarity(self.webpage, self.apple_webpage) >= 80:
-            self.apple_webpage_score = 14
+            self.apple_webpage_score = APPLE_WEBPAGE_VALUE
             return self.apple_webpage_score
 
     def get_apple_phone_score(self):
         self.phone = self.clean_phone_number(self.phone)
         self.apple_phone_similarity_score = self.text_similarity(self.phone, self.apple_phone)
         if self.text_similarity(self.phone, self.apple_phone) >= 95:
-            self.apple_phone_score = 14
+            self.apple_phone_score = APPLE_PHONE_VALUE
             return self.apple_phone_score
 
     def get_apple_addres_score(self):
         self.apple_address_similarity_score = self.address_similarity(self.apple_address, 'apple')
         if self.apple_address_similarity_score >= 85:
-            self.apple_address_score = 14
+            self.apple_address_score = APPLE_ADDRESS_VALUE
             return self.apple_address_score
 
     def get_apple_state_score(self):
         self.apple_state_similarity_score = self.text_similarity(self.state, self.apple_state)
         if self.apple_state_similarity_score >= 95:
-            self.apple_state_score = 14
+            self.apple_state_score = APPLE_STATE_VALUE
             return self.apple_state_score
 
     def get_apple_score(self):
