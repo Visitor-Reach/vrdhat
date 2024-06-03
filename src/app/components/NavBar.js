@@ -24,7 +24,8 @@ export default function NavBar() {
   }, [user])
 
   const navigation = [
-    { name: 'Data Runs', href: '/data', current: pathname === '/data', restricted: false },
+    { name: 'Client Form', href: '/', current: pathname === '/data', restricted: false },
+    { name: 'Data Runs', href: '/data', current: pathname === '/data', restricted: true },
   ]
 
   return (

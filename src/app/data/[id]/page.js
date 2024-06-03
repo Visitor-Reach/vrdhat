@@ -6,10 +6,15 @@ export default function Data({ params }) {
   const [run, setRun] = useState(null)
   const [data, setData] = useState(null)
 
+  const totalScoreRatio = (data?.digital_search_assesment_score/750)
+  const voiceScoreRatio = (data?.voice_score/250)
+  const googleMapsScoreRatio = (data?.google_maps_score/125)
+  const appleMapsScoreRatio = (data?.apple_maps_score/125)
+  const websiteAuthorityScoreRatio = (data?.domain_trust_score/250)
+
   useEffect(() => {
     getData(params.id).then((runData) => {
       setRun(runData)
-      console.log(runData)
     })
   },[])
 
@@ -17,10 +22,40 @@ export default function Data({ params }) {
     if (run?.data_file) {
       getJson(run.data_file).then((data) => {
         setData(data)
-        console.log(data)
       })
     }
   }, [run?.data_file])
+
+   // Calculate colors based on progress
+  const getGradientColor = (progress) => {
+    // Adjust these ranges and colors as needed
+    if (progress <= 0.2) {
+      return '#E23D3E';
+    } else if (progress <= 0.4) {
+      return '#EB7E5C';
+    } else if (progress <= 0.6) {
+      return '#F7C780';
+    } else if (progress <= 0.8) {
+      return '#A8D281';
+    } else {
+      return '#4FDD83';
+    }
+  };
+
+  const getLetterScore = (input_value) => {
+    // Adjust these ranges and letters as needed
+    if (input_value <= 0.2) {
+      return 'F';
+    } else if (input_value <= 0.4) {
+      return 'D';
+    } else if (input_value <= 0.6) {
+      return 'C';
+    } else if (input_value <= 0.8) {
+      return 'B';
+    } else {
+      return 'A';
+    }
+  };
 
   if (data) {
     return (
@@ -41,17 +76,35 @@ export default function Data({ params }) {
             <div className="text-gray-700 text-sm">{data.first_name} {data.last_name}</div>
             <div className="text-gray-700 text-sm">{data.mobile_phone}</div>
             <div className="text-gray-700 text-sm">{data.email}</div>
+            {run?.pdf_file && (
+              <a href={`https://vr-digital-health-files.s3.us-west-2.amazonaws.com/pdf/${run.pdf_file}`} 
+                target="_blank" 
+                className="text-blue-500 text-sm">
+                Open PDF
+              </a>
+            )}
           </div>
         </div>
         
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 shadow-sm bg-white">
-          <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-2">Total Digital Health Score</h3>
+          <h3 className="text-xl font-semibold leading-6 text-gray-900 mb-2">
+            Total Digital Health Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(totalScoreRatio)}]`}>
+              {getLetterScore(totalScoreRatio)}
+            </span>
+          </h3>
           <div className="text-xl font-bold mt-2">{data.digital_search_assesment_score} <span className="text-gray-400 font-normal">/ 750</span></div>
         </div>
 
         {/* Yelp */}
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">Digital Voice Score</h3>
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Digital Voice Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(voiceScoreRatio)}]`}>
+              {getLetterScore(voiceScoreRatio)}
+            </span>
+            
+          </h3>
           <div className="text-lg font-bold my-2">{data.voice_score} <span className="text-gray-400 font-normal">/ 250</span></div>
 
           <table className="text-gray-700 w-full">
@@ -163,7 +216,12 @@ export default function Data({ params }) {
 
         {/* Google Maps */}
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">Google Maps Score</h3>
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Google Maps Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(googleMapsScoreRatio)}]`}>
+              {getLetterScore(googleMapsScoreRatio)}
+            </span>
+          </h3>
           <div className="text-lg font-bold my-2">{data.google_maps_score} <span className="text-gray-400 font-normal">/ 125</span></div>
 
           <table className="text-gray-700 w-full">
@@ -277,7 +335,12 @@ export default function Data({ params }) {
 
         {/* Apple Maps */}
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">Apple Maps Score</h3>
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Apple Maps Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(appleMapsScoreRatio)}]`}>
+              {getLetterScore(appleMapsScoreRatio)}
+            </span>
+          </h3>
           <div className="text-lg font-bold my-2">{data.apple_maps_score} <span className="text-gray-400 font-normal">/ 125</span></div>
 
           <table className="text-gray-700 w-full">
@@ -391,7 +454,12 @@ export default function Data({ params }) {
 
       {/* Google Search 'church' near me */}
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">Website Authority Score</h3>
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Website Authority Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(websiteAuthorityScoreRatio)}]`}>
+              {getLetterScore(websiteAuthorityScoreRatio)}
+            </span>
+          </h3>
           <div className="text-lg font-bold my-2">{data.domain_trust_score} <span className="text-gray-400 font-normal">/ 250</span></div>
 
           <table className="text-gray-700 w-2/3">

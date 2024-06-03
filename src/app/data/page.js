@@ -15,7 +15,7 @@ export default function Data() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const page = searchParams.get("page") || 1
-  const pageSize = searchParams.get("page_size") || 10
+  const pageSize = searchParams.get("page_size") || 15
 
   const createQueryString = useCallback(
     (name, value) => {
