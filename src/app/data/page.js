@@ -1,6 +1,6 @@
 'use client'
 
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'
 import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 
@@ -15,7 +15,7 @@ export default function Data() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const page = searchParams.get("page") || 1
-  const pageSize = searchParams.get("page_size") || 5
+  const pageSize = searchParams.get("page_size") || 10
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -40,7 +40,7 @@ export default function Data() {
 
   return (
     <div className="m-10 w-2/3 h-[100vh]">
-      <h1 className="text-xl font-bold">DHA Data Runs</h1>
+      <h1 className="text-xl font-bold">Data Runs</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 my-3 shadow-sm bg-white">
 
@@ -53,7 +53,12 @@ export default function Data() {
                     Name
                   </th>
                   <th scope="col" className="w-1/3 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
-                    Run Date
+                    <a href="#" className="group inline-flex">
+                      Run Date
+                      <span className="ml-2 flex-none rounded bg-gray-100 text-gray-900 group-hover:bg-gray-200">
+                        <ChevronDownIcon className="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </a>
                   </th>
                   <th scope="col" className="w-1/8 pl-3 py-3.5 text-right text-sm font-semibold text-gray-900">
                     View
@@ -99,6 +104,7 @@ export default function Data() {
                   <>
                   {parseInt(page) === p && (
                     <a
+                      key={p}
                       href="#"
                       aria-current="page"
                       className="relative z-10 inline-flex items-center bg-indigo-600 px-4 py-2 text-sm font-semibold text-white focus:z-20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

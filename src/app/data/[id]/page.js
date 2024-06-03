@@ -25,7 +25,7 @@ export default function Data({ params }) {
   if (data) {
     return (
       <div className="m-10 w-full">
-        <h1 className="text-xl font-bold"><a href="/data" className="text-blue-500">DHA Data Runs</a> &gt; {data.name}</h1>
+        <h1 className="text-xl font-bold"><a href="/data" className="text-blue-500">Data Runs</a> &gt; {data.name}</h1>
         
         <div className="flex flex-row gap-3">
           <div className="w-1/2 rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
