@@ -68,7 +68,7 @@ def update_sent_pdf(id, file_name):
         results = cur.fetchall()
         connection.commit()
         close_connection(cur, connection)
-        print("Update success email {email}")
+        print(f"Updated run pdf_sent = 1, pdf_file = {file_name}")
     except Exception as error:
         print("Update failed")
 

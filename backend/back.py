@@ -29,7 +29,8 @@ def post_hubspot_data(church_obj):
         contact_id = add_hubspot_contact(church_obj)
         print("New contact id: ", contact_id)
     else:
-        print("Existing contact id: ", contact_id)
+        update_hubspot_contact(church_obj, contact_id)
+        print("Updated existing contact id: ", contact_id)
 
     # check if company already exists, if not create new company
     extracted = tldextract.extract(church_obj.webpage)
@@ -116,6 +117,7 @@ def add_hubspot_contact(church_obj):
             "company": church_obj.name,
             "hs_marketable_status": "Marketing contact",
             "role": church_obj.contact_role,
+            "digital_health_assessment": "Yes"
         }
     })
     headers = {
@@ -129,6 +131,23 @@ def add_hubspot_contact(church_obj):
     data = res.read()
     contact_id = json.loads(data).get("id")
     return contact_id
+
+def update_hubspot_contact(church_obj, contact_id):
+    payload = json.dumps({
+        "properties": {
+            "digital_health_assessment": True
+        }
+    })
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("PATCH", f"/crm/v3/objects/contacts/{contact_id}", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    return 1
 
 def add_hubspot_company(church_obj, domain_name):
     payload = json.dumps({
