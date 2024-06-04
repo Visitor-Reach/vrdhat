@@ -36,7 +36,7 @@ def post_hubspot_data(church_obj):
     domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
     company_id = get_existing_hubspot_company(domain_name)
     if company_id is None:
-        company_id = add_hubspot_company(church_obj)
+        company_id = add_hubspot_company(church_obj, domain_name)
         print("New company id: ", company_id)
     else:
         print("Existing company id: ", company_id)
@@ -129,7 +129,7 @@ def add_hubspot_contact(church_obj):
     contact_id = json.loads(data).get("id")
     return contact_id
 
-def add_hubspot_company(church_obj):
+def add_hubspot_company(church_obj, domain_name):
     payload = json.dumps({
         "properties": {
             "name": church_obj.name,
