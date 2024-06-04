@@ -109,6 +109,7 @@ APPLE_STATE_VALUE = 10
 class church:
 
     def __init__(self, name='', address='', city='', state='', zipcode='', webpage='', phone='', size='', facebook_profile='', instagram_profile='', first_name='', last_name='', mobile_phone='', email='') -> None:
+        self.id = ""
         self.name = name
         self.coordinates = ""
         self.address = address

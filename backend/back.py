@@ -11,6 +11,7 @@ import requests
 import pdf_gen
 import db_manage
 import time
+import tldextract
 
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
@@ -20,20 +21,101 @@ mail = Mail(app)
 CORS(app)
 volume_search_last_month = 0
 
-app.config['MAIL_SERVER'] = "smtp.gmail.com"
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = os.environ.get('GOOGLE_MAIL_USER')
-app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_MAIL_PASS')
-app.config['MAIL_USE_TLS'] = False
-app.config['MAIL_USE_SSL'] = True
-app.config['WTF_CSRF_ENABLED'] = False
+# app.config['MAIL_SERVER'] = "smtp.gmail.com"
+# app.config['MAIL_PORT'] = 465
+# app.config['MAIL_USERNAME'] = os.environ.get('GOOGLE_MAIL_USER')
+# app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_MAIL_PASS')
+# app.config['MAIL_USE_TLS'] = False
+# app.config['MAIL_USE_SSL'] = True
+# app.config['WTF_CSRF_ENABLED'] = False
 
-mail = Mail(app)
+# mail = Mail(app)
 
 
-def post_contact_hubspot(church_obj):
+def post_hubspot_data(church_obj):
+    # check if contact already exists, if not create new contact
+    contact_id = get_existing_hubspot_contact(church_obj.email)
+    if contact_id is None:
+        contact_id = add_hubspot_contact(church_obj)
+        print("New contact id: ", contact_id)
+    else:
+        print("Existing contact id: ", contact_id)
 
+    # check if company already exists, if not create new company
+    extracted = tldextract.extract(church_obj.webpage)
+    domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
+    company_id = get_existing_hubspot_company(domain_name)
+    if company_id is None:
+        company_id = add_hubspot_company(church_obj)
+        print("New company id: ", company_id)
+    else:
+        print("Existing company id: ", company_id)
+
+    # associate contact with company
+    add_hubspot_association(contact_id, company_id)
+
+    # create note for contact
+    dataUrl = f"https://digitalhealth.visitorreach.com/data/{church_obj.id}"
+    noteContent = f'<div><p>This contact submitted a Digital Health Assessment:</p><p><a href="{dataUrl}" title="Data Analysis" target="_blank">Digital Health Analysis</a></p></div>'
+    add_hubspot_note(contact_id, company_id, noteContent)
+    return json.dumps({"contact_id": contact_id, "company_id": company_id})
+
+def get_existing_hubspot_contact(email):
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
     conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("GET", f"/crm/v3/objects/contacts/{email}?idProperty=email", {}, headers)
+    res = conn.getresponse()
+    existingData = res.read()
+    if res.status == 404:
+        return None
+    else:
+        existing = json.loads(existingData)
+        return existing.get("id")
+        
+def get_existing_hubspot_company(domain):
+    payload = json.dumps({
+        "limit": 1,
+        "sorts": [
+            {
+                "propertyName": "createdate",
+                "direction": "DESCENDING"
+            }
+        ],
+        "properties": [
+            "name"
+        ],
+        "filterGroups": [
+            {
+                "filters": [
+                    {
+                        "propertyName": "domain",
+                        "operator": "EQ",
+                        "value":domain
+                    }
+                ]
+            }
+        ]
+    })
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("POST", f"/crm/v3/objects/companies/search", payload, headers)
+    res = conn.getresponse()
+    existingCompanyData = res.read()
+    existingData = json.loads(existingCompanyData)
+    if existingData.get("total") == 0:
+        return None
+    else:
+        return existingData.get("results")[0].get("id")
+
+def add_hubspot_contact(church_obj):
     payload = json.dumps({
         "properties": {
             "email": church_obj.email,
@@ -50,53 +132,128 @@ def post_contact_hubspot(church_obj):
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {HUBSPOT_API_KEY}'
     }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("POST", f"/crm/v3/objects/contacts", payload, headers)
     res = conn.getresponse()
     data = res.read()
-    # print("DATA: ", payload)
-    print("New contact: ", data)
+    contact_id = json.loads(data).get("id")
+    return contact_id
 
-    conn = http.client.HTTPSConnection("api.hubapi.com")
+def add_hubspot_company(church_obj):
     payload = json.dumps({
         "properties": {
             "name": church_obj.name,
+            "domain": domain_name,
             "church_size": church_obj.size,
             "phone": church_obj.phone,
+            "address": church_obj.address,
             "city": church_obj.city,
             "state": church_obj.state,
+            "zip": church_obj.zipcode,
             "country": "United States",
-
+            "facebook_company_page": church_obj.facebook_profile,
         }
     })
-    print("Payload", payload)
-
     headers = {
         'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {HUBSPOT_API_KEY}'
     }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("POST", f"/crm/v3/objects/companies", payload, headers)
     res = conn.getresponse()
     data = res.read()
-    # print("COMPANY DATA: ", payload)
-    print("New company: ", data)
-    # return (data.decode("utf-8"))
-    return 0
+    company_id = json.loads(data).get("id")
+    return company_id
+
+def add_hubspot_association(contact_id, company_id):
+    payload = json.dumps({
+        "inputs":[
+            {
+                "from": {
+                "id": contact_id,
+                "type": "contact"
+                },
+                "to": {
+                    "id": company_id,
+                    "type": "company"
+                },
+                "type": "contact_to_company"
+            }
+        ]
+    })
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("POST", f"/crm/v3/associations/contact/company/batch/create", payload, headers)
+    associationRes = conn.getresponse()
+    if associationRes.status == 201:
+        print("Contact to Company Association created")
+    else:
+        print("Error creating Contact to Company Association")
+    return associationRes.status
+
+def add_hubspot_note(contact_id, company_id, content):
+    payload = json.dumps({
+        "properties": {
+            "hs_timestamp": int(time.time() * 1000),
+            "hs_note_body": content
+        },
+        "associations": [
+            {
+                "to": {
+                    "id": contact_id
+                },
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 202
+                    }
+                ]
+            },
+            {
+                "to": {
+                    "id": company_id
+                },
+                "types": [
+                    {
+                        "associationCategory": "HUBSPOT_DEFINED",
+                        "associationTypeId": 190
+                    }
+                ]
+            }
+        ]
+    })
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("POST", f"/crm/v3/objects/notes", payload, headers)
+    noteRes = conn.getresponse()
+    if noteRes.status == 201:
+        print("Note created")
+    else:
+        print("Error creating note")
+    return noteRes.status
 
 
-def send_email(church_obj):
-
-    msg = Message(
-        "Check your Digital Health Assessment report for your church: " + church_obj.name,
-        sender='digitalhealth@visitorreach.com',
-        recipients=[church_obj.email]
-    )
-    pdf_gen.generate(church_obj.name)
-    with app.open_resource("reports/" + (church_obj.name).replace(" ", "_") + ".pdf") as pdf_file:
-        msg.attach(church_obj.name + ".pdf",
-                   "application/pdf", pdf_file.read())
-    msg.html = render_template("email.html", first_name=church_obj.first_name)
-    mail.send(msg)
+# def send_email(church_obj):
+#     msg = Message(
+#         "Check your Digital Health Assessment report for your church: " + church_obj.name,
+#         sender='digitalhealth@visitorreach.com',
+#         recipients=[church_obj.email]
+#     )
+#     pdf_gen.generate(church_obj.name)
+#     with app.open_resource("reports/" + (church_obj.name).replace(" ", "_") + ".pdf") as pdf_file:
+#         msg.attach(church_obj.name + ".pdf",
+#                    "application/pdf", pdf_file.read())
+#     msg.html = render_template("email.html", first_name=church_obj.first_name)
+#     mail.send(msg)
 
 
 @app.route('/submit-form', methods=['POST'])
@@ -128,7 +285,6 @@ def handle_form_submission():
     church_obj.get_digital_search_assesment_score()
     church_obj.get_map_image()
     church_obj.write_object_to_json()
-    # post_contact_hubspot(church_obj)
 
     id = db_manage.insert_User(json_data.get("firstName"),
                                       json_data.get("lastName"),
@@ -157,12 +313,9 @@ def handle_form_submission():
                                       ''
                                       )
 
-    if id is not None:
-        return jsonify({'id': f'{id}'})
-    else:
-        pass
-
-    return jsonify({'message': 'Error in submission'}), 400
+    church_obj.id = id
+    post_hubspot_data(church_obj)
+    return jsonify({"id": id})
 
 
 @app.route('/api/fetch-data/<id>', methods=['GET'])
