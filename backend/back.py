@@ -46,7 +46,7 @@ def post_hubspot_data(church_obj):
 
     # create note for contact
     dataUrl = f"https://digitalhealth.visitorreach.com/data/{church_obj.id}"
-    noteContent = f'<div><p>This contact submitted a Digital Health Assessment:</p><p><a href="{dataUrl}" title="Data Analysis" target="_blank">Digital Health Analysis</a></p></div>'
+    noteContent = f'<div><p>{church_obj.first_name} {church_obj.last_name} submitted a Digital Health Assessment:</p><p><a href="{dataUrl}" title="Data Analysis" target="_blank">Digital Health Analysis</a></p></div>'
     add_hubspot_note(contact_id, company_id, noteContent)
     return {contact_id: contact_id, company_id: company_id}
 
@@ -114,7 +114,8 @@ def add_hubspot_contact(church_obj):
             "phone": church_obj.mobile_phone,
             "digital_assessment": "Yes",
             "company": church_obj.name,
-            "hs_marketable_status": "Marketing contact"
+            "hs_marketable_status": "Marketing contact",
+            "role": church_obj.contact_role,
         }
     })
     headers = {
@@ -229,6 +230,7 @@ def add_hubspot_note(contact_id, company_id, content):
         print("Note created")
     else:
         print("Error creating note")
+        print(noteRes.read())
     return noteRes.status
 
 
@@ -252,6 +254,7 @@ def handle_form_submission():
     church_obj.phone = json_data.get("churchPhone")
     church_obj.facebook_profile = json_data.get("churchFacebook")
     church_obj.instagram_profile = json_data.get("churchInstagram")
+    church_obj.contact_role = json_data.get("role")
 
     global volume_search_last_month
     try:

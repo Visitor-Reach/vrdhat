@@ -179,6 +179,7 @@ export default function Page() {
     const churchZipCode = form.churchZipCode.value
     const churchFacebook = form.churchFacebook.value
     const churchInstagram = form.churchInstagram.value
+    const role = form.role.value
 
     if (!firstName || !firstName.trim()) {
       errors.push({ msg: 'First Name is required', field: 'firstName' })
@@ -226,6 +227,9 @@ export default function Page() {
     // if (!churchInstagram || !churchInstagram.trim()) {
     //   errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
     // }
+    if (!role || !role.trim()) {
+      errors.push({ msg: 'Your Role is required', field: 'role' })
+    }
 
     return errors
   }
@@ -291,9 +295,10 @@ export default function Page() {
         churchZipCode: event.target.elements.churchZipCode.value,
         churchFacebook: event.target.elements.churchFacebook.value,
         churchInstagram: event.target.elements.churchInstagram.value,
+        role: event.target.elements.role.value,
       })
       set_email(event.target.elements.email.value)
-      console.log(churchInfo)
+
       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
         body: churchInfo,
@@ -485,7 +490,7 @@ export default function Page() {
                       <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
                     </div>
                   </div>
-                  <div className="form-page-input-row-2-elements">
+                  <div className="form-page-input-row-3-elements">
                     <input
                       className="form-page-input"
                       type=" text"
@@ -500,6 +505,15 @@ export default function Page() {
                       placeholder="Church Facebook Handle"
                       onBlur={onInputBlur}
                     />
+                    <div className="relative phone:w-full tablet-vertical:w-full">
+                      <select className="form-page-input appearance-none" name="role" onBlur={onInputBlur}>
+                        <option value=""> Your Role </option>
+                        <option key="role_1" value="Senior leadership">Senior leadership</option>
+                        <option key="role_2" value="Staff position">Staff position</option>
+                        <option key="role_3" value="Member of Church">Member of Church</option>
+                      </select>
+                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                    </div>
                   </div>
                   <div className="pt-10 w-10/12 m-auto">
                     <label className="phone:text-sm tablet-vertical:text-2xl text-slate-700">
