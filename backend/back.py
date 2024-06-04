@@ -117,7 +117,7 @@ def add_hubspot_contact(church_obj):
             "company": church_obj.name,
             "hs_marketable_status": "Marketing contact",
             "role": church_obj.contact_role,
-            "digital_health_assessment": "Yes"
+            "digital_health_assessment": True
         }
     })
     headers = {
