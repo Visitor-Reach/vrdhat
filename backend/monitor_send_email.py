@@ -11,6 +11,7 @@ import re
 import shutil
 import boto3
 import uuid
+from back import add_hubspot_note
 
 
 # Configure Flask-Mail (replace with your app instance)
@@ -42,7 +43,7 @@ def close_connection(cur, connection):
 def retrieve_email_missing_pdf():
     cur, connection = init_connection()
     cur.execute(f"""
-                    SELECT id, email, name, first_name, pdf_sent FROM Users WHERE pdf_sent <> 1
+                    SELECT id, email, name, first_name, pdf_sent, hubspot_contact_id, hubspot_company_id FROM Users WHERE pdf_sent <> 1
                 """)
     try:
         results = cur.fetchall()
@@ -115,7 +116,7 @@ def check_and_send_emails(app):
         users = retrieve_email_missing_pdf()
 
         for user in users:
-            id, email, church_name, first_name, pdf_sent = user
+            id, email, church_name, first_name, pdf_sent, hubspot_contact_id, hubspot_company_id = user
             church_name = church_name.lower().replace(" ", "_")
             church_name = re.sub(r'[^\w\s]', '', church_name)
             # map_id = get_map_id(id)
@@ -131,6 +132,9 @@ def check_and_send_emails(app):
             print(f'PDF file uploaded to /{bucket_name}/{key}')
 
             update_sent_pdf(id, file_name)
+            pdfUrl = f"https://vr-digital-health-files.s3.amazonaws.com/pdf/{file_name}"
+            noteContent = f'<div><p>A Digital Health Assessment report PDF file was generated and sent:</p><p><a href="{pdfUrl}" title="Digital Health Assessment Report" target="_blank">Digital Health Assessment Report PDF</a></p></div>'
+            add_hubspot_note(hubspot_contact_id, hubspot_company_id, noteContent)
             shutil.rmtree('reports/' + church_name)
         procesando = False
 

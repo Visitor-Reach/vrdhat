@@ -12,6 +12,7 @@ import pdf_gen
 import db_manage
 import time
 import tldextract
+import sqlite3
 
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
@@ -20,17 +21,6 @@ app = Flask(__name__)
 mail = Mail(app)
 CORS(app)
 volume_search_last_month = 0
-
-# app.config['MAIL_SERVER'] = "smtp.gmail.com"
-# app.config['MAIL_PORT'] = 465
-# app.config['MAIL_USERNAME'] = os.environ.get('GOOGLE_MAIL_USER')
-# app.config['MAIL_PASSWORD'] = os.environ.get('GOOGLE_MAIL_PASS')
-# app.config['MAIL_USE_TLS'] = False
-# app.config['MAIL_USE_SSL'] = True
-# app.config['WTF_CSRF_ENABLED'] = False
-
-# mail = Mail(app)
-
 
 def post_hubspot_data(church_obj):
     # check if contact already exists, if not create new contact
@@ -58,7 +48,7 @@ def post_hubspot_data(church_obj):
     dataUrl = f"https://digitalhealth.visitorreach.com/data/{church_obj.id}"
     noteContent = f'<div><p>This contact submitted a Digital Health Assessment:</p><p><a href="{dataUrl}" title="Data Analysis" target="_blank">Digital Health Analysis</a></p></div>'
     add_hubspot_note(contact_id, company_id, noteContent)
-    return json.dumps({"contact_id": contact_id, "company_id": company_id})
+    return {contact_id: contact_id, company_id: company_id}
 
 def get_existing_hubspot_contact(email):
     headers = {
@@ -242,20 +232,6 @@ def add_hubspot_note(contact_id, company_id, content):
     return noteRes.status
 
 
-# def send_email(church_obj):
-#     msg = Message(
-#         "Check your Digital Health Assessment report for your church: " + church_obj.name,
-#         sender='digitalhealth@visitorreach.com',
-#         recipients=[church_obj.email]
-#     )
-#     pdf_gen.generate(church_obj.name)
-#     with app.open_resource("reports/" + (church_obj.name).replace(" ", "_") + ".pdf") as pdf_file:
-#         msg.attach(church_obj.name + ".pdf",
-#                    "application/pdf", pdf_file.read())
-#     msg.html = render_template("email.html", first_name=church_obj.first_name)
-#     mail.send(msg)
-
-
 @app.route('/submit-form', methods=['POST'])
 @cross_origin()
 def handle_form_submission():
@@ -314,9 +290,36 @@ def handle_form_submission():
                                       )
 
     church_obj.id = id
-    post_hubspot_data(church_obj)
+    contact_id, company_id = post_hubspot_data(church_obj)
+    update_contact_company(id, contact_id, company_id)
     return jsonify({"id": id})
 
+def init_connection():
+    connection = sqlite3.connect("info/digital_assessment.db")
+    cur = connection.cursor()
+    return cur, connection
+
+def close_connection(cur, connection):
+    cur.close()
+    connection.close()
+
+def update_contact_company(id, contact_id, company_id):
+    cur, connection = init_connection()
+    cur.execute(f"""
+                    UPDATE Users
+                    SET
+                            hubspot_contact_id = {contact_id},
+                            hubspot_company_id = {company_id}
+                    WHERE
+                            id = "{id}"
+                """)
+    try:
+        results = cur.fetchall()
+        connection.commit()
+        close_connection(cur, connection)
+        print("Update success contact/company")
+    except Exception as error:
+        print("Update failed")
 
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
