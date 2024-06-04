@@ -735,9 +735,7 @@ class church:
         results = search.get_dict()
         local_results = results.get("local_results")
         if local_results is not None:
-            if len(local_results) > 1:
-                pass
-            else:
+            if len(local_results) > 0:
                 sources = local_results[0]["source"]
                 for source in sources:
                     source_name = source.get("name", "")
