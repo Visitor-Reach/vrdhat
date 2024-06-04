@@ -113,7 +113,6 @@ def add_hubspot_contact(church_obj):
             "firstname": church_obj.first_name,
             "lastname": church_obj.last_name,
             "phone": church_obj.mobile_phone,
-            "digital_assessment": "Yes",
             "company": church_obj.name,
             "hs_marketable_status": "Marketing contact",
             "role": church_obj.contact_role,
@@ -128,9 +127,14 @@ def add_hubspot_contact(church_obj):
     conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("POST", f"/crm/v3/objects/contacts", payload, headers)
     res = conn.getresponse()
-    data = res.read()
-    contact_id = json.loads(data).get("id")
-    return contact_id
+    if res.status != 201:
+        print("Error creating contact")
+        print(res.read())
+        return None
+    else:
+        data = res.read()
+        contact_id = json.loads(data).get("id")
+        return contact_id
 
 def update_hubspot_contact(church_obj, contact_id):
     payload = json.dumps({
