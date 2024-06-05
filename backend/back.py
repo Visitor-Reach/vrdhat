@@ -40,7 +40,8 @@ def post_hubspot_data(church_obj):
         company_id = add_hubspot_company(church_obj, domain_name)
         print("New company id: ", company_id)
     else:
-        print("Existing company id: ", company_id)
+        update_hubspot_company(church_obj, company_id)
+        print("Updated existing company id: ", company_id)
 
     # associate contact with company
     add_hubspot_association(contact_id, company_id)
@@ -149,6 +150,27 @@ def update_hubspot_contact(church_obj, contact_id):
     }
     conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("PATCH", f"/crm/v3/objects/contacts/{contact_id}", payload, headers)
+    res = conn.getresponse()
+    data = res.read()
+    return 1
+
+def update_hubspot_company(church_obj, company_id):
+    payload = json.dumps({
+        "properties": {
+            "phone": church_obj.phone,
+            "address": church_obj.address,
+            "city": church_obj.city,
+            "state": church_obj.state,
+            "zip": church_obj.zipcode,
+        }
+    })
+    headers = {
+        'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
+        'Content-Type': 'application/json',
+        'Authorization': f'Bearer {HUBSPOT_API_KEY}'
+    }
+    conn = http.client.HTTPSConnection("api.hubapi.com")
+    conn.request("PATCH", f"/crm/v3/objects/companies/{company_id}", payload, headers)
     res = conn.getresponse()
     data = res.read()
     return 1
