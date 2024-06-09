@@ -318,7 +318,7 @@ export default function Page() {
 
   return (
     <>
-      <dialog id="dialog" className="p-5 w-1/3 rounded-xl shadow-2xl text-center">
+      <dialog id="dialog" className="p-5 w-4/5 sm:w-3/5 lg:w-1/3 rounded-xl shadow-2xl text-center">
         <h1 className="text-lb mb-2 font-bold text-center">Please review &amp; update these fields...</h1>
         <p id="dialogcontent"></p>
         <button
@@ -330,7 +330,7 @@ export default function Page() {
         </button>
       </dialog>
 
-      <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-20">
+      <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-14">
         {isLoading ? (
           <div className="pt loading flex-grow flex flex-col justify-center items-center">
             <div className="flex flex-col items-center w-2/12"></div>
@@ -339,14 +339,14 @@ export default function Page() {
           <LoadingAnimation />
         ) : (
           <form onSubmit={onSubmit}>
-            <div className="flex flex-col justify-center items-center text-2xl text-vr-form-title font-medium">
-              <h1 className="w-2/3 text-vr-form-title max-md:text-4xl text-6xl">
+            <div className="flex flex-col justify-center text-2xl text-vr-form-title font-medium">
+              <h1 className="text-3xl sm:text-5xl lg:text-6xl max-w-[800px]">
                 Let's get some information for your report
               </h1>
 
-              <div className="fields-container m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-10/12 overflow-hidden">
+              <div className="mt-[50px] sm:mt-[80px] p-1 m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-full overflow-hidden">
                 <div className="flex flex-wrap m-auto w-full p-[10px] gap-5">
-                  <div className="form-page-input-row-2-elements">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                     <input
                       className="form-page-input"
                       type=" text"
@@ -362,7 +362,7 @@ export default function Page() {
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="form-page-input-row-2-elements">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                     <input
                       className="form-page-input"
                       type=" text"
@@ -378,7 +378,7 @@ export default function Page() {
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="form-page-input-row-2-elements">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                     <input
                       className="form-page-input"
                       type=" text"
@@ -394,8 +394,8 @@ export default function Page() {
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="form-page-input-row-2-elements">
-                    <div className="relative phone:w-full tablet-vertical:w-full">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
+                    <div className="relative phone:w-full tablet-vertical:w-full flex flex-row items-center">
                       <select className="form-page-input appearance-none" name="churchSize" onBlur={onInputBlur}>
                         <option value=""> Church Size </option>
                         {church_sizes.map((church_sizes) => (
@@ -404,7 +404,7 @@ export default function Page() {
                           </option>
                         ))}
                       </select>
-                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                      <div className="arrow">&#8964;</div>
                     </div>
                     <input
                       className="form-page-input"
@@ -414,17 +414,20 @@ export default function Page() {
                       onBlur={onInputBlur}
                     />
                   </div>
-                  <div className="form-page-input-row-1-element">
-                    <div className="flex-row relative">
+                  <div className="w-full">
+                    <div className="flex-row relative w-full">
                       <input
-                        className="form-page-input"
+                        className="form-page-input w-full"
                         type=" text"
                         name="churchAddress"
                         placeholder="Church Address"
                         onPaste={() => parseAddress(this)}
                         onBlur={onInputBlur}
                       />
-                      <div id="spinner1" className="hidden absolute right-[20px] top-[16px]">
+                      <div
+                        id="spinner1"
+                        className="hidden absolute right-[14px] top-[12px] md:top-[16px] md:right-[18px]"
+                      >
                         <div className="lds-spinner">
                           <div></div>
                           <div></div>
@@ -442,7 +445,7 @@ export default function Page() {
                       </div>
                     </div>
                   </div>
-                  <div className="form-page-input-row-3-elements">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
                     <div className="flex-row relative phone:w-full tablet-vertical:w-full">
                       <input
                         className="form-page-input"
@@ -454,7 +457,10 @@ export default function Page() {
                           lookupZipCode(e)
                         }}
                       />
-                      <div id="spinner2" className="hidden absolute right-[20px] top-[16px]">
+                      <div
+                        id="spinner2"
+                        className="hidden absolute right-[14px] top-[12px] md:top-[16px] md:right-[18px]"
+                      >
                         <div className="lds-spinner">
                           <div></div>
                           <div></div>
@@ -487,10 +493,10 @@ export default function Page() {
                           </option>
                         ))}
                       </select>
-                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                      <div className="arrow">&#8964;</div>
                     </div>
                   </div>
-                  <div className="form-page-input-row-3-elements">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                     <input
                       className="form-page-input"
                       type=" text"
@@ -508,11 +514,17 @@ export default function Page() {
                     <div className="relative phone:w-full tablet-vertical:w-full">
                       <select className="form-page-input appearance-none" name="role" onBlur={onInputBlur}>
                         <option value=""> Your Role </option>
-                        <option key="role_1" value="Senior leadership">Senior leadership</option>
-                        <option key="role_2" value="Staff position">Staff position</option>
-                        <option key="role_3" value="Member of Church">Member of Church</option>
+                        <option key="role_1" value="Senior leadership">
+                          Senior leadership
+                        </option>
+                        <option key="role_2" value="Staff position">
+                          Staff position
+                        </option>
+                        <option key="role_3" value="Member of Church">
+                          Member of Church
+                        </option>
                       </select>
-                      <div className="absolute right-[15px] top-[5px] text-3xl text-gray-300">&#8964;</div>
+                      <div className="arrow">&#8964;</div>
                     </div>
                   </div>
                   <div className="pt-10 w-10/12 m-auto">
