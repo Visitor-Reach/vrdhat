@@ -16,7 +16,7 @@ export default function Page() {
   const router = useRouter()
   const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [id, setId] = useState('')
 
   const [email, set_email] = useState('')
