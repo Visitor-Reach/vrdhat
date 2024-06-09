@@ -20,7 +20,7 @@ export const metadata = {
 
 export default function FormLayout({ children }) {
   return (
-    <div className="p-5 sm:p-5 md:p-6 lg:p-14">
+    <div className="p-5 sm:p-5 md:p-6 lg:p-14 max-w-[1000px] my-0 mx-auto">
       <Image
         src={'VR Logo Small.svg'}
         className="mt-5 sm:mt-10 relative left-0 w-[100px] sm:w-[150px] md:w-[200px]"
