@@ -12,34 +12,33 @@ import React from 'react'
 export default function Home() {
   const ref = useRef()
   return (
-    <div className="h-[100vh] bg-gradient-to-br from-sky-200 from-5% via-white to-white">
-      <div className="relative left-[80px] top-16 w-[320px]">
-        <Image src={'Logo-2.svg'} alt="VR Logo" width={500} height={500} />
-      </div>
-      <div className="">
-        <div style={{ position: 'absolute', right: '-300px', bottom: '-450px', overflow: 'hidden' }}>
-          <Image className="" src="Radial waves.svg" alt="Picture of the author" width={1200} height={1200} />
+    <div className="relative h-[100vh] max-w-[100vw] sm:p-5 lg:p-14 overflow-x-clip bg-gradient-to-br from-sky-200 from-5% via-white to-white">
+      <div className="absolute right-0 top-0 overflow-hidden">
+        <div className="fixed right-[-300px] bottom-[-400px] overflow-hidden">
+          <Image className="" src="Radial waves.svg" alt="background waves" width={1200} height={1200} />
         </div>
-        <div style={{ position: 'absolute', right: '0px', bottom: '0px', overflow: 'hidden' }}>
-          <Image className="" src="page1_church.svg" alt="Picture of the author" width={500} height={500} />
+        <div className="fixed right-0 bottom-0 overflow-hidden scale-50 sm:scale-50 md:scale-75 lg:scale-100 origin-bottom-right">
+          <Image className="" src="page1_church.svg" alt="background church" width={500} height={500} />
         </div>
       </div>
-      <div className="">
-        <h1 className="md:text-7xl sm:text-6xl text-black	 text-left font-medium absolute top-48 left-20">
-          Discover your Church’s
-        </h1>
-        <h1 className="md:text-7xl sm:text-6xl text-[#0179FF]	 text-left font-medium absolute top-72  left-20 ">
-          Digital Health Score
-        </h1>
+
+      <div className="relative top-2 h-14">
+        <Image src={'Logo-2.svg'} alt="VR Logo" width={500} height={500} className="origin-top-left scale-50" />
       </div>
-      <div className="relative top-[400px] left-[90px] w-1/3">
-        <p className="  text-black text-[22px]">
+
+      <div className="relative m-6 mt-10 sm:mt-16">
+        <h1 className="mt-2 text-3xl sm:text-5xl lg:text-6xl text-black font-medium">Discover your Church’s</h1>
+        <h1 className="mt-2 text-3xl sm:text-5xl lg:text-6xl text-[#0179FF] font-medium">Digital Health Score</h1>
+      </div>
+
+      <div className="relative m-6 mt-10 sm:mt-20 sm:landscape:w-1/2">
+        <p className="text-lg sm:text-xl lg:text-2xl text-black">
           Can people in your community find your church? This tool was designed to help churches check their overall
           digital health and discoverability. Complete the form with your church’s information and receive a free
           Digital Health Assessment in your email.
         </p>
 
-        <div className="relative top-24">
+        <div className="relative top-10 sm:top-20 origin-left scale-75 sm:scale-100">
           <Link href="/form">
             <button className="text-2xl font-medium text-white rounded-full hover:bg-white bg-gradient-to-br from-vr-button-first via-vr-button-second to-vr-button-third hover:text-vr-button-third  h-16 w-48">
               Get Started
