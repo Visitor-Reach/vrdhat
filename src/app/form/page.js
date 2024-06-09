@@ -16,7 +16,7 @@ export default function Page() {
   const router = useRouter()
   const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(true)
   const [id, setId] = useState('')
 
   const [email, set_email] = useState('')
@@ -87,12 +87,10 @@ export default function Page() {
 
   const LoadingAnimation = () => {
     return (
-      <div className="pt loading flex-grow flex flex-col justify-center items-center">
-        <div className=" ">
-          <Player autoplay loop src="/Message Loading 1.json" style={{ width: '100%' }}>
-            <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
-          </Player>
-        </div>
+      <div className="w-full h-[100vh]">
+        <Player autoplay loop src="/Message Loading 1.json" style={{ width: '100%' }}>
+          <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
+        </Player>
       </div>
     )
   }
@@ -331,11 +329,7 @@ export default function Page() {
       </dialog>
 
       <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-14">
-        {isLoading ? (
-          <div className="pt loading flex-grow flex flex-col justify-center items-center">
-            <div className="flex flex-col items-center w-2/12"></div>
-          </div>
-        ) : isSubmitting ? (
+        {isSubmitting ? (
           <LoadingAnimation />
         ) : (
           <form onSubmit={onSubmit}>
