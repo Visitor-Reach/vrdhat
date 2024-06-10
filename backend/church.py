@@ -216,6 +216,9 @@ class church:
         self.digital_search_assesment_score = 0
 
     def get_map_image(self):
+        if self.google_coordinates == "":
+            return None
+        
         file_name = str(uuid.uuid4()) + '.png'
         base_url = "https://maps.googleapis.com/maps/api/staticmap?"
         style = "&format=png&maptype=roadmap&style=visibility:simplified&style=element:geometry%7Ccolor:0xf5f5f5&style=element:labels.icon%7Cvisibility:off&style=element:labels.text%7Csaturation:-5%7Clightness:-5&style=element:labels.text.fill%7Ccolor:0xb5b5b5&style=element:labels.text.stroke%7Ccolor:0xf5f5f5&style=feature:administrative.land_parcel%7Celement:labels%7Cvisibility:off&style=feature:administrative.land_parcel%7Celement:labels.text.fill%7Ccolor:0xbdbdbd&style=feature:poi%7Celement:geometry%7Ccolor:0xeeeeee&style=feature:poi%7Celement:labels.text%7Cvisibility:off&style=feature:poi%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:poi.park%7Celement:geometry%7Ccolor:0xe5e5e5&style=feature:poi.park%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:road%7Celement:geometry%7Ccolor:0xffffff&style=feature:road.arterial%7Celement:labels.text.fill%7Ccolor:0x757575&style=feature:road.highway%7Celement:geometry%7Ccolor:0xdadada&style=feature:road.highway%7Celement:labels.text.fill%7Ccolor:0x616161&style=feature:road.local%7Celement:labels%7Cvisibility:off&style=feature:road.local%7Celement:labels.text.fill%7Ccolor:0x9e9e9e&style=feature:transit.line%7Celement:geometry%7Ccolor:0xe5e5e5&style=feature:transit.station%7Celement:geometry%7Ccolor:0xeeeeee&style=feature:water%7Celement:geometry%7Ccolor:0xc9c9c9&style=feature:water%7Celement:labels.text.fill%7Ccolor:0x9e9e9e"
@@ -758,62 +761,52 @@ class church:
             "api_key": SERPAPI_API_KEY,
             "hl": "en"
         }
-
         search = GoogleSearch(params)
         results = search.get_dict()
         local_results = results.get("local_results", "")
+        place_results = results.get("place_results", "")
 
-        if results.get("place_results", "") is not None:
-            if len(results.get("place_results", "")) == 0:
-                place_id = local_results[0].get("place_id", "")
-                params = {
-                    "engine": "google_maps",
-                    "google_domain": "google.com",
-                    "q": self.name,
-                    "ll": "@" + str(self.coordinates[0]) + "," + str(self.coordinates[1]) + "," + "15.1z",
-                    "api_key": SERPAPI_API_KEY,
-                    "hl": "en",
-                    "place_id": place_id
-                }
-                search = GoogleSearch(params)
-                results = search.get_dict()
+        # no results found
+        if local_results is "" and place_results == "":
+            return
 
-                place_results = results.get("place_results", "")
+        # local results found, assume first one is the correct one and get specific place results for it
+        if local_results != "":
+            place_id = local_results[0].get("place_id", "")
+            params = {
+                "engine": "google_maps",
+                "google_domain": "google.com",
+                "q": self.name,
+                "ll": "@" + str(self.coordinates[0]) + "," + str(self.coordinates[1]) + "," + "15.1z",
+                "api_key": SERPAPI_API_KEY,
+                "hl": "en",
+                "place_id": place_id
+            }
+            search = GoogleSearch(params)
+            results = search.get_dict()
 
-                self.google_name = place_results.get("title")
-                self.google_coordinates = (place_results["gps_coordinates"]["latitude"], place_results["gps_coordinates"]["longitude"])
+            place_results = results.get("place_results", "")
+            self.parse_google_place_results(place_results)
 
-                try:
-                    self.google_address = place_results.get('address', '')
+        else:
+            place_results = results.get("place_results", "")
+            self.parse_google_place_results(place_results)
 
-                except IndexError:
-                    pass
-                allowed_chars = string.digits
-                self.google_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_results.get("phone", "")).replace(" ", "")
-                self.google_webpage = place_results.get("website")
-                # self.google_rating = place_results.get("rating", "")
-                self.google_category = [category for category in place_results.get("type")]
-                self.google_description = place_results.get("description", "")
-                self.google_schedule = place_results.get("hours", "")
+    def parse_google_place_results(self, place_results):
+        self.google_name = place_results.get("title")
+        self.google_coordinates = (place_results["gps_coordinates"]["latitude"], place_results["gps_coordinates"]["longitude"])
 
-            else:
-                place_results = results.get("place_results", "")
+        try:
+            self.google_address = place_results.get('address', '')
+        except IndexError:
+            pass
 
-                self.google_name = place_results.get("title")
-                self.google_coordinates = (place_results["gps_coordinates"]["latitude"], place_results["gps_coordinates"]["longitude"])
-
-                try:
-                    self.google_address = place_results.get('address', '')
-
-                except IndexError:
-                    pass
-                allowed_chars = string.digits
-                self.google_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_results.get("phone", "")).replace(" ", "")
-                self.google_webpage = place_results.get("website")
-                # self.google_rating = place_results.get("rating", "")
-                self.google_category = [category for category in place_results.get("type")]
-                self.google_description = place_results.get("description", "")
-                self.google_schedule = place_results.get("hours", "")
+        allowed_chars = string.digits
+        self.google_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_results.get("phone", "")).replace(" ", "")
+        self.google_webpage = place_results.get("website")
+        self.google_category = [category for category in place_results.get("type")]
+        self.google_description = place_results.get("description", "")
+        self.google_schedule = place_results.get("hours", "")
 
     def set_yelp_search(self):
         params = {

@@ -33,11 +33,9 @@ def post_hubspot_data(church_obj):
         print("Updated existing contact id: ", contact_id)
 
     # check if company already exists, if not create new company
-    extracted = tldextract.extract(church_obj.webpage)
-    domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
-    company_id = get_existing_hubspot_company(domain_name)
+    company_id = get_existing_hubspot_company(church_obj)
     if company_id is None:
-        company_id = add_hubspot_company(church_obj, domain_name)
+        company_id = add_hubspot_company(church_obj)
         print("New company id: ", company_id)
     else:
         update_hubspot_company(church_obj, company_id)
@@ -68,7 +66,9 @@ def get_existing_hubspot_contact(email):
         existing = json.loads(existingData)
         return existing.get("id")
         
-def get_existing_hubspot_company(domain):
+def get_existing_hubspot_company(church_obj):
+    extracted = tldextract.extract(church_obj.webpage)
+    root_domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
     payload = json.dumps({
         "limit": 1,
         "sorts": [
@@ -86,7 +86,7 @@ def get_existing_hubspot_company(domain):
                     {
                         "propertyName": "domain",
                         "operator": "EQ",
-                        "value":domain
+                        "value":root_domain_name
                     }
                 ]
             }
@@ -151,8 +151,13 @@ def update_hubspot_contact(church_obj, contact_id):
     conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("PATCH", f"/crm/v3/objects/contacts/{contact_id}", payload, headers)
     res = conn.getresponse()
-    data = res.read()
-    return 1
+    if res.status != 200:
+        print("Error updating contact")
+        print(res.read())
+        return None
+    else:
+        data = res.read()
+        return None
 
 def update_hubspot_company(church_obj, company_id):
     payload = json.dumps({
@@ -172,14 +177,21 @@ def update_hubspot_company(church_obj, company_id):
     conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("PATCH", f"/crm/v3/objects/companies/{company_id}", payload, headers)
     res = conn.getresponse()
-    data = res.read()
-    return 1
+    if res.status != 200:
+        print("Error updating company")
+        print(res.read())
+        return None
+    else:
+        data = res.read()
+        return None
 
-def add_hubspot_company(church_obj, domain_name):
+def add_hubspot_company(church_obj):
+    extracted = tldextract.extract(church_obj.webpage)
+    root_domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
     payload = json.dumps({
         "properties": {
             "name": church_obj.name,
-            "domain": domain_name,
+            "domain": root_domain_name,
             "church_size": church_obj.size,
             "phone": church_obj.phone,
             "address": church_obj.address,
@@ -187,7 +199,6 @@ def add_hubspot_company(church_obj, domain_name):
             "state": church_obj.state,
             "zip": church_obj.zipcode,
             "country": "United States",
-            "facebook_company_page": church_obj.facebook_profile,
         }
     })
     headers = {
@@ -198,9 +209,14 @@ def add_hubspot_company(church_obj, domain_name):
     conn = http.client.HTTPSConnection("api.hubapi.com")
     conn.request("POST", f"/crm/v3/objects/companies", payload, headers)
     res = conn.getresponse()
-    data = res.read()
-    company_id = json.loads(data).get("id")
-    return company_id
+    if res.status != 201:
+        print("Error creating contact")
+        print(res.read())
+        return None
+    else:
+        data = res.read()
+        company_id = json.loads(data).get("id")
+        return company_id
 
 def add_hubspot_association(contact_id, company_id):
     payload = json.dumps({
@@ -343,7 +359,7 @@ def handle_form_submission():
         update_contact_company(id, contact_id, company_id)
     except Exception as error:
         print("Error: ", error)
-        
+
     return jsonify({"id": id})
 
 def init_connection():

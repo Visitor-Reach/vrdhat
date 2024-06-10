@@ -143,7 +143,7 @@ def check_and_send_emails(app):
 scheduler = BackgroundScheduler()
 
 # Schedule the send_email function to run every 2 minutes
-scheduler.add_job(check_and_send_emails, 'interval', seconds=30, args=[app])
+scheduler.add_job(check_and_send_emails, 'interval', minutes=1, args=[app])
 
 # Start the scheduler
 scheduler.start()
