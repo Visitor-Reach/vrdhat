@@ -767,7 +767,7 @@ class church:
         place_results = results.get("place_results", "")
 
         # no results found
-        if local_results is "" and place_results == "":
+        if local_results == "" and place_results == "":
             return
 
         # local results found, assume first one is the correct one and get specific place results for it
