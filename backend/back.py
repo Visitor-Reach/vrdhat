@@ -338,8 +338,12 @@ def handle_form_submission():
                                       )
 
     church_obj.id = id
-    contact_id, company_id = post_hubspot_data(church_obj)
-    update_contact_company(id, contact_id, company_id)
+    try:
+        contact_id, company_id = post_hubspot_data(church_obj)
+        update_contact_company(id, contact_id, company_id)
+    except Exception as error:
+        print("Error: ", error)
+        
     return jsonify({"id": id})
 
 def init_connection():

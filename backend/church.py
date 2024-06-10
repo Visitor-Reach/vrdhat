@@ -370,16 +370,9 @@ class church:
             return None
 
     def clean_address(self, address):
-        """
-        Cleans and standardizes the address string.
-
-        Args:
-            address (str): The address to be cleaned.
-
-        Returns:
-            str: The cleaned address string.
-        """
-
+        if address == "" or address == None:
+            return ""
+        
         # Lowercase the address and remove extra spaces
         address = address.lower().strip()
 
@@ -741,8 +734,6 @@ class church:
                     source_name = source.get("name", "")
                     if "apple" in source_name.lower():
                         self.apple_name = local_results[0].get("title")
-                        # self.apple_coordinates = (
-                        #     local_results[0]["gps_coordinates"]["latitude"], local_results[0]["gps_coordinates"]["longitude"])
                         try:
                             self.apple_address = local_results[0].get('address', '')
                         except IndexError:
@@ -750,9 +741,11 @@ class church:
                         allowed_chars = string.digits
                         self.apple_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", local_results[0].get("phone", ""))
                         self.apple_webpage = local_results[0].get("website")
-                        # self.apple_rating = local_results[0].get("rating", "")
-                        self.apple_category = [category for category in local_results[0].get("types")]
-                        self.apple_category.append(local_results[0].get("type"))
+                        try:
+                            self.apple_category = [category for category in local_results[0].get("types")]
+                            self.apple_category.append(local_results[0].get("type"))
+                        except:
+                            pass
                         self.apple_description = local_results[0].get("description", "")
                         self.apple_schedule = local_results[0].get("operating_hours", "")
 
