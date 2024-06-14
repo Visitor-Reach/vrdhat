@@ -128,6 +128,7 @@ class church:
         self.email = email
         self.map_image = ""
         self.data_file = ""
+        self.search_params = ""
 
         self.parsed_address = ""
         self.original_address = ""

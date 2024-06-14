@@ -13,6 +13,7 @@ import db_manage
 import time
 import tldextract
 import sqlite3
+from urllib.parse import parse_qs
 
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
@@ -108,6 +109,8 @@ def get_existing_hubspot_company(church_obj):
         return existingData.get("results")[0].get("id")
 
 def add_hubspot_contact(church_obj):
+    query_dict = {k: v[0] for k, v in parse_qs(church_obj.search_params).items()}
+    print(query_dict)
     payload = json.dumps({
         "properties": {
             "email": church_obj.email,
@@ -117,7 +120,11 @@ def add_hubspot_contact(church_obj):
             "company": church_obj.name,
             "hs_marketable_status": "Marketing contact",
             "role": church_obj.contact_role,
-            "digital_health_assessment": True
+            "digital_health_assessment": True,
+            "utm_source": query_dict.get("utm_source"),
+            "utm_medium": query_dict.get("utm_medium"),
+            "utm_campaign": query_dict.get("utm_campaign"),
+            "utm_content": query_dict.get("utm_content"),
         }
     })
     headers = {
@@ -279,6 +286,7 @@ def add_hubspot_note(contact_id, company_id, content):
             }
         ]
     })
+    print(payload)
     headers = {
         'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
         'Content-Type': 'application/json',
@@ -316,6 +324,7 @@ def handle_form_submission():
     church_obj.facebook_profile = json_data.get("churchFacebook")
     church_obj.instagram_profile = json_data.get("churchInstagram")
     church_obj.contact_role = json_data.get("role")
+    church_obj.search_params = json_data.get("searchParams")
 
     global volume_search_last_month
     try:

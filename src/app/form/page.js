@@ -5,10 +5,10 @@ import './page.css'
 
 import { Controls, Player } from '@lottiefiles/react-lottie-player'
 import React, { useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 
 export default function Page() {
   const church_sizes = ['0-100', '100-300', '300-500', '500-1000', '+1000', '2,000-4,999', '5,000-9,999', '10,000+']
@@ -18,8 +18,9 @@ export default function Page() {
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [id, setId] = useState('')
-
   const [email, set_email] = useState('')
+
+  const searchParams = useSearchParams().toString()
 
   const states = [
     { id: 'AL', title: 'Alabama' },
@@ -294,6 +295,7 @@ export default function Page() {
         churchFacebook: event.target.elements.churchFacebook.value,
         churchInstagram: event.target.elements.churchInstagram.value,
         role: event.target.elements.role.value,
+        searchParams: event.target.elements.searchParams.value,
       })
       set_email(event.target.elements.email.value)
 
@@ -333,6 +335,7 @@ export default function Page() {
           <LoadingAnimation />
         ) : (
           <form onSubmit={onSubmit}>
+            <input type="hidden" name="searchParams" value={searchParams} />
             <div className="flex flex-col justify-center text-2xl text-vr-form-title font-medium">
               <h1 className="text-3xl sm:text-5xl lg:text-6xl max-w-[800px]">
                 Let's get some information for your report

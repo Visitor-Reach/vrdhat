@@ -2,15 +2,14 @@
 
 import './globals.css'
 
-import { useRef, useState } from 'react'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import Pdf from 'react-to-pdf'
 import React from 'react'
+import { useSearchParams } from 'next/navigation'
 
 export default function Home() {
-  const ref = useRef()
+  const searchParams = useSearchParams().toString()
+
   return (
     <div className="relative h-[100vh] max-w-[100vw] sm:p-5 lg:p-14 overflow-x-clip bg-gradient-to-br from-sky-200 from-5% via-white to-white">
       <div className="absolute right-0 top-0 overflow-hidden">
@@ -39,7 +38,7 @@ export default function Home() {
         </p>
 
         <div className="relative top-10 sm:top-20 origin-left scale-75 sm:scale-100">
-          <Link href="/form">
+          <Link href={`/form?${searchParams}`}>
             <button className="text-2xl font-medium text-white rounded-full hover:bg-white bg-gradient-to-br from-vr-button-first via-vr-button-second to-vr-button-third hover:text-vr-button-third  h-16 w-48">
               Get Started
             </button>
