@@ -6,16 +6,11 @@ import React, { useEffect, useState } from 'react'
 
 import Circularbar from '../../../app/components/Circularbar1.js'
 import Image from 'next/image'
-import Link from 'next/link.js'
 import NavBar from '../components/navbar.js'
 import Summary from '../../../app/components/ScoreSummarySimple.js'
 import { useSearchParams } from 'next/navigation'
 
 export default function CompleteReportPage7() {
-  const timeElapsed = Date.now()
-  const today = new Date(timeElapsed)
-  const [isLoading, setIsLoading] = useState(true)
-  const [church_name, set_church_name] = useState('')
   const [digitalVoice, setDigitalVoice] = useState(0)
   const [appleMaps, setAppleMaps] = useState(0)
   const [googleMaps, setGoogleMaps] = useState(0)
@@ -25,16 +20,9 @@ export default function CompleteReportPage7() {
   const [vrMaps, setvrMaps] = useState(0)
   const [vrSocial, setvrSocial] = useState(0)
   const [vrWebsite, setvrWebsite] = useState(0)
-  const [last_month_searches, set_last_month_searches] = useState(0)
-  const [loc_city, setLoc_city] = useState('')
-  const [loc_zipcode, setLoc_zipcode] = useState('')
-  const [loc_address, setLoc_address] = useState('')
-  const [loc_state, setLoc_state] = useState('')
-  const [webpage, setWebpage] = useState('')
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
-  const map = searchParams.get('map_key')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,8 +36,6 @@ export default function CompleteReportPage7() {
         })
 
         const data = await response.json()
-
-        set_church_name(data.church_name)
         setDigitalVoice(data.digitalVoice)
         setAppleMaps(data.appleMaps)
         setGoogleMaps(data.googleMaps)
@@ -59,12 +45,6 @@ export default function CompleteReportPage7() {
         setvrMaps(data.vrMaps)
         setvrSocial(data.vrSocial)
         setvrWebsite(data.vrWebsite)
-        set_last_month_searches(data.last_month_searches)
-        setLoc_city(data.loc_city)
-        setLoc_address(data.loc_address)
-        setLoc_zipcode(data.loc_zipcodesetLoc_ziploc_zipcode)
-        setLoc_state(data.loc_state)
-        setWebpage(data.website)
         console.log('Sucess fetching data: ', data)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -84,7 +64,7 @@ export default function CompleteReportPage7() {
       </div>
       <div className="relative col-span-2 row-span-2 menu-shadow">
         <div>
-          <NavBar id={id} map={map} page={7}></NavBar>
+          <NavBar id={id} page={7}></NavBar>
         </div>
       </div>
 
@@ -141,29 +121,6 @@ export default function CompleteReportPage7() {
           </div>
         </div>
       </div>
-
-      {/*<div className='col-span-2 row-span-2 rounded-3xl shadow-2xl justify-center justify-items-center m-auto h-[80vh] relative top-[2vh] '>
-                    <h1 className='text-[24px] text-[#050938] relative top-16 left-0 font-medium text-center'>Your Church’s Total Digital Health Score</h1>
-                    <div className='relative m-auto grid justify-center top-20'>
-                        <Circularbar value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority} title={undefined} max_value={750}/>
-                    </div>
-                    <h2 className='text-[#75778B] text-[16px] font-regular relative top-20 w-5/6 m-auto text-center'>If you’re surprised by your digital health score, you are not alone. Most churches are in the same boat.</h2>
-                    <div className="relative top-24 w-[200px] m-auto">
-                        <Image
-                            src={"/people_im.svg"}
-                            alt={" "}
-                            height={400}
-                            width={400}
-                        />
-                    </div>
-                    <h1 className='text-[#050938] text-[22px] relative top-28 w-5/6 m-auto text-center'> 79% of churches </h1>
-                    <h2 className='text-[#75778B] text-[16px] font-regular relative top-36 w-5/6 m-auto  pb-56 text-center'>feel they don’t “have a well-defined digital ministry” for engaging nonbelievers or people outside their church community.</h2>
-                </div>
-                <div className=''>
-
-                </div>
-                
-    </div>*/}
     </div>
   )
 }

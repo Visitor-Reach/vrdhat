@@ -1,20 +1,17 @@
-from flask import Flask, request, jsonify, redirect, url_for, render_template
-from flask_mail import Mail, Message
+from flask import Flask, request, jsonify
+from flask_mail import Mail
 from flask_cors import CORS, cross_origin
 from church import church
 import metricas
 import http.client
 import json
 import os
-import sys
 import requests
-import pdf_gen
-import db_manage
+import db_manage2
 import time
 import tldextract
-import sqlite3
 from urllib.parse import parse_qs
-
+from bson import json_util
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
 
@@ -286,7 +283,7 @@ def add_hubspot_note(contact_id, company_id, content):
             }
         ]
     })
-    print(payload)
+    # print(payload)
     headers = {
         'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
         'Content-Type': 'application/json',
@@ -325,104 +322,61 @@ def handle_form_submission():
     church_obj.instagram_profile = json_data.get("churchInstagram")
     church_obj.contact_role = json_data.get("role")
     church_obj.search_params = json_data.get("searchParams")
+    church_obj.social_clarity_score = 0
+    church_obj.pdf_sent = 0
 
     global volume_search_last_month
     try:
         volume_search_last_month = metricas.start_historical(church_obj.city, church_obj.state)
     except:
         pass
+    church_obj.volume_search_last_month = volume_search_last_month
+
     church_obj.get_digital_search_assesment_score()
     church_obj.get_map_image()
     church_obj.write_object_to_json()
+    church_obj.created_at = int(time.time())
 
-    id = db_manage.insert_User(json_data.get("firstName"),
-                                      json_data.get("lastName"),
-                                      json_data.get("mobilePhone"),
-                                      json_data.get("email"),
-                                      json_data.get("churchName"),
-                                      json_data.get("churchSize"),
-                                      json_data.get("churchAddress"),
-                                      json_data.get("churchCity"),
-                                      json_data.get("churchState"),
-                                      json_data.get("churchZipCode"),
-                                      json_data.get("churchWebsite"),
-                                      json_data.get("churchPhone"),
-                                      json_data.get("churchFacebook"),
-                                      json_data.get("churchInstagram"),
-                                      church_obj.voice_score,
-                                      church_obj.google_maps_score,
-                                      church_obj.apple_maps_score,
-                                      0,
-                                      church_obj.domain_trust_score,
-                                      volume_search_last_month,
-                                      0,
-                                      church_obj.domain_organic_keywords,
-                                      church_obj.map_image,
-                                      church_obj.data_file,
-                                      ''
-                                      )
+    data = {key: value for key, value in church_obj.__dict__.items()
+                if not callable(value)}
+    object_id = db_manage2.insert_User(data)
+    id = str(object_id)
 
-    church_obj.id = id
     try:
         contact_id, company_id = post_hubspot_data(church_obj)
-        update_contact_company(id, contact_id, company_id)
+        db_manage2.update_contact_company(id, contact_id, company_id)
     except Exception as error:
         print("Error: ", error)
 
-    return jsonify({"id": id})
+    return jsonify({"id": str(id)})
 
-def init_connection():
-    connection = sqlite3.connect("info/digital_assessment.db")
-    cur = connection.cursor()
-    return cur, connection
-
-def close_connection(cur, connection):
-    cur.close()
-    connection.close()
-
-def update_contact_company(id, contact_id, company_id):
-    cur, connection = init_connection()
-    cur.execute(f"""
-                    UPDATE Users
-                    SET
-                            hubspot_contact_id = {contact_id},
-                            hubspot_company_id = {company_id}
-                    WHERE
-                            id = "{id}"
-                """)
-    try:
-        results = cur.fetchall()
-        connection.commit()
-        close_connection(cur, connection)
-        print("Update success contact/company")
-    except Exception as error:
-        print("Update failed")
 
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
     try:
-        user_info = db_manage.retrieve_User_complete_report(id)
+        info = db_manage2.retrieve_User_complete_report(id)
         response_json = {
-            'church_name': user_info[10],
-            'digitalVoice': user_info[1],
-            'appleMaps': user_info[3],
-            'googleMaps': user_info[2],
-            'socialClarity': user_info[4],
-            'websiteAuthority': user_info[5],
+            'church_name': info.get('name'),
+            'digitalVoice': info.get('voice_score'),
+            'appleMaps': info.get('apple_maps_score'),
+            'googleMaps': info.get('google_maps_score'),
+            'socialClarity': info.get('social_clarity_score'),
+            'websiteAuthority': info.get('domain_trust_score'),
+            'last_month_searches': info.get('volume_search_last_month'),
+            'loc_address': info.get('address'),
+            'loc_zipcode': info.get('zipcode'),
+            'loc_city': info.get('city'),
+            'loc_state': info.get('state'),
+            'website': info.get('webpage'),
+            'keywords': info.get('domain_organic_keywords'),
+            'map_image': info.get('map_image'),
+            'data_file': info.get('data_file'),
+            'pdf_file': info.get('pdf_file'),
+            'created_at': info.get('created_at'),
             'vrVoice': 225,
             'vrMaps': 235,
             'vrSocial': 195,
             'vrWebsite': 205,
-            'last_month_searches': user_info[0],
-            'loc_address': user_info[11],
-            'loc_zipcode': user_info[8],
-            'loc_city': user_info[7],
-            'loc_state': user_info[6],
-            'website': user_info[9],
-            'keywords': user_info[12],
-            'map_image': user_info[13],
-            'data_file': user_info[14],
-            'pdf_file': user_info[15]
         }
 
         return jsonify(response_json)
@@ -430,6 +384,14 @@ def fetch_data(id):
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting data for id ' + id}), 400
 
+@app.route('/api/fetch-data/<id>/json', methods=['GET'])
+def fetch_data_json(id):
+    try:
+        info = db_manage2.retrieve_User_complete_report(id)
+        return json_util.dumps(info)
+    except Exception as error_msg:
+        print("Error: ", error_msg)
+        return jsonify({'message': 'Error getting data for id ' + str(id)}), 400
 
 @app.route('/api/fetch-runs', methods=['GET'])
 def fetch_runs():
@@ -437,17 +399,14 @@ def fetch_runs():
         page = request.args.get('page') or 1
         page_size = request.args.get('page_size') or 10
         data = []
-        runs = db_manage.retrieve_runs(int(page), int(page_size))
+        runs = db_manage2.retrieve_runs(int(page), int(page_size))
         for run in runs:
             data.append({
-                'id': run[0],
-                'church_name': run[1],
-                # 'map_image': run[2],
-                # 'data_file': run[3],
-                # 'pdf_file': run[4],
-                'created_at': run[5]
+                'id': str(run.get("_id")),
+                'church_name': run.get("name"),
+                'created_at': run.get("created_at")
             })
-        total = db_manage.get_total_runs()
+        total = db_manage2.get_total_runs()
         results = {
             'page': page,
             'page_size': page_size,
@@ -477,10 +436,6 @@ def fetch_run_data(jsonFile):
     except Exception as error_msg:
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting run data'}), 400
-
-@app.route("/test")
-def test():
-    return jsonify({"message": "test"})
 
 
 if __name__ == '__main__':

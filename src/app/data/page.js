@@ -94,14 +94,15 @@ export default function Data() {
             <div>
               <nav className="isolate inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                 <a
+                  key="back"
                   href={parseInt(page) <= 1 ? '#' : pathname + '?' + createQueryString('page', parseInt(page) - 1)}
                   className="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                 >
                   <span className="sr-only">Previous</span>
                   <ChevronLeftIcon className="h-5 w-5" aria-hidden="true" />
                 </a>
-                {pageNumbers.map((p) => (
-                  <>
+                {pageNumbers.map((p, i) => (
+                  <div key={i}>
                   {parseInt(page) === p && (
                     <a
                       key={p}
@@ -113,15 +114,16 @@ export default function Data() {
                     </a>
                   )}
                   {parseInt(page) !== p && (
-                    <a href={pathname + '?' + createQueryString('page', p.toString())}
+                    <a key={p} href={pathname + '?' + createQueryString('page', p.toString())}
                       className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-500 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                     >
                       {p}
                     </a>
                   )}
-                  </>
+                  </div>
                 ))}
                 <a
+                  key="next"
                   href={parseInt(page) >= totalPages ? '#' : pathname + '?' + createQueryString('page', parseInt(page) + 1)}
                   className="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-20 focus:outline-offset-0"
                 >

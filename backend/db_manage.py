@@ -1,6 +1,16 @@
 import sqlite3
 import time
 import uuid
+from pymongo.mongo_client import MongoClient
+from pymongo.server_api import ServerApi
+
+uri = "mongodb+srv://vr-aws:ax4wqbl9Ux1Q03GI@vr-test.simi1.mongodb.net/?appName=vr-test"
+client = MongoClient(uri, server_api=ServerApi('1'))
+db = client.digitalhealth
+
+def get_data():
+    data = [d for d in db.user_runs.find({})]
+    return data
 
 def init_connection():
     connection = sqlite3.connect("info/digital_assessment.db")
@@ -13,67 +23,6 @@ def close_connection(cur, connection):
     connection.close()
 
 
-# def create_User_table():
-    # cur, connection = init_connection()
-    # cur.execute('''CREATE TABLE IF NOT EXISTS Users (
-    #                         id VARCHAR(36) PRIMARY NOT_NULL UNIQUE,
-    #                         first_name VARCHAR(30),
-    #                         last_name VARCHAR(30),
-    #                         mobile_phone VARCHAR(20),
-    #                         email VARCHAR(150),
-    #                         name VARCHAR(100),
-    #                         size VARCHAR(30), 
-    #                         address VARCHAR(100), 
-    #                         state VARCHAR(50),
-    #                         city VARCHAR(50),
-    #                         zipcode VARCHAR(10), 
-    #                         webpage VARCHAR(255), 
-    #                         phone VARCHAR(20),
-    #                         facebook_profile VARCHAR(255), 
-    #                         instagram_profile VARCHAR(255), 
-    #                         digital_voice REAL,
-    #                         google_maps REAL,
-    #                         apple_maps REAL,
-    #                         social_clarity REAL,
-    #                         website_authority REAL,
-    #                         last_month_searches REAL,
-    #                         pdf_sent INTEGER,
-    #                         keywords TEXT,
-    #                         map_image TEXT,
-    #                         data_file TEXT,
-    #                         pdf_file TEXT,
-    #                         created_at INTEGER''')
-#     connection.commit()
-#     close_connection(cur, connection)
-
-
-# def get_User_table():
-#     cur, connection = init_connection()
-#     cur.execute(''' SELECT * FROM Users ''')
-#     results = cur.fetchall()
-#     print(results)
-#     connection.commit()
-#     close_connection(cur, connection)
-
-
-# def get_User_email_index(email):
-#     cur, connection = init_connection()
-#     cur.execute(f"""
-#                         EXPLAIN QUERY PLAN
-#                         SELECT
-#                             *
-#                         FROM
-#                             Users
-#                         WHERE
-#                             email = "{email}"
-
-#                 """)
-#     results = cur.fetchall()
-#     # print(results)
-#     connection.commit()
-#     close_connection(cur, connection)
-
-
 def insert_User(first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords, map_image, data_file, pdf_file):
     id = str(uuid.uuid4())
     cur, connection = init_connection()
@@ -81,29 +30,10 @@ def insert_User(first_name, last_name, mobile_phone, email, name, size, address,
         INSERT INTO Users (id, first_name, last_name, mobile_phone, email, name, size, address, city, state, zipcode, webpage, phone, facebook_profile, instagram_profile, digital_voice, google_maps, apple_maps, social_clarity, website_authority, last_month_searches, pdf_sent, keywords, map_image, data_file, pdf_file, created_at) 
         VALUES ("{id}", "{first_name}", "{last_name}", "{mobile_phone}", "{email}", "{name}", "{size}", "{address}", "{city}", "{state}", "{zipcode}", "{webpage}", "{phone}", "{facebook_profile}", "{instagram_profile}", {digital_voice}, {google_maps}, {apple_maps}, {social_clarity}, {website_authority}, {last_month_searches}, {pdf_sent}, "{keywords}", "{map_image}", "{data_file}", "{pdf_file}", {int(time.time())})
     """
-    # print(query)
     cur.execute(query)
     connection.commit()
     close_connection(cur, connection)
     return id
-
-    # cur.execute(f"""
-    #                     EXPLAIN QUERY PLAN
-    #                     SELECT
-    #                         *
-    #                     FROM
-    #                         Users
-    #                     WHERE
-    #                         email = "{email}"
-
-    #             """)
-    # try:
-    #     results = cur.fetchall()[0][0]
-    #     connection.commit()
-    #     close_connection(cur, connection)
-    #     return results
-    # except Exception as error:
-    #     return None
 
 
 def retrieve_User_complete_report(id):
@@ -149,3 +79,22 @@ def get_total_runs():
         return results
     except Exception as error:
         return None
+    
+
+def update_contact_company(id, contact_id, company_id):
+    cur, connection = init_connection()
+    cur.execute(f"""
+                    UPDATE Users
+                    SET
+                            hubspot_contact_id = {contact_id},
+                            hubspot_company_id = {company_id}
+                    WHERE
+                            id = "{id}"
+                """)
+    try:
+        results = cur.fetchall()
+        connection.commit()
+        close_connection(cur, connection)
+        print("Update success contact/company")
+    except Exception as error:
+        print("Update failed")

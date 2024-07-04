@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 
 export default function Data({ params }) {
-  const [run, setRun] = useState(null)
   const [data, setData] = useState(null)
 
   const totalScoreRatio = (data?.digital_search_assesment_score/750)
@@ -14,17 +13,10 @@ export default function Data({ params }) {
 
   useEffect(() => {
     getData(params.id).then((runData) => {
-      setRun(runData)
+      console.log(runData)
+      setData(runData)
     })
   },[])
-
-  useEffect(() => {
-    if (run?.data_file) {
-      getJson(run.data_file).then((data) => {
-        setData(data)
-      })
-    }
-  }, [run?.data_file])
 
    // Calculate colors based on progress
   const getGradientColor = (progress) => {
@@ -40,7 +32,7 @@ export default function Data({ params }) {
     } else {
       return '#4FDD83';
     }
-  };
+  }
 
   const getLetterScore = (input_value) => {
     // Adjust these ranges and letters as needed
@@ -55,7 +47,7 @@ export default function Data({ params }) {
     } else {
       return 'A';
     }
-  };
+  }
 
   if (data) {
     return (
@@ -76,8 +68,8 @@ export default function Data({ params }) {
             <div className="text-gray-700 text-sm">{data.first_name} {data.last_name}</div>
             <div className="text-gray-700 text-sm">{data.mobile_phone}</div>
             <div className="text-gray-700 text-sm">{data.email}</div>
-            {run?.pdf_file && (
-              <a href={`https://vr-digital-health-files.s3.us-west-2.amazonaws.com/pdf/${run.pdf_file}`} 
+            {data?.pdf_file && (
+              <a href={`https://vr-digital-health-files.s3.us-west-2.amazonaws.com/pdf/${data.pdf_file}`} 
                 target="_blank" 
                 className="text-blue-500 text-sm">
                 Open PDF
@@ -489,18 +481,8 @@ export default function Data({ params }) {
 
 async function getData(id) {
   try {
-  const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROOT}/api/fetch-data/${id}`)
+  const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROOT}/api/fetch-data/${id}/json`)
   return response.json()
-  }
-  catch (error) {
-    console.error('Error fetching data:', error)
-  }
-}
-
-async function getJson(jsonFile) {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROOT}/api/fetch-run-data/${jsonFile}`)
-    return response.json()
   }
   catch (error) {
     console.error('Error fetching data:', error)

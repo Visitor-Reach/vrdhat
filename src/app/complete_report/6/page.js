@@ -8,37 +8,14 @@ import Circularbar from '../../../app/components/Circularbar1.js'
 import Image from 'next/image'
 import Link from 'next/link.js'
 import NavBar from '../components/navbar.js'
-import Pdf from 'react-to-pdf'
-import Summary from '../../../app/components/ScoreSummarySimple.js'
-import { useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
 
 export default function CompleteReportPage6() {
-  const ref = useRef()
-  const timeElapsed = Date.now()
-  const today = new Date(timeElapsed)
-  const [isLoading, setIsLoading] = useState(true)
-  const [church_name, set_church_name] = useState('')
-  const [digitalVoice, setDigitalVoice] = useState(0)
-  const [appleMaps, setAppleMaps] = useState(0)
-  const [googleMaps, setGoogleMaps] = useState(0)
-  const [socialClarity, setsocialClarity] = useState(0)
   const [websiteAuthority, setwebsiteAuthority] = useState(0)
-  const [vrVoice, setvrVoice] = useState(0)
-  const [vrMaps, setvrMaps] = useState(0)
-  const [vrSocial, setvrSocial] = useState(0)
-  const [vrWebsite, setvrWebsite] = useState(0)
-  const [last_month_searches, set_last_month_searches] = useState(0)
-  const [loc_city, setLoc_city] = useState('')
-  const [loc_zipcode, setLoc_zipcode] = useState('')
-  const [loc_address, setLoc_address] = useState('')
-  const [loc_state, setLoc_state] = useState('')
-  const [webpage, setWebpage] = useState('')
   const [keywords, setKeywords] = useState('')
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
-  const map = searchParams.get('map_key')
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,23 +29,7 @@ export default function CompleteReportPage6() {
         })
 
         const data = await response.json()
-
-        set_church_name(data.church_name)
-        setDigitalVoice(data.digitalVoice)
-        setAppleMaps(data.appleMaps)
-        setGoogleMaps(data.googleMaps)
-        setsocialClarity(data.socialClarity)
         setwebsiteAuthority(data.websiteAuthority)
-        setvrVoice(data.vrVoice)
-        setvrMaps(data.vrMaps)
-        setvrSocial(data.vrSocial)
-        setvrWebsite(data.vrWebsite)
-        set_last_month_searches(data.last_month_searches)
-        setLoc_city(data.loc_city)
-        setLoc_address(data.loc_address)
-        setLoc_zipcode(data.loc_zipcodesetLoc_ziploc_zipcode)
-        setLoc_state(data.loc_state)
-        setWebpage(data.website)
         setKeywords(data.keywords.split(','))
         console.log('Sucess fetching data: ', data)
       } catch (error) {
@@ -89,7 +50,7 @@ export default function CompleteReportPage6() {
       </div>
       <div className="relative col-span-2 row-span-2 menu-shadow">
         <div>
-          <NavBar id={id} map={map} page={6}></NavBar>
+          <NavBar id={id} page={6}></NavBar>
         </div>
       </div>
 
@@ -178,38 +139,6 @@ export default function CompleteReportPage6() {
           </div>
         </div>
       </div>
-
-      {/*
-                
-                <div className='col-span-4 w-[42vw] h-[45vh] shadow-2xl rounded-3xl relative left-10 top-3'>
-                    <div className="relative -right-72 top-0 w-[150px] m-auto">
-                        <Image
-                            src={"/keywords_im.svg"}
-                            alt={" "}
-                            height={400}
-                            width={400}
-                        />
-                    </div>
-                    <h1 className='text-[#050938] text-[28px] font-medium w-2/3 relative left-12 -top-24'>Your Church’s Domain Keywords in Organic Search</h1>
-                    <h2 className='text-[#75778B] text-[18px] font-regular w-3/4 relative left-12 -top-16' >The top 8 keywords or phrases your website is known for by Google and other search engines</h2>
-                    <div className='relative -right-12 bottom-10'>
-                        {keywords.length > 0 && (
-                            <div className="grid grid-cols-2 gap-4">
-                                <ul className='text-xl text-blue-600'>
-                                {keywords.slice(0, Math.floor(keywords.length / 2)).map((keyword) => (
-                                    <li key={keyword}>{keyword}</li>
-                                ))}
-                                </ul>
-                                <ul className='text-xl text-blue-600'>
-                                {keywords.slice(Math.floor(keywords.length / 2)).map((keyword) => (
-                                    <li key={keyword}>{keyword}</li>
-                                ))}
-                                </ul>
-                            </div>
-                        )}
-                    </div>
-                    
-                    </div>*/}
     </div>
   )
 }
