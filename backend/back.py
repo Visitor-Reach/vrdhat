@@ -384,6 +384,7 @@ def fetch_data(id):
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting data for id ' + id}), 400
 
+
 @app.route('/api/fetch-data/<id>/json', methods=['GET'])
 def fetch_data_json(id):
     try:
@@ -392,6 +393,7 @@ def fetch_data_json(id):
     except Exception as error_msg:
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting data for id ' + str(id)}), 400
+
 
 @app.route('/api/fetch-runs', methods=['GET'])
 def fetch_runs():

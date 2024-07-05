@@ -870,7 +870,7 @@ class church:
         s3.upload_file('../public/data/' + file_name, bucket_name, key, ExtraArgs={'ContentType': 'application/json'})
         print(f'JSON file uploaded to /{bucket_name}/{key}')
 
-        # os.remove('../public/data/' + file_name)
+        os.remove('../public/data/' + file_name)
         self.data_file = file_name
         return file_name
 
