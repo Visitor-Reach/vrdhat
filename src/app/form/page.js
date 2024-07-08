@@ -7,18 +7,16 @@ import { Controls, Player } from '@lottiefiles/react-lottie-player'
 import React, { useEffect, useRef, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Page() {
   const church_sizes = ['0-100', '100-300', '300-500', '500-1000', '+1000', '2,000-4,999', '5,000-9,999', '10,000+']
-  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const [showAnimation, setShowAnimation] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [id, setId] = useState('')
-  const [email, set_email] = useState('')
+
+  const progress = useRef(null)
 
   const searchParams = useSearchParams().toString()
 
@@ -75,10 +73,11 @@ export default function Page() {
     { id: 'WY', title: 'Wyoming' },
   ]
 
+  startProgressBar()
+  
   useEffect(() => {
     if (submitted) {
       const timeoutId = setTimeout(() => {
-        setShowAnimation(true)
         router.push('/user_report?id=' + id)
       }, 8000)
 
@@ -88,7 +87,7 @@ export default function Page() {
 
   const LoadingAnimation = () => {
     return (
-      <div className="w-full h-[100vh]">
+      <div className="w-full">
         <Player autoplay loop src="/Message Loading 1.json" style={{ width: '100%' }}>
           <Controls visible={false} buttons={['play', 'repeat', 'frame', 'debug']} />
         </Player>
@@ -252,9 +251,23 @@ export default function Page() {
     }
   }
 
+  function startProgressBar() {
+    let fake_timer = 0
+    const p = setInterval(() => {
+      fake_timer += 0.167
+      if (progress.current) {
+        progress.current.style.width = fake_timer + '%'
+      }
+      if (fake_timer >= 100) {
+        clearInterval(p)
+      }
+    },100)
+  }
+
   async function onSubmit(event) {
     event.preventDefault()
-
+    startProgressBar()
+    
     try {
       setIsSubmitting(true)
       // reset field errors
@@ -297,7 +310,6 @@ export default function Page() {
         role: event.target.elements.role.value,
         searchParams: event.target.elements.searchParams.value,
       })
-      set_email(event.target.elements.email.value)
 
       const response = await fetch(process.env.NEXT_PUBLIC_API_ROOT + '/submit-form', {
         method: 'POST',
@@ -330,9 +342,15 @@ export default function Page() {
         </button>
       </dialog>
 
-      <div id="loading_page" className="m-auto justify-center min-h-screen flex flex-col mt-14">
+      <div id="loading_page" className="m-auto justify-start min-h-screen flex flex-col mt-14">
         {isSubmitting ? (
-          <LoadingAnimation />
+          <>
+            <LoadingAnimation />
+            <div id="progress-outer" className="w-full bg-gray-200 h-2 rounded-md mt-10">
+              <div ref={progress} id="progress-inner" className="bg-vr-title-second h-2 rounded-md w-1"></div>
+            </div>
+            <div className="text-center text-md text-gray-400">Calculating...</div>
+          </>
         ) : (
           <form onSubmit={onSubmit}>
             <input type="hidden" name="searchParams" value={searchParams} />
@@ -340,7 +358,6 @@ export default function Page() {
               <h1 className="text-3xl sm:text-5xl lg:text-6xl max-w-[800px]">
                 Let's get some information for your report
               </h1>
-
               <div className="mt-[50px] sm:mt-[80px] p-1 m-auto flex flex-wrap rounded-2xl bg-white border-solid border-2 border-slate-200  max-md:w-full w-full overflow-hidden">
                 <div className="flex flex-wrap m-auto w-full p-[10px] gap-5">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
