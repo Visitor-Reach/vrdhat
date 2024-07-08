@@ -12,6 +12,8 @@ from requests.structures import CaseInsensitiveDict
 from urllib.parse import quote, unquote
 import boto3
 import uuid
+from concurrent.futures import ThreadPoolExecutor
+
 
 states_dic = {
     'AK': 'Alaska',
@@ -104,6 +106,8 @@ APPLE_WEBPAGE_VALUE = 20
 APPLE_PHONE_VALUE = 10
 APPLE_ADDRESS_VALUE = 10
 APPLE_STATE_VALUE = 10
+
+APIFY_TOKEN = "apify_api_iAg7arHnPeftRg9PVFbS1w3bhPwb1d2lxtPH"
 
 
 class church:
@@ -299,6 +303,7 @@ class church:
         return keywords
 
     def get_semrush_domain_organic_results(self):
+        print("Getting organic results")
         url = "https://api.semrush.com/?type=domain_organic&key=" + SEMRUSH_API_KEY + \
             "&display_limit=10&export_columns=Ph,Po,Pp,Pd,Nq,Cp,Ur,Tr,Tc,Co,Nr,Td&domain=" + \
             self.webpage + "&display_sort=tr_desc&database=us"
@@ -309,11 +314,15 @@ class church:
     def get_digital_search_assesment_score(self):
         self.standarize_initial_address()
         self.set_coordinates()
-        self.get_semrush_domain_organic_results()
-        # self.get_semrush_authority_score()
-        self.get_domain_trust_score()
-        self.get_maps_score()
-        self.get_voice_score()
+
+        executors_list = []
+        with ThreadPoolExecutor() as executor:
+            executors_list.append(executor.submit(self.get_semrush_domain_organic_results))
+            executors_list.append(executor.submit(self.get_domain_trust_score))
+            executors_list.append(executor.submit(self.get_maps_score))
+            executors_list.append(executor.submit(self.get_voice_score))
+            executors_list.append(executor.submit(self.get_facebook_data, APIFY_TOKEN))
+            executors_list.append(executor.submit(self.get_instagram_data, APIFY_TOKEN))
 
         self.digital_search_assesment_score += \
             self.domain_trust_score + \
@@ -557,6 +566,7 @@ class church:
         self.get_yelp_state_score()
 
     def get_voice_score(self):
+        print("Getting voice score")
         self.get_yelp_score()
         self.voice_score += \
             self.yelp_name_score + \
@@ -696,6 +706,7 @@ class church:
         self.get_apple_state_score()
 
     def get_maps_score(self):
+        print("Getting maps score")
         self.get_google_score()
         self.get_apple_score()
         self.apple_maps_score += \
@@ -899,6 +910,7 @@ class church:
         return response.json()
 
     def get_domain_trust_score(self):
+        print('Getting domain trust score')
         url = f"https://serpapi.com/search?engine=google_maps&google_domain=google.com&q=church&ll=@{self.coordinates[0]},{self.coordinates[1]},15.1z&api_key={SERPAPI_API_KEY}&hl=en&type=search"
         response = requests.request("GET", url)
         results = response.json()
@@ -916,3 +928,39 @@ class church:
         if self.domain_trust_score < 0:
             self.domain_trust_score = 0
         return self.domain_trust_score
+
+    def get_facebook_data(self, token):
+        print('Getting facebook data')
+        if self.facebook_profile == "" or self.facebook_profile == None:
+            return
+        url = "https://api.apify.com/v2/acts/apify~facebook-pages-scraper/run-sync-get-dataset-items?token=" + token
+        payload = '{"startUrls": [{"url": "https://www.facebook.com/' + self.facebook_profile + '"}]}'
+        headers = {'Content-Type': 'application/json'}
+        proxies = {
+            'http': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
+            'https': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
+        }
+        try:
+            response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
+            fb_results = response.json()
+            self.facebook_data = fb_results
+        except Exception as e:
+            print(e)
+
+    def get_instagram_data(self, token):
+        print('Getting instagram data')
+        if self.instagram_profile == "" or self.instagram_profile == None:
+            return
+        url = "https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=" + token + "&omit=relatedProfiles,latestIgtvVideos,postsCount,latestPosts"
+        payload = '{"usernames":["' + self.instagram_profile + '"]}'
+        headers = {'Content-Type': 'application/json'}
+        proxies = {
+            'http': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
+            'https': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
+        }
+        try:
+            response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
+            insta_results = response.json()
+            self.instagram_data = insta_results
+        except Exception as e:
+            print(e)

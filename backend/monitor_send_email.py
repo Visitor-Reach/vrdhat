@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from flask_mail import Mail, Message
-import db_manage2
+import backend.db_manage as db_manage
 import pdf_gen
 import os
 import re
@@ -43,7 +43,7 @@ def check_and_send_emails(app):
     global procesando
     if procesando == False:
         procesando = True
-        users = db_manage2.retrieve_email_missing_pdf()
+        users = db_manage.retrieve_email_missing_pdf()
 
         for user in users:
             id = str(user['_id'])
@@ -66,7 +66,7 @@ def check_and_send_emails(app):
             s3.upload_file("reports/" + church_name + "/" + church_name + ".pdf", bucket_name, key, ExtraArgs={'ContentType': 'application/pdf'})
             print(f'PDF file uploaded to /{bucket_name}/{key}')
 
-            db_manage2.update_sent_pdf(id, file_name)
+            db_manage.update_sent_pdf(id, file_name)
             pdfUrl = f"https://vr-digital-health-files.s3.amazonaws.com/pdf/{file_name}"
             noteContent = f'<div><p>A Digital Health Assessment report PDF file was generated and sent:</p><p><a href="{pdfUrl}" title="Digital Health Assessment Report" target="_blank">Digital Health Assessment Report PDF</a></p></div>'
             add_hubspot_note(hubspot_contact_id, hubspot_company_id, noteContent)

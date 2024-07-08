@@ -1,13 +1,13 @@
 from flask import Flask, request, jsonify
 from bson import json_util
-import db_manage2
+import backend.db_manage as db_manage
 
 app = Flask(__name__)
 
 @app.route('/', methods=['GET'])
 def get():
-  data = db_manage2.retrieve_runs(1, 10)
-  count = db_manage2.get_total_runs()
+  data = db_manage.retrieve_runs(1, 10)
+  count = db_manage.get_total_runs()
   stuff = {
     "count": count,
     "data": data
@@ -16,18 +16,18 @@ def get():
 
 @app.route('/<id>', methods=['GET'])
 def get_one(id):
-  data = db_manage2.retrieve_User_complete_report(id)
+  data = db_manage.retrieve_User_complete_report(id)
   return json_util.dumps(data)
 
 @app.route('/', methods=['POST'])
 def insert():
-  id = db_manage2.insert_User(request.get_json())
-  data = db_manage2.retrieve_User_complete_report(id)
+  id = db_manage.insert_User(request.get_json())
+  data = db_manage.retrieve_User_complete_report(id)
   return json_util.dumps(data)
 
 @app.route('/<id>', methods=['PATCH'])
 def update(id):
-  data = db_manage2.update_contact_company(id, 'asdfasdf', '12341234')
+  data = db_manage.update_contact_company(id, 'asdfasdf', '12341234')
   return json_util.dumps(data)
 
 if __name__ == '__main__':

@@ -7,13 +7,14 @@ import http.client
 import json
 import os
 import requests
-import db_manage2
+import db_manage
 import time
 import tldextract
 from urllib.parse import parse_qs
 from bson import json_util
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
+APIFY_TOKEN = "apify_api_iAg7arHnPeftRg9PVFbS1w3bhPwb1d2lxtPH"
 
 app = Flask(__name__)
 mail = Mail(app)
@@ -333,18 +334,19 @@ def handle_form_submission():
     church_obj.volume_search_last_month = volume_search_last_month
 
     church_obj.get_digital_search_assesment_score()
+
     church_obj.get_map_image()
     church_obj.write_object_to_json()
     church_obj.created_at = int(time.time())
 
     data = {key: value for key, value in church_obj.__dict__.items()
                 if not callable(value)}
-    object_id = db_manage2.insert_User(data)
+    object_id = db_manage.insert_User(data)
     id = str(object_id)
 
     try:
         contact_id, company_id = post_hubspot_data(church_obj)
-        db_manage2.update_contact_company(id, contact_id, company_id)
+        db_manage.update_contact_company(id, contact_id, company_id)
     except Exception as error:
         print("Error: ", error)
 
@@ -354,7 +356,7 @@ def handle_form_submission():
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
     try:
-        info = db_manage2.retrieve_User_complete_report(id)
+        info = db_manage.retrieve_User_complete_report(id)
         response_json = {
             'church_name': info.get('name'),
             'digitalVoice': info.get('voice_score'),
@@ -388,7 +390,7 @@ def fetch_data(id):
 @app.route('/api/fetch-data/<id>/json', methods=['GET'])
 def fetch_data_json(id):
     try:
-        info = db_manage2.retrieve_User_complete_report(id)
+        info = db_manage.retrieve_User_complete_report(id)
         return json_util.dumps(info)
     except Exception as error_msg:
         print("Error: ", error_msg)
@@ -401,14 +403,14 @@ def fetch_runs():
         page = request.args.get('page') or 1
         page_size = request.args.get('page_size') or 10
         data = []
-        runs = db_manage2.retrieve_runs(int(page), int(page_size))
+        runs = db_manage.retrieve_runs(int(page), int(page_size))
         for run in runs:
             data.append({
                 'id': str(run.get("_id")),
                 'church_name': run.get("name"),
                 'created_at': run.get("created_at")
             })
-        total = db_manage2.get_total_runs()
+        total = db_manage.get_total_runs()
         results = {
             'page': page,
             'page_size': page_size,
