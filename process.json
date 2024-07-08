@@ -4,6 +4,7 @@
       "name": "backend-service",
       "cwd": "./backend",
       "script": "back.py",
+      "interpreter":"python3.12",
       "watch": false,
       "env": {
         "NODE_ENV": "production"
@@ -13,6 +14,7 @@
       "name": "email-service",
       "cwd": "./backend",
       "script": "monitor_send_email.py",
+      "interpreter":"python3.12",
       "watch": false,
       "env": {
         "NODE_ENV": "production"
