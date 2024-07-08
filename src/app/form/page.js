@@ -73,8 +73,6 @@ export default function Page() {
     { id: 'WY', title: 'Wyoming' },
   ]
 
-  startProgressBar()
-  
   useEffect(() => {
     if (submitted) {
       const timeoutId = setTimeout(() => {
