@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 from apscheduler.schedulers.background import BackgroundScheduler
 
 from flask_mail import Mail, Message
-import backend.db_manage as db_manage
+import db_manage
 import pdf_gen
 import os
 import re

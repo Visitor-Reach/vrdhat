@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 from bson import json_util
-import backend.db_manage as db_manage
+import db_manage
 
 app = Flask(__name__)
 

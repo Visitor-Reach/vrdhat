@@ -1,11 +1,4 @@
 import os
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from PIL import Image
-from pdf2image import convert_from_path
-import img2pdf
-import time
 from pyhtml2pdf import converter
 import fitz
 import PyPDF2
