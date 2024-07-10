@@ -50,8 +50,8 @@ def check_and_send_emails(app):
             email = user['email']
             church_name = user['name']
             first_name = user['first_name']
-            hubspot_contact_id = user['hubspot_contact_id']
-            hubspot_company_id = user['hubspot_company_id']
+            hubspot_contact_id = user.get('hubspot_contact_id')
+            hubspot_company_id = user.get('hubspot_company_id')
 
             church_name = church_name.lower().replace(" ", "_")
             church_name = re.sub(r'[^\w\s]', '', church_name)
