@@ -217,12 +217,12 @@ export default function Page() {
     if (!churchZipCode || !churchZipCode.trim()) {
       errors.push({ msg: 'Zip Code is required', field: 'churchZipCode' })
     }
-    // if (!churchFacebook || !churchFacebook.trim()) {
-    //   errors.push({ msg: 'Church Facebook is required', field: 'churchFacebook' })
-    // }
-    // if (!churchInstagram || !churchInstagram.trim()) {
-    //   errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
-    // }
+    if (!churchFacebook || !churchFacebook.trim()) {
+      errors.push({ msg: 'Church Facebook is required', field: 'churchFacebook' })
+    }
+    if (!churchInstagram || !churchInstagram.trim()) {
+      errors.push({ msg: 'Church Instagram is required', field: 'churchInstagram' })
+    }
     if (!role || !role.trim()) {
       errors.push({ msg: 'Your Role is required', field: 'role' })
     }
