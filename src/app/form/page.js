@@ -250,16 +250,16 @@ export default function Page() {
   }
 
   function startProgressBar() {
-    let fake_timer = 0
-    const p = setInterval(() => {
-      fake_timer += 0.167
-      if (progress.current) {
-        progress.current.style.width = fake_timer + '%'
-      }
-      if (fake_timer >= 100) {
-        clearInterval(p)
-      }
-    },100)
+    // let fake_timer = 0
+    // const p = setInterval(() => {
+    //   fake_timer += 0.167
+    //   if (progress.current) {
+    //     progress.current.style.width = fake_timer + '%'
+    //   }
+    //   if (fake_timer >= 100) {
+    //     clearInterval(p)
+    //   }
+    // },100)
   }
 
   async function onSubmit(event) {
@@ -344,10 +344,10 @@ export default function Page() {
         {isSubmitting ? (
           <>
             <LoadingAnimation />
-            <div id="progress-outer" className="w-full bg-gray-200 h-2 rounded-md mt-10">
+            {/* <div id="progress-outer" className="w-full bg-gray-200 h-2 rounded-md mt-10">
               <div ref={progress} id="progress-inner" className="bg-vr-title-second h-2 rounded-md w-1"></div>
             </div>
-            <div className="text-center text-md text-gray-400">Calculating...</div>
+            <div className="text-center text-md text-gray-400">Calculating...</div> */}
           </>
         ) : (
           <form onSubmit={onSubmit}>
