@@ -39,7 +39,7 @@ export default function Data() {
   const pageNumbers = Array.from({length: totalPages}, (_, i) => i + 1)
 
   return (
-    <div className="m-10 w-2/3 h-[100vh]">
+    <div className="m-10 w-full h-[100vh]">
       <h1 className="text-xl font-bold">Data Runs ({total})</h1>
       
       <div className="rounded-lg border-gray-500 border-spacing-1 p-5 my-3 shadow-sm bg-white">
@@ -49,10 +49,16 @@ export default function Data() {
             <table className="min-w-full divide-y divide-gray-300">
               <thead>
                 <tr>
-                  <th scope="col" className="w-1/2 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
-                    Name
+                  <th scope="col" className="w-1/4 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                    Church
                   </th>
-                  <th scope="col" className="w-1/3 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                  <th scope="col" className="w-1/4 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                    Contact Name
+                  </th>
+                  <th scope="col" className="w-1/4 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                    Email
+                  </th>
+                  <th scope="col" className="w-1/4 px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                     <a href="#" className="group inline-flex">
                       Run Date
                       <span className="ml-2 flex-none rounded bg-gray-100 text-gray-900 group-hover:bg-gray-200">
@@ -70,6 +76,12 @@ export default function Data() {
                   <tr key={item.id}>
                     <td className="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                       {item.church_name}
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-0">
+                      {item?.first_name} {item?.last_name}
+                    </td>
+                    <td className="whitespace-nowrap py-3 pl-4 pr-3 text-sm font-medium text-gray-500 sm:pl-0">
+                      {item?.email}
                     </td>
                     <td className="whitespace-nowrap px-3 py-3 text-sm text-gray-500">{moment(item.created_at * 1000).format(dateFormatString)}</td>
                     <td className="relative whitespace-nowrap py-3 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">

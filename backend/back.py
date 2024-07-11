@@ -408,6 +408,9 @@ def fetch_runs():
             data.append({
                 'id': str(run.get("_id")),
                 'church_name': run.get("name"),
+                'email': run.get("email"),
+                'first_name': run.get("first_name"),
+                'last_name': run.get("last_name"),
                 'created_at': run.get("created_at")
             })
         total = db_manage.get_total_runs()
