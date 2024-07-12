@@ -12,6 +12,7 @@ import time
 import tldextract
 from urllib.parse import parse_qs
 from bson import json_util
+import re
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
 APIFY_TOKEN = "apify_api_iAg7arHnPeftRg9PVFbS1w3bhPwb1d2lxtPH"
@@ -68,6 +69,7 @@ def get_existing_hubspot_contact(email):
 def get_existing_hubspot_company(church_obj):
     extracted = tldextract.extract(church_obj.webpage)
     root_domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
+    print("Root domain name: ", root_domain_name)
     payload = json.dumps({
         "limit": 1,
         "sorts": [
@@ -101,6 +103,7 @@ def get_existing_hubspot_company(church_obj):
     res = conn.getresponse()
     existingCompanyData = res.read()
     existingData = json.loads(existingCompanyData)
+    print("Existing company data: ", existingData)
     if existingData.get("total") == 0:
         return None
     else:
@@ -196,7 +199,6 @@ def add_hubspot_company(church_obj):
     payload = json.dumps({
         "properties": {
             "name": church_obj.name,
-            "domain": root_domain_name,
             "church_size": church_obj.size,
             "phone": church_obj.phone,
             "address": church_obj.address,
@@ -206,6 +208,20 @@ def add_hubspot_company(church_obj):
             "country": "United States",
         }
     })
+    if is_valid_domain(root_domain_name):
+        payload = json.dumps({
+            "properties": {
+                "name": church_obj.name,
+                "domain": root_domain_name,
+                "church_size": church_obj.size,
+                "phone": church_obj.phone,
+                "address": church_obj.address,
+                "city": church_obj.city,
+                "state": church_obj.state,
+                "zip": church_obj.zipcode,
+                "country": "United States",
+            }
+        })
     headers = {
         'User-Agent': 'Apidog/1.0.0 (https://apidog.com)',
         'Content-Type': 'application/json',
@@ -215,7 +231,7 @@ def add_hubspot_company(church_obj):
     conn.request("POST", f"/crm/v3/objects/companies", payload, headers)
     res = conn.getresponse()
     if res.status != 201:
-        print("Error creating contact")
+        print("Error creating company")
         print(res.read())
         return None
     else:
@@ -444,6 +460,10 @@ def fetch_run_data(jsonFile):
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting run data'}), 400
 
+def is_valid_domain(domain):
+    # Regular expression to validate domain name
+    regex = r'^(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}$'
+    return re.match(regex, domain) is not None
 
 if __name__ == '__main__':
     from waitress import serve
