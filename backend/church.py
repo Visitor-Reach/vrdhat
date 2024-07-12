@@ -107,6 +107,18 @@ APPLE_PHONE_VALUE = 10
 APPLE_ADDRESS_VALUE = 10
 APPLE_STATE_VALUE = 10
 
+SOCIAL_INSTAGRAM_NAME_VALUE = 42
+SOCIAL_INSTAGRAM_WEBPAGE_VALUE = 32
+SOCIAL_INSTAGRAM_CATEGORY_VALUE = 26
+SOCIAL_FACEBOOK_NAME_VALUE = 40
+SOCIAL_FACEBOOK_WEBPAGE_VALUE = 30
+SOCIAL_FACEBOOK_CATEGORY_VALUE = 25
+SOCIAL_FACEBOOK_INFO_VALUE = 23
+SOCIAL_FACEBOOK_ADDRESS_VALUE = 10
+SOCIAL_FACEBOOK_STATE_VALUE = 7
+SOCIAL_FACEBOOK_PHONE_VALUE = 15
+
+
 APIFY_TOKEN = "apify_api_iAg7arHnPeftRg9PVFbS1w3bhPwb1d2lxtPH"
 
 
@@ -140,6 +152,7 @@ class church:
         self.google_parsed_address = ""
         self.apple_parsed_address = ""
         self.yelp_parsed_address = ""
+        self.facebook_parsed_address = ""
 
         self.apple_name = ""
         self.apple_name_score = 0
@@ -212,12 +225,30 @@ class church:
         self.yelp_schedule = ""
         self.yelp_schedule_score = 0
 
+        self.instagram_data = []
+        self.instagram_name_score = 0
+        self.instagram_webpage_score = 0
+        self.instagram_category_score = 0
+
+        self.facebook_data = []
+        self.facebook_name_score = 0
+        self.facebook_webpage_score = 0
+        self.facebook_category_score = 0
+        self.facebook_info_score = 0
+        self.facebook_address_score = 0
+        self.facebook_state_score = 0
+        self.facebook_phone_score = 0
+
+        self.facebook_address = ""
+        self.facebook_state = ""
+
         self.church_search_results = []
         self.domain_organic_keywords = []
 
         self.maps_score = 0
         self.voice_score = 34
         self.domain_trust_score = 0
+        self.social_clarity_score = 0
 
         self.digital_search_assesment_score = 0
 
@@ -325,10 +356,13 @@ class church:
             executors_list.append(executor.submit(self.get_facebook_data, APIFY_TOKEN))
             executors_list.append(executor.submit(self.get_instagram_data, APIFY_TOKEN))
 
+        self.get_social_clarity_score()
+
         self.digital_search_assesment_score += \
             self.domain_trust_score + \
             self.maps_score + \
-            self.voice_score
+            self.voice_score + \
+            self.social_clarity_score
 
     def set_coordinates(self):
         if self.coordinates == "":
@@ -468,40 +502,35 @@ class church:
         similarity_score = self.text_similarity(cleaned_input_name, cleaned_name)
         return similarity_score
 
-    def address_similarity(self, map_adress, type):
+    def address_similarity(self, map_adress, source):
         response = self.parse_address(map_adress)
         if response.get('results') != None:
             if len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
                 result = response.get('results')[0]
 
-                if type == "google":
+                if source == "google":
                     self.google_parsed_address = result
                     self.google_address = result.get('address_line1')
-                    # self.google_city = result.get('city')
                     self.google_state = result.get('state')
-                    # self.google_zipcode = result.get('postcode')
-                    self.google_coordinates = (
-                        result.get('lat'), result.get('lon'))
-                elif type == "apple":
+                    self.google_coordinates = (result.get('lat'), result.get('lon'))
+
+                elif source == "apple":
                     self.apple_parsed_address = result
                     self.apple_address = result.get('address_line1')
-                    # self.apple_city = result.get('city')
                     self.apple_state = result.get('state')
-                    # self.apple_zipcode = result.get('postcode')
-                    # self.apple_coordinates = (
-                    #     result.get('lat'), result.get('lon'))
-                elif type == "yelp":
+
+                elif source == "yelp":
                     self.yelp_parsed_address = result
                     self.yelp_address = result.get('address_line1')
-                    # self.yelp_city = result.get('city')
                     self.yelp_state = result.get('state')
-                    # self.yelp_zipcode = result.get('postcode')
-                    # self.yelp_coordinates = (
-                    #     result.get('lat'), result.get('lon'))
+
+                elif source == "facebook":
+                    self.facebook_parsed_address = result
+                    self.facebook_address = result.get('address_line1')
+                    self.facebook_state = result.get('state')
 
                 # Calculate similarity score using Levenshtein distance
-                address_similarity = self.text_similarity(
-                    self.address, result.get('address_line1'))
+                address_similarity = self.text_similarity(self.address, result.get('address_line1'))
                 return address_similarity
         return 0
 
@@ -509,6 +538,8 @@ class church:
         name_similarity_value = self.name_similarity(self.yelp_name)
         self.yelp_name_similarity_score = name_similarity_value
         self.yelp_name_score = YELP_NAME_VALUE * (name_similarity_value > 95)
+        if self.yelp_name_score == 0 and self.name in self.yelp_name:
+            self.yelp_name_score = YELP_NAME_VALUE
         return self.yelp_name_score
 
     def get_yelp_category_score(self):
@@ -908,7 +939,8 @@ class church:
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
         response = requests.get(url, headers=headers)
-        return response.json()
+        data = response.json()
+        return data
 
     def get_domain_trust_score(self):
         print('Getting domain trust score')
@@ -937,14 +969,17 @@ class church:
         url = "https://api.apify.com/v2/acts/apify~facebook-pages-scraper/run-sync-get-dataset-items?token=" + token
         payload = '{"startUrls": [{"url": "https://www.facebook.com/' + self.facebook_profile + '"}]}'
         headers = {'Content-Type': 'application/json'}
+        # proxy_group = "RESIDENTIAL"
+        proxy_group = "BUYPROXIES94952"
         proxies = {
-            'http': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
-            'https': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
+            'http': 'http://groups-' + proxy_group + ':apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
+            'https': 'http://groups-' + proxy_group + ':apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
         }
         try:
             response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
             fb_results = response.json()
             self.facebook_data = fb_results
+            print('Got facebook data')
         except Exception as e:
             print(e)
 
@@ -955,13 +990,126 @@ class church:
         url = "https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=" + token + "&omit=relatedProfiles,latestIgtvVideos,postsCount,latestPosts"
         payload = '{"usernames":["' + self.instagram_profile + '"]}'
         headers = {'Content-Type': 'application/json'}
+        # proxy_group = "RESIDENTIAL"
+        proxy_group = "BUYPROXIES94952"
         proxies = {
-            'http': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
-            'https': 'http://groups-RESIDENTIAL:apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
+            'http': 'http://groups-' + proxy_group + ':apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000',
+            'https': 'http://groups-' + proxy_group + ':apify_proxy_tFJ7WaDa0vfaXaywtmenDA81s7UYc54Ex8Lf@proxy.apify.com:8000'
         }
         try:
             response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
             insta_results = response.json()
             self.instagram_data = insta_results
+            print('Got instagram data')
         except Exception as e:
             print(e)
+
+    def get_social_clarity_score(self):
+        if self.instagram_data == None or len(self.instagram_data) == 0:
+            return
+        self.instagram_data = self.instagram_data[0]
+
+        try:
+            self.get_instagram_name_score()
+            self.get_instagram_category_score()
+            self.get_instagram_webpage_score()
+        except Exception as e:
+            print(e)
+
+        if self.facebook_data == None or len(self.facebook_data) == 0:
+            return
+        self.facebook_data = self.facebook_data[0]
+
+        try:
+            self.get_facebook_name_score()
+            self.get_facebook_category_score()
+            self.get_facebook_webpage_score()
+            self.get_facebook_info_score()
+            self.get_facebook_address_score()
+            self.get_facebook_state_score()
+            self.get_facebook_phone_score()
+        except Exception as e:
+            print(e)
+
+        self.social_clarity_score += \
+            self.instagram_name_score + \
+            self.instagram_category_score + \
+            self.instagram_webpage_score + \
+            self.facebook_name_score + \
+            self.facebook_category_score + \
+            self.facebook_webpage_score + \
+            self.facebook_info_score + \
+            self.facebook_address_score + \
+            self.facebook_state_score + \
+            self.facebook_phone_score
+        
+    def get_instagram_name_score(self):
+        self.instagram_name = self.instagram_data.get("fullName", "")
+        self.instagram_name = unquote(self.instagram_name).replace("’", "'")
+        self.instagram_name_similarity_score = self.name_similarity(self.instagram_name)
+        self.instagram_name_score = SOCIAL_INSTAGRAM_NAME_VALUE * (self.instagram_name_similarity_score > 95)
+        if self.instagram_name_score == 0 and self.name in self.instagram_name:
+            self.facebook_name_score = SOCIAL_INSTAGRAM_NAME_VALUE
+
+    def get_instagram_category_score(self):
+        self.instagram_category = self.instagram_data.get("businessCategoryName", "")
+        if "church" in self.instagram_category.lower() or "religious" in self.instagram_category.lower():
+            self.instagram_category_score = SOCIAL_INSTAGRAM_CATEGORY_VALUE
+
+    def get_instagram_webpage_score(self):
+        self.instagram_webpage = self.instagram_data.get("externalUrl", "")
+        if not self.instagram_webpage.startswith("https://"):
+            self.instagram_webpage = "https://" + self.instagram_webpage
+        self.instagram_webpage_similarity_score = self.text_similarity(self.webpage, self.instagram_webpage)
+        if self.instagram_webpage_similarity_score >= 85:
+            self.instagram_webpage_score = SOCIAL_INSTAGRAM_WEBPAGE_VALUE
+
+    def get_facebook_name_score(self):
+        self.facebook_name = self.facebook_data.get("title", "")
+        self.facebook_name = unquote(self.facebook_name).replace("’", "'")
+        self.facebook_name_similarity_score = self.name_similarity(self.facebook_name)
+        self.facebook_name_score = SOCIAL_FACEBOOK_NAME_VALUE * (self.facebook_name_similarity_score > 95)
+        if self.facebook_name_score == 0 and self.name in self.facebook_name:
+            self.facebook_name_score = SOCIAL_FACEBOOK_NAME_VALUE
+
+    def get_facebook_category_score(self):
+        self.facebook_categories = self.facebook_data.get("categories", [])
+        for category in self.facebook_categories:
+            if "church" in category.lower() or "religious" in category.lower():
+                self.facebook_category_score = SOCIAL_FACEBOOK_CATEGORY_VALUE
+
+    def get_facebook_webpage_score(self):
+        self.facebook_webpage = self.facebook_data.get("website", "")
+        if not self.facebook_webpage.startswith("https://"):
+            self.facebook_webpage = "https://" + self.facebook_webpage
+        self.facebook_webpage_similarity_score = self.text_similarity(self.webpage, self.facebook_webpage)
+        if self.facebook_webpage_similarity_score >= 85:
+            self.facebook_webpage_score = SOCIAL_FACEBOOK_WEBPAGE_VALUE
+
+    def get_facebook_info_score(self):
+        self.facebook_info = self.facebook_data.get("info", [])
+        for info in self.facebook_info:
+            if self.name in info:
+                self.facebook_info_score = SOCIAL_FACEBOOK_INFO_VALUE
+
+    def get_facebook_address_score(self):
+        url_pattern = r'https?://\S+'
+        self.facebook_address = self.facebook_data.get("address", "")
+        self.facebook_address = re.sub(url_pattern, '', self.facebook_address)
+
+        self.facebook_address_similarity_score = self.address_similarity(self.facebook_address, 'facebook')
+        if self.facebook_address_similarity_score >= 85:
+            self.facebook_address_score = SOCIAL_FACEBOOK_ADDRESS_VALUE
+
+    def get_facebook_state_score(self):
+        self.facebook_state_similarity_score = self.text_similarity(self.state, self.facebook_state)
+        if self.facebook_state_similarity_score >= 95:
+            self.facebook_state_score = SOCIAL_FACEBOOK_STATE_VALUE
+        
+    def get_facebook_phone_score(self):
+        self.phone = self.clean_phone_number(self.phone)
+        self.facebook_phone = self.facebook_data.get("phone", "")
+        self.facebook_phone = self.clean_phone_number(self.facebook_phone)
+        self.facebook_phone_similarity_score = self.text_similarity(self.phone, self.facebook_phone)
+        if self.facebook_phone_similarity_score >= 95:
+            self.facebook_phone_score = SOCIAL_FACEBOOK_PHONE_VALUE

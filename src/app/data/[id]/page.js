@@ -5,11 +5,12 @@ import { useEffect, useState } from 'react'
 export default function Data({ params }) {
   const [data, setData] = useState(null)
 
-  const totalScoreRatio = (data?.digital_search_assesment_score/750)
+  const totalScoreRatio = (data?.digital_search_assesment_score/1000)
   const voiceScoreRatio = (data?.voice_score/250)
   const googleMapsScoreRatio = (data?.google_maps_score/125)
   const appleMapsScoreRatio = (data?.apple_maps_score/125)
   const websiteAuthorityScoreRatio = (data?.domain_trust_score/250)
+  const socialClarityScoreRatio = (data?.social_clarity_score/250)
 
   useEffect(() => {
     getData(params.id).then((runData) => {
@@ -57,22 +58,37 @@ export default function Data({ params }) {
         <div className="flex flex-row gap-3">
           <div className="w-1/2 rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
             <h3 className="text-base font-semibold leading-6 text-gray-900 mb-2">Church Info</h3>
-            <div className="text-gray-700 text-sm">{data.address}</div>
-            <div className="text-gray-700 text-sm">{data.city}, {data.state} {data.zipcode}</div>
-            <div className="text-gray-700 text-sm">{data.phone}</div>
-            <div className="text-gray-700 text-sm">{data.webpage}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.address}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.city}, {data.state} {data.zipcode}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.phone}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.webpage}</div>
+            {data?.hubspot_company_id && (
+              <a href={`https://app.hubspot.com/contacts/44122818/record/0-2/${data.hubspot_company_id}`}
+                target="_blank"
+                className="text-blue-500 text-sm block leading-6">
+                View in Hubspot
+              </a>
+            )}
           </div>
 
           <div className="w-1/2 rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-            <h3 className="font-semibold leading-6 text-gray-900 mb-2 text-sm">Contact Info</h3>
-            <div className="text-gray-700 text-sm">{data.first_name} {data.last_name}</div>
-            <div className="text-gray-700 text-sm">{data.mobile_phone}</div>
-            <div className="text-gray-700 text-sm">{data.email}</div>
+            <h3 className="font-semibold leading-6 text-gray-900 mb-2">Contact Info</h3>
+            <div className="text-gray-700 text-sm leading-6">{data.first_name} {data.last_name}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.mobile_phone}</div>
+            <div className="text-gray-700 text-sm leading-6">{data.email}</div>
+            
+            {data?.hubspot_contact_id && (
+              <a href={`https://app.hubspot.com/contacts/44122818/record/0-1/${data.hubspot_contact_id}`}
+                target="_blank"
+                className="text-blue-500 text-sm block leading-6">
+                View in Hubspot
+              </a>
+            )}
             {data?.pdf_file && (
               <a href={`https://vr-digital-health-files.s3.us-west-2.amazonaws.com/pdf/${data.pdf_file}`} 
                 target="_blank" 
-                className="text-blue-500 text-sm">
-                Open PDF
+                className="text-blue-500 text-sm block leading-6">
+                View PDF
               </a>
             )}
           </div>
@@ -85,7 +101,7 @@ export default function Data({ params }) {
               {getLetterScore(totalScoreRatio)}
             </span>
           </h3>
-          <div className="text-xl font-bold mt-2">{data.digital_search_assesment_score} <span className="text-gray-400 font-normal">/ 750</span></div>
+          <div className="text-xl font-bold mt-2">{data.digital_search_assesment_score} <span className="text-gray-400 font-normal">/ 1000</span></div>
         </div>
 
         {/* Yelp */}
@@ -113,7 +129,7 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
                   <td className="text-left text-sm py-1">{data.yelp_name_score}</td>
-                  <td className="text-left text-sm py-1">{data.yelp_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.yelp_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.yelp_name}</td>
                 </tr>
@@ -169,28 +185,28 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
                   <td className="text-left text-sm py-1">{data.yelp_webpage_score}</td>
-                  <td className="text-left text-sm py-1">{data.yelp_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.yelp_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.yelp_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
                   <td className="text-left text-sm py-1">{data.yelp_phone_score}</td>
-                  <td className="text-left text-sm py-1">{data.yelp_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.yelp_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.yelp_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
                   <td className="text-left text-sm py-1">{data.yelp_address_score}</td>
-                  <td className="text-left text-sm py-1">{data.yelp_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.yelp_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.yelp_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
                   <td className="text-left text-sm py-1">{data.yelp_state_score}</td>
-                  <td className="text-left text-sm py-1">{data.yelp_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.yelp_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.yelp_state}</td>
                 </tr>
@@ -230,7 +246,7 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
                   <td className="text-left text-sm py-1">{data.google_name_score}</td>
-                  <td className="text-left text-sm py-1">{data.google_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.google_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.google_name}</td>
                 </tr>
@@ -288,28 +304,28 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
                   <td className="text-left text-sm py-1">{data.google_webpage_score}</td>
-                  <td className="text-left text-sm py-1">{data.google_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.google_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.google_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
                   <td className="text-left text-sm py-1">{data.google_phone_score}</td>
-                  <td className="text-left text-sm py-1">{data.google_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.google_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.google_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
                   <td className="text-left text-sm py-1">{data.google_address_score}</td>
-                  <td className="text-left text-sm py-1">{data.google_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.google_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.google_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
                   <td className="text-left text-sm py-1">{data.google_state_score}</td>
-                  <td className="text-left text-sm py-1">{data.google_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.google_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.google_state}</td>
                 </tr>
@@ -349,7 +365,7 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
                   <td className="text-left text-sm py-1">{data.apple_name_score}</td>
-                  <td className="text-left text-sm py-1">{data.apple_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.apple_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.apple_name}</td>
                 </tr>
@@ -407,28 +423,28 @@ export default function Data({ params }) {
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
                   <td className="text-left text-sm py-1">{data.apple_webpage_score}</td>
-                  <td className="text-left text-sm py-1">{data.apple_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.apple_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.apple_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
                   <td className="text-left text-sm py-1">{data.apple_phone_score}</td>
-                  <td className="text-left text-sm py-1">{data.apple_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.apple_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.apple_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
                   <td className="text-left text-sm py-1">{data.apple_address_score}</td>
-                  <td className="text-left text-sm py-1">{data.apple_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.apple_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.apple_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
                   <td className="text-left text-sm py-1">{data.apple_state_score}</td>
-                  <td className="text-left text-sm py-1">{data.apple_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt; 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.apple_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.apple_state}</td>
                 </tr>
@@ -438,6 +454,136 @@ export default function Data({ params }) {
                   <td className="text-left"></td>
                   <td className="text-left"></td>
                   <td className="text-left"></td>
+                </tr>
+            </tbody>
+          </table>
+
+        </div>
+
+        {/* Social Clarity */}
+        <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Social Clarity Score
+            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(appleMapsScoreRatio)}]`}>
+              {getLetterScore(socialClarityScoreRatio)}
+            </span>
+          </h3>
+          <div className="text-lg font-bold my-2">{data.social_clarity_score} <span className="text-gray-400 font-normal">/ 250</span></div>
+
+          <table className="text-gray-700 w-full">
+            <thead>
+              <tr>
+                <th className="w-1/5 text-left text-sm py-1">Social Property</th>
+                <th className="w-1/12 text-left text-sm py-1">Score</th>
+                <th className="w-1/12 text-left text-sm py-1">Similarity</th>
+                <th className="w-1/4 text-left text-sm py-1">Expected</th>
+                <th className="w-1/4 text-left text-sm py-1">Actual <span className="font-normal text-gray-400">(Social Media)</span></th>
+              </tr>
+            </thead>
+            <tbody className="">
+                <tr>
+                  <td className="text-left text-sm py-1">Instagram Name</td>
+                  <td className="text-left text-sm py-1">{data.instagram_name_score}</td>
+                  <td className="text-left text-sm py-1">{data.instagram_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
+                  <td className="text-left text-sm py-1">{data.name}</td>
+                  <td className="text-left text-sm py-1">{data.instagram_name}</td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="text-left text-sm py-1">Instagram Category</td>
+                  <td className="text-left text-sm py-1">{data.instagram_category_score}</td>
+                  {data.instagram_category_score > 0 && (
+                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
+                  )}
+                  {data.instagram_category_score == 0 && (
+                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
+                  )}
+                  <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
+                  <td className="text-left text-sm py-1 max-w-[200px]">
+                      <div>{data.instagram_data.businessCategoryName}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td className="text-left text-sm py-1">Instagram Webpage</td>
+                  <td className="text-left text-sm py-1">{data.instagram_webpage_score}</td>
+                  <td className="text-left text-sm py-1">{data.instagram_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.webpage}</td>
+                  <td className="text-left text-sm py-1">{data.instagram_webpage}</td>
+                </tr>
+
+                <tr className="bg-gray-100">
+                  <td className="text-left text-sm py-1">Facbook Name</td>
+                  <td className="text-left text-sm py-1">{data.facebook_name_score}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
+                  <td className="text-left text-sm py-1">{data.name}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_name}</td>
+                </tr>
+                <tr>
+                  <td className="text-left text-sm py-1">Facebook Category</td>
+                  <td className="text-left text-sm py-1">{data.facebook_category_score}</td>
+                  {data.facebook_category_score > 0 && (
+                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
+                  )}
+                  {data.facebook_category_score == 0 && (
+                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
+                  )}
+                  <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
+                  <td className="text-left text-sm py-1 max-w-[200px]">
+                    {data.facebook_categories?.length >= 3 && (
+                      <div className="inline truncate" title={data.facebook_categories.join(', ')}>List (hover to view)</div>
+                    )}
+                    {data.facebook_categories?.length < 3 && (
+                      <div>{data.facebook_categories.join(', ')}</div>
+                    )}
+                  </td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="text-left text-sm py-1">Facebook Webpage</td>
+                  <td className="text-left text-sm py-1">{data.facebook_webpage_score}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.webpage}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_webpage}</td>
+                </tr>
+                <tr>
+                  <td className="text-left text-sm py-1">Facebook Info</td>
+                  <td className="text-left text-sm py-1">{data.facebook_info_score}</td>
+                  {data.facebook_info_score > 0 && (
+                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
+                  )}
+                  {data.facebook_info_score == 0 && (
+                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
+                  )}
+                  <td className="text-left text-sm py-1 max-w-[200px]">
+                    <div className="truncate">Contains church name</div>
+                  </td>
+                  <td className="text-left text-sm py-1 max-w-[200px]">
+                    {data.facebook_info?.length >= 3 && (
+                      <div className="inline truncate" title={data.facebook_info.join(', ')}>List (hover to view)</div>
+                    )}
+                    {data.facebook_info?.length < 3 && (
+                      <div>{data.facebook_info.join(', ')}</div>
+                    )}
+                  </td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="text-left text-sm py-1">Facebook Phone</td>
+                  <td className="text-left text-sm py-1">{data.facebook_phone_score}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
+                  <td className="text-left text-sm py-1">{data.phone}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_phone}</td>
+                </tr>
+                <tr>
+                  <td className="text-left text-sm py-1">Facebook Address</td>
+                  <td className="text-left text-sm py-1">{data.facebook_address_score}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.address}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_address}</td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="text-left text-sm py-1">Facebook State</td>
+                  <td className="text-left text-sm py-1">{data.facebook_state_score}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                  <td className="text-left text-sm py-1">{data.state}</td>
+                  <td className="text-left text-sm py-1">{data.facebook_state}</td>
                 </tr>
             </tbody>
           </table>
