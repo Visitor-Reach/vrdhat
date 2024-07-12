@@ -162,7 +162,7 @@ export default function Data({ params }) {
                   <td className="text-left text-sm py-1">day: &quot;Sun&quot; exists, not &quot;Closed&quot;</td>
                   <td className="text-left text-sm py-1">
                     {data.yelp_schedule?.length > 0 && data.yelp_schedule.find(d => d.day === 'Sun' && d.hours !== 'Closed') && (
-                      <div>{data.yelp_schedule.find(d => d.day === 'Sun').hours}</div>
+                      <div>{data.yelp_schedule.find(d => d.day === 'Sun')?.hours}</div>
                     )}
                   </td>
                 </tr>
@@ -281,7 +281,7 @@ export default function Data({ params }) {
                   <td className="text-left text-sm py-1">day: &quot;sunday&quot;, not &quot;Closed&quot;</td>
                   <td className="text-left text-sm py-1">
                     {data.google_schedule?.length > 0 && data.google_schedule.find(d => d.sunday && d.sunday !== 'Closed') !== null && (
-                      <div>{data.google_schedule.find(d => d.sunday && d.sunday !== 'Closed').sunday}</div>
+                      <div>{data.google_schedule.find(d => d.sunday && d.sunday !== 'Closed')?.sunday}</div>
                     )}
                   </td>
                 </tr>
