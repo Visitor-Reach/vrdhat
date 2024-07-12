@@ -47,7 +47,7 @@ def update_contact_company(id, contact_id, company_id):
 
 def retrieve_email_missing_pdf():
     try:
-        results = db.user_runs.find({"pdf_sent": {"$ne": 1}})
+        results = db.user_runs.find({"pdf_sent": 0})
         return results
     except Exception as error:
         print(error)

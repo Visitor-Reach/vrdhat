@@ -133,6 +133,7 @@ class church:
         self.map_image = ""
         self.data_file = ""
         self.search_params = ""
+        self.pdf_sent = 0
 
         self.parsed_address = ""
         self.original_address = ""
