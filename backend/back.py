@@ -69,7 +69,6 @@ def get_existing_hubspot_contact(email):
 def get_existing_hubspot_company(church_obj):
     extracted = tldextract.extract(church_obj.webpage)
     root_domain_name = "{}.{}".format(extracted.domain, extracted.suffix)
-    print("Root domain name: ", root_domain_name)
     payload = json.dumps({
         "limit": 1,
         "sorts": [
@@ -103,7 +102,6 @@ def get_existing_hubspot_company(church_obj):
     res = conn.getresponse()
     existingCompanyData = res.read()
     existingData = json.loads(existingCompanyData)
-    print("Existing company data: ", existingData)
     if existingData.get("total") == 0:
         return None
     else:
