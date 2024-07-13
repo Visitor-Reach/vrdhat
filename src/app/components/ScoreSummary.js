@@ -89,11 +89,11 @@ const ScoreSummary = ({
           <div className="max-md:w-full max-md:h-full w-11/12 h-11/12">
             <ScoreBar score={digitalVoiceScore} avgscore={avgDigitalVoiceScore} label="Digital Voice Score" />
             <ScoreBar score={digitalMapsScore} avgscore={avgDigitalMapsScore} label="Digital Maps Score" />
-            {/* <ScoreBar
+            <ScoreBar
               score={socialClarityScore}
               avgscore={avgSocialClarityScore}
               label="Social Clarity Score"
-            /> */}
+            />
             <ScoreBar
               score={websiteAuthorityScore}
               avgscore={avgWebsiteAuthorityScore}
@@ -109,7 +109,7 @@ const ScoreSummary = ({
         <Circularbar1
           value={digitalVoiceScore + digitalMapsScore + socialClarityScore + websiteAuthorityScore}
           title={''}
-          max_value={750}
+          max_value={1000}
         />
         <div className="pt-20 justify-center justify-items-center text-center">
           <p className="text-2xl text-slate-500 text-regular relative -top-12">
