@@ -248,7 +248,7 @@ class church:
         self.domain_organic_keywords = []
 
         self.maps_score = 0
-        self.voice_score = 34
+        self.voice_score = 0
         self.domain_trust_score = 0
         self.social_clarity_score = 0
 

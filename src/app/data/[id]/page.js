@@ -2,6 +2,45 @@
 
 import { useEffect, useState } from 'react'
 
+const YELP_NAME_VALUE = 30
+const YELP_CATEGORY_VALUE = 35
+const YELP_ABOUT_VALUE = 35
+const YELP_SCHEDULE_VALUE = 35
+const YELP_WEBPAGE_VALUE = 30
+const YELP_PHONE_VALUE = 30
+const YELP_ADDRESS_VALUE = 35
+const YELP_STATE_VALUE = 20
+
+const GOOGLE_NAME_VALUE = 15
+const GOOGLE_CATEGORY_VALUE = 20
+const GOOGLE_ABOUT_VALUE = 20
+const GOOGLE_SCHEDULE_VALUE = 20
+const GOOGLE_WEBPAGE_VALUE = 20
+const GOOGLE_PHONE_VALUE = 10
+const GOOGLE_ADDRESS_VALUE = 10
+const GOOGLE_STATE_VALUE = 10
+
+const APPLE_NAME_VALUE = 15
+const APPLE_CATEGORY_VALUE = 20
+const APPLE_ABOUT_VALUE = 20
+const APPLE_SCHEDULE_VALUE = 20
+const APPLE_WEBPAGE_VALUE = 20
+const APPLE_PHONE_VALUE = 10
+const APPLE_ADDRESS_VALUE = 10
+const APPLE_STATE_VALUE = 10
+
+const SOCIAL_INSTAGRAM_NAME_VALUE = 40
+const SOCIAL_INSTAGRAM_WEBPAGE_VALUE = 32
+const SOCIAL_INSTAGRAM_CATEGORY_VALUE = 28
+const SOCIAL_FACEBOOK_NAME_VALUE = 40
+const SOCIAL_FACEBOOK_WEBPAGE_VALUE = 32
+const SOCIAL_FACEBOOK_CATEGORY_VALUE = 28
+const SOCIAL_FACEBOOK_INFO_VALUE = 23
+const SOCIAL_FACEBOOK_ADDRESS_VALUE = 10
+const SOCIAL_FACEBOOK_STATE_VALUE = 7
+const SOCIAL_FACEBOOK_PHONE_VALUE = 10
+
+
 export default function Data({ params }) {
   const [data, setData] = useState(null)
 
@@ -132,14 +171,14 @@ export default function Data({ params }) {
             <tbody className="">
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
-                  <td className="text-left text-sm py-1">{data.yelp_name_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_name_score} / {YELP_NAME_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.yelp_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.yelp_name}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Category</td>
-                  <td className="text-left text-sm py-1">{data.yelp_category_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_category_score} / {YELP_CATEGORY_VALUE}</td>
                   {data.yelp_category_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -158,7 +197,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Description</td>
-                  <td className="text-left text-sm py-1">{data.yelp_description_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_description_score} / {YELP_ABOUT_VALUE}</td>
                   {data.yelp_description_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -172,7 +211,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Schedule</td>
-                  <td className="text-left text-sm py-1">{data.yelp_schedule_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_schedule_score} / {YELP_SCHEDULE_VALUE}</td>
                   {data.yelp_schedule_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -188,28 +227,28 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
-                  <td className="text-left text-sm py-1">{data.yelp_webpage_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_webpage_score} / {YELP_WEBPAGE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.yelp_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.yelp_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
-                  <td className="text-left text-sm py-1">{data.yelp_phone_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_phone_score} / {YELP_PHONE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.yelp_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.yelp_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
-                  <td className="text-left text-sm py-1">{data.yelp_address_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_address_score} / {YELP_ADDRESS_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.yelp_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.yelp_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
-                  <td className="text-left text-sm py-1">{data.yelp_state_score}</td>
+                  <td className="text-left text-sm py-1">{data.yelp_state_score} / {YELP_STATE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.yelp_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.yelp_state}</td>
@@ -249,14 +288,14 @@ export default function Data({ params }) {
             <tbody className="">
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
-                  <td className="text-left text-sm py-1">{data.google_name_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_name_score} / {GOOGLE_NAME_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.google_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.google_name}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Category</td>
-                  <td className="text-left text-sm py-1">{data.google_category_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_category_score} / {GOOGLE_CATEGORY_VALUE}</td>
                   {data.google_category_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -275,7 +314,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Description</td>
-                  <td className="text-left text-sm py-1">{data.google_description_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_description_score} / {GOOGLE_ABOUT_VALUE}</td>
                   {data.google_description_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -291,7 +330,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Schedule</td>
-                  <td className="text-left text-sm py-1">{data.google_schedule_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_schedule_score} / {GOOGLE_SCHEDULE_VALUE}</td>
                   {data.google_schedule_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -307,28 +346,28 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
-                  <td className="text-left text-sm py-1">{data.google_webpage_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_webpage_score} / {GOOGLE_WEBPAGE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.google_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.google_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
-                  <td className="text-left text-sm py-1">{data.google_phone_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_phone_score} / {GOOGLE_PHONE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.google_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.google_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
-                  <td className="text-left text-sm py-1">{data.google_address_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_address_score} / {GOOGLE_ADDRESS_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.google_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.google_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
-                  <td className="text-left text-sm py-1">{data.google_state_score}</td>
+                  <td className="text-left text-sm py-1">{data.google_state_score} / {GOOGLE_STATE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.google_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.google_state}</td>
@@ -368,14 +407,14 @@ export default function Data({ params }) {
             <tbody className="">
                 <tr>
                   <td className="text-left text-sm py-1">Name</td>
-                  <td className="text-left text-sm py-1">{data.apple_name_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_name_score} / {APPLE_NAME_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.apple_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
                   <td className="text-left text-sm py-1">{data.apple_name}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Category</td>
-                  <td className="text-left text-sm py-1">{data.apple_category_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_category_score} / {APPLE_CATEGORY_VALUE}</td>
                   {data.apple_category_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -394,7 +433,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Description</td>
-                  <td className="text-left text-sm py-1">{data.apple_description_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_description_score} / {APPLE_ABOUT_VALUE}</td>
                   {data.apple_description_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -410,7 +449,7 @@ export default function Data({ params }) {
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Schedule</td>
-                  <td className="text-left text-sm py-1">{data.apple_schedule_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_schedule_score} / {APPLE_SCHEDULE_VALUE}</td>
                   {data.apple_schedule_score > 0 && (
                     <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                   )}
@@ -426,28 +465,28 @@ export default function Data({ params }) {
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Webpage</td>
-                  <td className="text-left text-sm py-1">{data.apple_webpage_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_webpage_score} / {APPLE_WEBPAGE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.apple_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.webpage}</td>
                   <td className="text-left text-sm py-1">{data.apple_webpage}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">Phone</td>
-                  <td className="text-left text-sm py-1">{data.apple_phone_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_phone_score} / {APPLE_PHONE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.apple_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.phone}</td>
                   <td className="text-left text-sm py-1">{data.apple_phone}</td>
                 </tr>
                 <tr>
                   <td className="text-left text-sm py-1">Address</td>
-                  <td className="text-left text-sm py-1">{data.apple_address_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_address_score} / {APPLE_ADDRESS_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.apple_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                   <td className="text-left text-sm py-1">{data.address}</td>
                   <td className="text-left text-sm py-1">{data.apple_address}</td>
                 </tr>
                 <tr className="bg-gray-100">
                   <td className="text-left text-sm py-1">State</td>
-                  <td className="text-left text-sm py-1">{data.apple_state_score}</td>
+                  <td className="text-left text-sm py-1">{data.apple_state_score} / {APPLE_STATE_VALUE}</td>
                   <td className="text-left text-sm py-1">{data.apple_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                   <td className="text-left text-sm py-1">{data.state}</td>
                   <td className="text-left text-sm py-1">{data.apple_state}</td>
@@ -488,14 +527,14 @@ export default function Data({ params }) {
               <tbody className="">
                   <tr>
                     <td className="text-left text-sm py-1">Instagram Name</td>
-                    <td className="text-left text-sm py-1">{data.instagram_name_score}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_name_score} / {SOCIAL_INSTAGRAM_NAME_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.instagram_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                     <td className="text-left text-sm py-1">{data.name}</td>
                     <td className="text-left text-sm py-1">{data.instagram_name}</td>
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="text-left text-sm py-1">Instagram Category</td>
-                    <td className="text-left text-sm py-1">{data.instagram_category_score}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_category_score} / {SOCIAL_INSTAGRAM_CATEGORY_VALUE}</td>
                     {data.instagram_category_score > 0 && (
                       <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                     )}
@@ -509,7 +548,7 @@ export default function Data({ params }) {
                   </tr>
                   <tr>
                     <td className="text-left text-sm py-1">Instagram Webpage</td>
-                    <td className="text-left text-sm py-1">{data.instagram_webpage_score}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_webpage_score} / {SOCIAL_INSTAGRAM_WEBPAGE_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.instagram_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                     <td className="text-left text-sm py-1">{data.webpage}</td>
                     <td className="text-left text-sm py-1">{data.instagram_webpage}</td>
@@ -517,14 +556,14 @@ export default function Data({ params }) {
 
                   <tr className="bg-gray-100">
                     <td className="text-left text-sm py-1">Facebook Name</td>
-                    <td className="text-left text-sm py-1">{data.facebook_name_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_name_score} / {SOCIAL_FACEBOOK_NAME_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.facebook_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                     <td className="text-left text-sm py-1">{data.name}</td>
                     <td className="text-left text-sm py-1">{data.facebook_name}</td>
                   </tr>
                   <tr>
                     <td className="text-left text-sm py-1">Facebook Category</td>
-                    <td className="text-left text-sm py-1">{data.facebook_category_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_category_score} / {SOCIAL_FACEBOOK_CATEGORY_VALUE}</td>
                     {data.facebook_category_score > 0 && (
                       <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                     )}
@@ -543,14 +582,14 @@ export default function Data({ params }) {
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="text-left text-sm py-1">Facebook Webpage</td>
-                    <td className="text-left text-sm py-1">{data.facebook_webpage_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_webpage_score} / {SOCIAL_FACEBOOK_WEBPAGE_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.facebook_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                     <td className="text-left text-sm py-1">{data.webpage}</td>
                     <td className="text-left text-sm py-1">{data.facebook_webpage}</td>
                   </tr>
                   <tr>
                     <td className="text-left text-sm py-1">Facebook Info</td>
-                    <td className="text-left text-sm py-1">{data.facebook_info_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_info_score} / {SOCIAL_FACEBOOK_INFO_VALUE}</td>
                     {data.facebook_info_score > 0 && (
                       <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                     )}
@@ -571,25 +610,32 @@ export default function Data({ params }) {
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="text-left text-sm py-1">Facebook Phone</td>
-                    <td className="text-left text-sm py-1">{data.facebook_phone_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_phone_score} / {SOCIAL_FACEBOOK_PHONE_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.facebook_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
                     <td className="text-left text-sm py-1">{data.phone}</td>
                     <td className="text-left text-sm py-1">{data.facebook_phone}</td>
                   </tr>
                   <tr>
                     <td className="text-left text-sm py-1">Facebook Address</td>
-                    <td className="text-left text-sm py-1">{data.facebook_address_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_address_score} / {SOCIAL_FACEBOOK_ADDRESS_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.facebook_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                     <td className="text-left text-sm py-1">{data.address}</td>
                     <td className="text-left text-sm py-1">{data.facebook_address}</td>
                   </tr>
                   <tr className="bg-gray-100">
                     <td className="text-left text-sm py-1">Facebook State</td>
-                    <td className="text-left text-sm py-1">{data.facebook_state_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_state_score} / {SOCIAL_FACEBOOK_STATE_VALUE}</td>
                     <td className="text-left text-sm py-1">{data.facebook_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
                     <td className="text-left text-sm py-1">{data.state}</td>
                     <td className="text-left text-sm py-1">{data.facebook_state}</td>
                   </tr>
+                  <tr>
+                  <td className="text-left font-bold">Total</td>
+                  <td className="text-left font-bold">{data.social_clarity_score}</td>
+                  <td className="text-left"></td>
+                  <td className="text-left"></td>
+                  <td className="text-left"></td>
+                </tr>
               </tbody>
             </table>
 
