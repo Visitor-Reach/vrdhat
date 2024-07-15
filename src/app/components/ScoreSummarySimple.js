@@ -1,74 +1,88 @@
-import Circularbar1 from "../components/Circularbar1";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const ScoreBar = ({ score, avgscore, label }) => {
-  const score_percentage = (score / 250) * 100;
-  const avgscore_percentage = (avgscore / 250) * 100;
-  let barColor = 'bg-red-500';
-  let avgbarColor = 'bg-red-500';
+  const [scorePercentage, setScorePercentage] = useState(0)
+  const [avgScorePercentage, setAvgScorePercentage] = useState(0)
+  const [barColor, setBarColor] = useState('bg-[#2246E2]')
+  const [avgBarColor, setAvgBarColor] = useState('bg-[#2246E2]')
+  const [scorePosition, setScorePosition] = useState('0%')
+  const [avgScorePosition, setAvgScorePosition] = useState('0%')
 
+  useEffect(() => {
+    setScorePercentage((score / 250) * 100)
+    setAvgScorePercentage((avgscore / 250) * 100)
+    setBarColor(getBarColor(scorePercentage))
+  }, [score, avgscore])
 
-  if (score_percentage >= 75) {
-    barColor = 'bg-[#2246E2]';
-  } else if (score_percentage >= 50) {
-    barColor = 'bg-orange-500';
+  useEffect(() => {
+    const color = getBarColor(scorePercentage)
+    console.log(color)
+    setBarColor(color)
+    setScorePosition(`${scorePercentage-5}%`)
+    setAvgScorePosition(`${avgScorePercentage-5}%`)
+  }, [scorePercentage, avgScorePercentage])
+
+  function getBarColor(value) {
+    console.log(value)
+    if (value <= 20) {
+      return '#E23D3E';
+    } else if (value <= 40) {
+      return '#EB7E5C';
+    } else if (value <= 60) {
+      return '#F7C780';
+    } else if (value <= 80) {
+      return '#A8D281';
+    } else {
+      return '#4FDD83';
+    }
   }
-
-  if (avgscore_percentage >= 75) {
-    avgbarColor = 'bg-[#2246E2]';
-  } else if (avgscore_percentage >= 50) {
-    avgbarColor = 'bg-orange-500';
-  }
-
-  const scorePosition = `${score_percentage-5}%`;
-  const avgscorePosition = `${avgscore_percentage-5}%`;
 
   return (
-<div className="mb-0 grid grid-cols-2 gap-5 mt-3 w-full">
-  <div className="grid place-items-end">
-    <span className="text-slate-800 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px] relative top-[12px]">
-      {label}
-    </span>
-    <span className="text-slate-400 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px]">
-      Visitor Reach Church Average
-    </span>
-  </div>
-  <div className="">
-    <div className="h-[28px]">
-      <span
-        className="text-black relative text-sm text-semibold"
-        style={{ left: scorePosition, top: "10px" }}
-      >
-        {score}
-      </span>
-      <div className="grid place-items-center mb-0 h-5 m-auto">
-        <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
-          <div
-            className={`h-full rounded-l-full ${barColor} mb-5`}
-            style={{ width: `${score_percentage}%` }}
-          ></div>
+    <div className="mb-0 grid grid-cols-2 gap-5 mt-3 w-full">
+      <div className="grid place-items-end">
+        <span className="text-slate-800 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px] relative top-[12px]">
+          {label}
+        </span>
+        <span className="text-slate-400 w-full block font-[400] text-[15px] leading-[150%] tracking-[-0.6px]">
+          Visitor Reach Church Average
+        </span>
+      </div>
+      <div className="">
+        <div className="h-[28px]">
+          <span
+            className="text-black relative text-sm text-semibold"
+            style={{ left: scorePosition, top: "10px" }}
+          >
+            {score}
+          </span>
+          <div className="grid place-items-center mb-0 h-5 m-auto">
+            <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
+              <div
+                className={`h-full rounded-l-full bg-[${barColor}] mb-5`}
+                style={{ width: `${scorePercentage}%` }}
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div className="">
+          <span
+            className="text-black relative text-sm text-semibold"
+            style={{ left: avgScorePosition, top: "10px" }}
+          >
+            {avgscore}
+          </span>
+          <div className="grid place-items-center mb-0 h-5 m-auto">
+            <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
+              <div
+                className={`h-full rounded-l-full ${avgBarColor} mb-0`}
+                style={{ width: `${avgScorePercentage}%` }}
+              ></div>
+            </div>
+          </div>
         </div>
       </div>
+      
     </div>
-    <div className="">
-      <span
-        className="text-black relative text-sm text-semibold"
-        style={{ left: avgscorePosition, top: "10px" }}
-      >
-        {avgscore}
-      </span>
-      <div className="grid place-items-center mb-0 h-5 m-auto">
-        <div className="h-[8px] bg-gray-300 rounded-full w-full overflow-hidden relative">
-          <div
-            className={`h-full rounded-l-full ${avgbarColor} mb-0`}
-            style={{ width: `${avgscore_percentage}%` }}
-          ></div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-</div>
   );
 };
 
@@ -117,5 +131,6 @@ const ScoreSummarySimple = ({
     </div>
   );
 };
+
 
 export default ScoreSummarySimple;
