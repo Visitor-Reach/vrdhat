@@ -10,7 +10,16 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 
 export default function Page() {
-  const church_sizes = ['0-100', '100-300', '300-500', '500-1000', '+1000', '2,000-4,999', '5,000-9,999', '10,000+']
+  const church_sizes = [
+    {label:'1-100', value: '0-100'}, 
+    {label:'100-300', value:'100-300'},
+    {label:'300-500', value:'300-500'},
+    {label:'500-1000', value:'500-1000'},
+    {label:'+1000', value:'+1000'},
+    {label:'2,000-4,999', value:'2,000-2,999'}, 
+    {label:'5,000-9,999', value:'5,000-9,999'},
+    {label:'10,000+', value:'10,000-19,999'}
+  ]
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -410,9 +419,9 @@ export default function Page() {
                     <div className="relative phone:w-full tablet-vertical:w-full flex flex-row items-center">
                       <select className="form-page-input appearance-none" name="churchSize" onBlur={onInputBlur}>
                         <option value=""> Church Size </option>
-                        {church_sizes.map((church_sizes) => (
-                          <option key={church_sizes} value={church_sizes}>
-                            {church_sizes}
+                        {church_sizes.map((size) => (
+                          <option key={size.value} value={size.value}>
+                            {size.label}
                           </option>
                         ))}
                       </select>
