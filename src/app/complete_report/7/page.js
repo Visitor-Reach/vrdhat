@@ -100,7 +100,7 @@ export default function CompleteReportPage7() {
                 <Circularbar
                   value={digitalVoice + googleMaps + appleMaps + socialClarity + websiteAuthority}
                   title={undefined}
-                  max_value={750}
+                  max_value={1000}
                 />
               </div>
               <h2 className="text-[#75778B] text-[18px] font-regular w-[352px] m-auto mt-[10px] text-center leading-[143%] tracking-[-0.7px]">

@@ -44,7 +44,7 @@ def fix_links(church_name):
 
 
 def generate(church_name, id):
-    dirs = [1, 2, 3, 4, 6, 7, 8, 9]
+    dirs = [1, 2, 3, 4, 5, 6, 7, 8, 9]
     church_name = church_name.lower().replace(" ", "_")
     church_name = re.sub(r'[^\w\s]', '', church_name)
 
@@ -69,6 +69,7 @@ def generate(church_name, id):
         f"{church_name}/page2.pdf",
         f"{church_name}/page3.pdf",
         f"{church_name}/page4.pdf",
+        f"{church_name}/page5.pdf",
         f"{church_name}/page6.pdf",
         f"{church_name}/page7.pdf",
         f"{church_name}/page8.pdf",

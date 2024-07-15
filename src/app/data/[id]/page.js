@@ -511,7 +511,7 @@ export default function Data({ params }) {
                 </tr>
 
                 <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Facbook Name</td>
+                  <td className="text-left text-sm py-1">Facebook Name</td>
                   <td className="text-left text-sm py-1">{data.facebook_name_score}</td>
                   <td className="text-left text-sm py-1">{data.facebook_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
                   <td className="text-left text-sm py-1">{data.name}</td>
