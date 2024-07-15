@@ -681,7 +681,7 @@ class church:
         name_similarity_value = self.name_similarity(self.apple_name)
         self.apple_name_similarity_score = name_similarity_value
         self.apple_name_score = APPLE_NAME_VALUE * (name_similarity_value > 95)
-        if self.apple_name_score == 0 and self.apple_name in self.name:
+        if self.apple_name_score == 0 and self.name in self.apple_name:
             self.apple_name_score = APPLE_NAME_VALUE
         return self.apple_name_score
 
