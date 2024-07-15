@@ -1,5 +1,5 @@
-import React from 'react';
 import Circularbar1 from "../components/Circularbar1";
+import React from 'react';
 
 const ScoreBar = ({ score, avgscore, label }) => {
   const score_percentage = (score / 250) * 100;
@@ -88,7 +88,7 @@ const ScoreSummarySimple = ({
         <h2 className="m-4 text-black font-medium text-center text-[30px] leading-[115%] tracking-[-1.2px]">
           Digital Health Score Summary
         </h2>
-        <div className='mt-[50px]'>
+        <div className='mt-[20px]'>
           <div className='w-11/12 h-11/12 cl'>
             <ScoreBar
               score={digitalVoiceScore}
@@ -99,6 +99,11 @@ const ScoreSummarySimple = ({
               score={digitalMapsScore}
               avgscore={avgDigitalMapsScore}
               label="Digital Maps Score"
+            />
+            <ScoreBar
+              score={socialClarityScore}
+              avgscore={avgSocialClarityScore}
+              label="Social Clarity Score"
             />
             <ScoreBar
               score={websiteAuthorityScore}

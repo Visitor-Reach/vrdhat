@@ -229,6 +229,7 @@ class church:
         self.instagram_name_score = 0
         self.instagram_webpage_score = 0
         self.instagram_category_score = 0
+        self.instagram_score = 0
 
         self.facebook_data = []
         self.facebook_name_score = 0
@@ -238,6 +239,7 @@ class church:
         self.facebook_address_score = 0
         self.facebook_state_score = 0
         self.facebook_phone_score = 0
+        self.facebook_score = 0
 
         self.facebook_address = ""
         self.facebook_state = ""
@@ -1031,10 +1033,12 @@ class church:
         except Exception as e:
             print(e)
 
-        self.social_clarity_score += \
+        self.instagram_score = \
             self.instagram_name_score + \
             self.instagram_category_score + \
-            self.instagram_webpage_score + \
+            self.instagram_webpage_score
+        
+        self.facebook_score = \
             self.facebook_name_score + \
             self.facebook_category_score + \
             self.facebook_webpage_score + \
@@ -1042,6 +1046,9 @@ class church:
             self.facebook_address_score + \
             self.facebook_state_score + \
             self.facebook_phone_score
+        
+
+        self.social_clarity_score = self.instagram_score + self.facebook_score
         
     def get_instagram_name_score(self):
         self.instagram_name = self.instagram_data.get("fullName", "")

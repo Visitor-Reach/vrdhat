@@ -92,7 +92,7 @@ export default function CompleteReportPage6() {
         </div>
 
         <div className="flex items-center w-full gap-[20px] mt-[20px]">
-          <div className=" bg-[url('/bg-ct2-page5.png')] bg-auto w-[365px] h-[430px]  rounded-3xl overflow-hidden page-6-shadow-box-3">
+          <div className=" bg-[url('/bg-ct2-page5.png')] bg-auto w-[362px] h-[430px]  rounded-3xl overflow-hidden page-6-shadow-box-3">
             <div className="relative w-full h-[45vh] rounded-3xl pt-[40px]">
               <h1 className="text-white w-[234px] ml-10 text-[32px] font-medium leading-[130%] tracking-[-1.2px]">
                 9 out of 10 people will visit your church website before ever visiting in-person

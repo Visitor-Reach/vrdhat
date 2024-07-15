@@ -69,7 +69,7 @@ export default function CompleteReportPage3() {
                 </h2>
               </div>
 
-              <div className="bg-white w-[797px] h-[430px] rounded-3xl m-auto card-shadow bg-[url('/woman-background.png')] bg-cover overflow-hidden">
+              <div className="bg-white w-[797px] h-[430px] rounded-3xl mt-[20px] card-shadow bg-[url('/woman-background.png')] bg-cover overflow-hidden">
                 <div className="w-[797px] h-[430px] pt-[100px] page-3-box-gradient">
                   <h1 className="text-white w-2/3 ml-10 text-[80px] font-bold">57%</h1>
                   <h2 className="text-white w-[253px] ml-10 text-[20px] leading-[143%] tracking-[-0.8px]">

@@ -1,7 +1,6 @@
-import { useState } from 'react';
 import Image from "next/image";
 import Link from "next/link"
-
+import { useState } from 'react';
 
 export default function NavBar({user_key, map, page}) {
 
@@ -36,7 +35,20 @@ export default function NavBar({user_key, map, page}) {
                 <button style={ page === 4 ? { color: "#0179FF" } : {}} className='text-gray-500 text-[20px] text-[24px] font-[400] h-12 rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Digital Maps Score</button>
             </Link>
         </div>
-        
+        <div className='round-full w-full'>
+            {/*<Link className={'flex gap-[20px] items-center w-full h-[54px] px-[20px] rounded-[10px]' + (page === 4 ? " bg-[#E6F2FF] text-[#0179FF]" : "") } href={{pathname:"/complete_report/4?user_key="+user_key+"&map_key="+map}}>*/}
+            <Link className={'flex gap-[20px] items-center w-full h-[54px] px-[20px] rounded-[10px]' + (page === 5 ? " bg-[#E6F2FF] text-[#0179FF]" : "") } href={{pathname:""}} onClick={(e) => { e.preventDefault() }}>
+                <div className="w-[30px]">
+                    <Image
+                        src={ page === 5 ? "/img-navbar3-blue.png" : "/img-navbar3.png" }
+                        alt=" "
+                        height={400}
+                        width={400}
+                    />
+                </div>
+                <button style={ page === 5 ? { color: "#0179FF" } : {}} className='text-gray-500 text-[20px] text-[24px] font-[400] h-12 rounded-xl hover:bg-[#E6F2FF] hover:text-[#0179FF]'>Social Clarity Score</button>
+            </Link>
+        </div>
         <div className='round-full w-full'>
             {/*<Link className={'flex gap-[20px] items-center w-full h-[54px] px-[20px] rounded-[10px]' + (page === 6 ? " bg-[#E6F2FF] text-[#0179FF]" : "") } href={{pathname:"/complete_report/6?user_key="+user_key+"&map_key="+map}}>*/}
             <Link className={'flex gap-[20px] items-center w-full h-[54px] px-[20px] rounded-[10px]' + (page === 6 ? " bg-[#E6F2FF] text-[#0179FF]" : "") } href={{pathname:""}} >
