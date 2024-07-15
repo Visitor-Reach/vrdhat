@@ -5,7 +5,11 @@ import { useEffect, useState } from 'react'
 export default function Data({ params }) {
   const [data, setData] = useState(null)
 
-  const totalScoreRatio = (data?.digital_search_assesment_score/1000)
+  let maxScore = 750
+  if (data?.instagram_score != null) {
+    maxScore += 250
+  }
+  const totalScoreRatio = (data?.digital_search_assesment_score/maxScore)
   const voiceScoreRatio = (data?.voice_score/250)
   const googleMapsScoreRatio = (data?.google_maps_score/125)
   const appleMapsScoreRatio = (data?.apple_maps_score/125)
@@ -101,7 +105,7 @@ export default function Data({ params }) {
               {getLetterScore(totalScoreRatio)}
             </span>
           </h3>
-          <div className="text-xl font-bold mt-2">{data.digital_search_assesment_score} <span className="text-gray-400 font-normal">/ 1000</span></div>
+          <div className="text-xl font-bold mt-2">{data.digital_search_assesment_score} <span className="text-gray-400 font-normal">/ {maxScore}</span></div>
         </div>
 
         {/* Yelp */}
@@ -461,134 +465,136 @@ export default function Data({ params }) {
         </div>
 
         {/* Social Clarity */}
-        <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
-          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
-            Social Clarity Score
-            <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(appleMapsScoreRatio)}]`}>
-              {getLetterScore(socialClarityScoreRatio)}
-            </span>
-          </h3>
-          <div className="text-lg font-bold my-2">{data.social_clarity_score} <span className="text-gray-400 font-normal">/ 250</span></div>
+        {data.instagram_score != null && (
+          <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
+            <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+              Social Clarity Score
+              <span className={`ml-3 inline-block rounded-full w-[24px] h-[24px] text-white text-center align-middle bg-[${getGradientColor(socialClarityScoreRatio)}]`}>
+                {getLetterScore(socialClarityScoreRatio)}
+              </span>
+            </h3>
+            <div className="text-lg font-bold my-2">{data.social_clarity_score} <span className="text-gray-400 font-normal">/ 250</span></div>
 
-          <table className="text-gray-700 w-full">
-            <thead>
-              <tr>
-                <th className="w-1/5 text-left text-sm py-1">Social Property</th>
-                <th className="w-1/12 text-left text-sm py-1">Score</th>
-                <th className="w-1/12 text-left text-sm py-1">Similarity</th>
-                <th className="w-1/4 text-left text-sm py-1">Expected</th>
-                <th className="w-1/4 text-left text-sm py-1">Actual <span className="font-normal text-gray-400">(Social Media)</span></th>
-              </tr>
-            </thead>
-            <tbody className="">
+            <table className="text-gray-700 w-full">
+              <thead>
                 <tr>
-                  <td className="text-left text-sm py-1">Instagram Name</td>
-                  <td className="text-left text-sm py-1">{data.instagram_name_score}</td>
-                  <td className="text-left text-sm py-1">{data.instagram_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
-                  <td className="text-left text-sm py-1">{data.name}</td>
-                  <td className="text-left text-sm py-1">{data.instagram_name}</td>
+                  <th className="w-1/5 text-left text-sm py-1">Social Property</th>
+                  <th className="w-1/12 text-left text-sm py-1">Score</th>
+                  <th className="w-1/12 text-left text-sm py-1">Similarity</th>
+                  <th className="w-1/4 text-left text-sm py-1">Expected</th>
+                  <th className="w-1/4 text-left text-sm py-1">Actual <span className="font-normal text-gray-400">(Social Media)</span></th>
                 </tr>
-                <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Instagram Category</td>
-                  <td className="text-left text-sm py-1">{data.instagram_category_score}</td>
-                  {data.instagram_category_score > 0 && (
-                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
-                  )}
-                  {data.instagram_category_score == 0 && (
-                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
-                  )}
-                  <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
-                  <td className="text-left text-sm py-1 max-w-[200px]">
-                      <div>{data.instagram_data.businessCategoryName}</div>
-                  </td>
-                </tr>
-                <tr>
-                  <td className="text-left text-sm py-1">Instagram Webpage</td>
-                  <td className="text-left text-sm py-1">{data.instagram_webpage_score}</td>
-                  <td className="text-left text-sm py-1">{data.instagram_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
-                  <td className="text-left text-sm py-1">{data.webpage}</td>
-                  <td className="text-left text-sm py-1">{data.instagram_webpage}</td>
-                </tr>
+              </thead>
+              <tbody className="">
+                  <tr>
+                    <td className="text-left text-sm py-1">Instagram Name</td>
+                    <td className="text-left text-sm py-1">{data.instagram_name_score}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
+                    <td className="text-left text-sm py-1">{data.name}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_name}</td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="text-left text-sm py-1">Instagram Category</td>
+                    <td className="text-left text-sm py-1">{data.instagram_category_score}</td>
+                    {data.instagram_category_score > 0 && (
+                      <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
+                    )}
+                    {data.instagram_category_score == 0 && (
+                      <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
+                    )}
+                    <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
+                    <td className="text-left text-sm py-1 max-w-[200px]">
+                        <div>{data.instagram_data.businessCategoryName}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td className="text-left text-sm py-1">Instagram Webpage</td>
+                    <td className="text-left text-sm py-1">{data.instagram_webpage_score}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                    <td className="text-left text-sm py-1">{data.webpage}</td>
+                    <td className="text-left text-sm py-1">{data.instagram_webpage}</td>
+                  </tr>
 
-                <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Facebook Name</td>
-                  <td className="text-left text-sm py-1">{data.facebook_name_score}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
-                  <td className="text-left text-sm py-1">{data.name}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_name}</td>
-                </tr>
-                <tr>
-                  <td className="text-left text-sm py-1">Facebook Category</td>
-                  <td className="text-left text-sm py-1">{data.facebook_category_score}</td>
-                  {data.facebook_category_score > 0 && (
-                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
-                  )}
-                  {data.facebook_category_score == 0 && (
-                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
-                  )}
-                  <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
-                  <td className="text-left text-sm py-1 max-w-[200px]">
-                    {data.facebook_categories?.length >= 3 && (
-                      <div className="inline truncate" title={data.facebook_categories.join(', ')}>List (hover to view)</div>
+                  <tr className="bg-gray-100">
+                    <td className="text-left text-sm py-1">Facebook Name</td>
+                    <td className="text-left text-sm py-1">{data.facebook_name_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_name_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95) *</span></td>
+                    <td className="text-left text-sm py-1">{data.name}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_name}</td>
+                  </tr>
+                  <tr>
+                    <td className="text-left text-sm py-1">Facebook Category</td>
+                    <td className="text-left text-sm py-1">{data.facebook_category_score}</td>
+                    {data.facebook_category_score > 0 && (
+                      <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                     )}
-                    {data.facebook_categories?.length < 3 && (
-                      <div>{data.facebook_categories.join(', ')}</div>
+                    {data.facebook_category_score == 0 && (
+                      <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
                     )}
-                  </td>
-                </tr>
-                <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Facebook Webpage</td>
-                  <td className="text-left text-sm py-1">{data.facebook_webpage_score}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
-                  <td className="text-left text-sm py-1">{data.webpage}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_webpage}</td>
-                </tr>
-                <tr>
-                  <td className="text-left text-sm py-1">Facebook Info</td>
-                  <td className="text-left text-sm py-1">{data.facebook_info_score}</td>
-                  {data.facebook_info_score > 0 && (
-                    <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
-                  )}
-                  {data.facebook_info_score == 0 && (
-                    <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
-                  )}
-                  <td className="text-left text-sm py-1 max-w-[200px]">
-                    <div className="truncate">Contains church name</div>
-                  </td>
-                  <td className="text-left text-sm py-1 max-w-[200px]">
-                    {data.facebook_info?.length >= 3 && (
-                      <div className="inline truncate" title={data.facebook_info.join(', ')}>List (hover to view)</div>
+                    <td className="text-left text-sm py-1">Contains 'church' or 'religious'</td>
+                    <td className="text-left text-sm py-1 max-w-[200px]">
+                      {data.facebook_categories?.length >= 3 && (
+                        <div className="inline truncate" title={data.facebook_categories.join(', ')}>List (hover to view)</div>
+                      )}
+                      {data.facebook_categories?.length < 3 && (
+                        <div>{data.facebook_categories.join(', ')}</div>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="text-left text-sm py-1">Facebook Webpage</td>
+                    <td className="text-left text-sm py-1">{data.facebook_webpage_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_webpage_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                    <td className="text-left text-sm py-1">{data.webpage}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_webpage}</td>
+                  </tr>
+                  <tr>
+                    <td className="text-left text-sm py-1">Facebook Info</td>
+                    <td className="text-left text-sm py-1">{data.facebook_info_score}</td>
+                    {data.facebook_info_score > 0 && (
+                      <td className="text-left text-sm py-1 text-green-600">&#10003;</td>
                     )}
-                    {data.facebook_info?.length < 3 && (
-                      <div>{data.facebook_info.join(', ')}</div>
+                    {data.facebook_info_score == 0 && (
+                      <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
                     )}
-                  </td>
-                </tr>
-                <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Facebook Phone</td>
-                  <td className="text-left text-sm py-1">{data.facebook_phone_score}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
-                  <td className="text-left text-sm py-1">{data.phone}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_phone}</td>
-                </tr>
-                <tr>
-                  <td className="text-left text-sm py-1">Facebook Address</td>
-                  <td className="text-left text-sm py-1">{data.facebook_address_score}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
-                  <td className="text-left text-sm py-1">{data.address}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_address}</td>
-                </tr>
-                <tr className="bg-gray-100">
-                  <td className="text-left text-sm py-1">Facebook State</td>
-                  <td className="text-left text-sm py-1">{data.facebook_state_score}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
-                  <td className="text-left text-sm py-1">{data.state}</td>
-                  <td className="text-left text-sm py-1">{data.facebook_state}</td>
-                </tr>
-            </tbody>
-          </table>
+                    <td className="text-left text-sm py-1 max-w-[200px]">
+                      <div className="truncate">Contains church name</div>
+                    </td>
+                    <td className="text-left text-sm py-1 max-w-[200px]">
+                      {data.facebook_info?.length >= 3 && (
+                        <div className="inline truncate" title={data.facebook_info.join(', ')}>List (hover to view)</div>
+                      )}
+                      {data.facebook_info?.length < 3 && (
+                        <div>{data.facebook_info.join(', ')}</div>
+                      )}
+                    </td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="text-left text-sm py-1">Facebook Phone</td>
+                    <td className="text-left text-sm py-1">{data.facebook_phone_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_phone_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 95)</span></td>
+                    <td className="text-left text-sm py-1">{data.phone}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_phone}</td>
+                  </tr>
+                  <tr>
+                    <td className="text-left text-sm py-1">Facebook Address</td>
+                    <td className="text-left text-sm py-1">{data.facebook_address_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_address_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                    <td className="text-left text-sm py-1">{data.address}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_address}</td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="text-left text-sm py-1">Facebook State</td>
+                    <td className="text-left text-sm py-1">{data.facebook_state_score}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_state_similarity_score} <span className="font-normal text-gray-400 text-sm">(&gt;= 85)</span></td>
+                    <td className="text-left text-sm py-1">{data.state}</td>
+                    <td className="text-left text-sm py-1">{data.facebook_state}</td>
+                  </tr>
+              </tbody>
+            </table>
 
-        </div>
+          </div>
+        )}
 
       {/* Google Search 'church' near me */}
         <div className="rounded-lg border-gray-500 border-spacing-1 p-5 pt-3 my-3 shadow-sm bg-white">
