@@ -339,7 +339,7 @@ def handle_form_submission():
     church_obj.contact_role = json_data.get("role")
     church_obj.search_params = json_data.get("searchParams")
     church_obj.social_clarity_score = 0
-    church_obj.pdf_sent = 1
+    church_obj.pdf_sent = 0
 
     global volume_search_last_month
     try:
