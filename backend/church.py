@@ -540,7 +540,7 @@ class church:
         name_similarity_value = self.name_similarity(self.yelp_name)
         self.yelp_name_similarity_score = name_similarity_value
         self.yelp_name_score = YELP_NAME_VALUE * (name_similarity_value > 95)
-        if self.yelp_name_score == 0 and self.name in self.yelp_name:
+        if self.yelp_name_score == 0 and self.name.lower() in self.yelp_name.lower():
             self.yelp_name_score = YELP_NAME_VALUE
         return self.yelp_name_score
 
@@ -617,13 +617,13 @@ class church:
         name_similarity_value = self.name_similarity(self.google_name)
         self.google_name_similarity_score = name_similarity_value
         self.google_name_score = GOOGLE_NAME_VALUE * (name_similarity_value > 95)
-        if self.google_name_score == 0 and self.name in self.google_name:
+        if self.google_name_score == 0 and self.name.lower() in self.google_name.lower():
             self.google_name_score = GOOGLE_NAME_VALUE
         return self.google_name_score
 
     def get_google_category_score(self):
         for cat_element in self.google_category:
-            if "church" in cat_element.lower():
+            if "church" in cat_element.lower() or "religious" in cat_element.lower():
                 self.google_category_score = GOOGLE_CATEGORY_VALUE
                 return self.google_category_score
 
@@ -681,13 +681,13 @@ class church:
         name_similarity_value = self.name_similarity(self.apple_name)
         self.apple_name_similarity_score = name_similarity_value
         self.apple_name_score = APPLE_NAME_VALUE * (name_similarity_value > 95)
-        if self.apple_name_score == 0 and self.name in self.apple_name:
+        if self.apple_name_score == 0 and self.name.lower() in self.apple_name.lower():
             self.apple_name_score = APPLE_NAME_VALUE
         return self.apple_name_score
 
     def get_apple_category_score(self):
         for cat_element in self.apple_category:
-            if "church" in cat_element.lower():
+            if "church" in cat_element.lower() or "religious" in cat_element.lower():
                 self.apple_category_score = APPLE_CATEGORY_VALUE
                 return self.apple_category_score
 
@@ -957,7 +957,7 @@ class church:
             if self.name_similarity(result.get("title")) > 95:
                 self.domain_trust_score = 275 - result.get("position") * 25
                 break
-            if self.name in result.get("title"):
+            if self.name.lower() in result.get("title").lower():
                 self.domain_trust_score = 275 - result.get("position") * 25
                 break
         if self.domain_trust_score < 0:
@@ -1055,7 +1055,7 @@ class church:
         self.instagram_name = unquote(self.instagram_name).replace("’", "'")
         self.instagram_name_similarity_score = self.name_similarity(self.instagram_name)
         self.instagram_name_score = SOCIAL_INSTAGRAM_NAME_VALUE * (self.instagram_name_similarity_score > 95)
-        if self.instagram_name_score == 0 and self.name in self.instagram_name:
+        if self.instagram_name_score == 0 and self.name.lower() in self.instagram_name.lower():
             self.facebook_name_score = SOCIAL_INSTAGRAM_NAME_VALUE
 
     def get_instagram_category_score(self):
@@ -1076,7 +1076,7 @@ class church:
         self.facebook_name = unquote(self.facebook_name).replace("’", "'")
         self.facebook_name_similarity_score = self.name_similarity(self.facebook_name)
         self.facebook_name_score = SOCIAL_FACEBOOK_NAME_VALUE * (self.facebook_name_similarity_score > 95)
-        if self.facebook_name_score == 0 and self.name in self.facebook_name:
+        if self.facebook_name_score == 0 and self.name.lower() in self.facebook_name.lower():
             self.facebook_name_score = SOCIAL_FACEBOOK_NAME_VALUE
 
     def get_facebook_category_score(self):
@@ -1096,7 +1096,7 @@ class church:
     def get_facebook_info_score(self):
         self.facebook_info = self.facebook_data.get("info", [])
         for info in self.facebook_info:
-            if self.name in info:
+            if self.name.lower() in info.lower():
                 self.facebook_info_score = SOCIAL_FACEBOOK_INFO_VALUE
 
     def get_facebook_address_score(self):

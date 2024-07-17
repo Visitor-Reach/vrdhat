@@ -321,6 +321,7 @@ def handle_form_submission():
     # try:
     church_obj = church()
     json_data = request.get_json()
+    church_obj.form_submission = json_data
     church_obj.first_name = json_data.get("firstName")
     church_obj.last_name = json_data.get("lastName")
     church_obj.mobile_phone = json_data.get("mobilePhone")
@@ -333,12 +334,12 @@ def handle_form_submission():
     church_obj.zipcode = json_data.get("churchZipCode")
     church_obj.webpage = json_data.get("churchWebsite")
     church_obj.phone = json_data.get("churchPhone")
-    church_obj.facebook_profile = json_data.get("churchFacebook")
-    church_obj.instagram_profile = json_data.get("churchInstagram")
+    church_obj.facebook_profile = json_data.get("churchFacebook").replace("@", "")
+    church_obj.instagram_profile = json_data.get("churchInstagram").replace("@", "")
     church_obj.contact_role = json_data.get("role")
     church_obj.search_params = json_data.get("searchParams")
     church_obj.social_clarity_score = 0
-    church_obj.pdf_sent = 0
+    church_obj.pdf_sent = 1
 
     global volume_search_last_month
     try:

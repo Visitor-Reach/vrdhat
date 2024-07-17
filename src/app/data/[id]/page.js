@@ -185,7 +185,7 @@ export default function Data({ params }) {
                   {data.yelp_category_score == 0 && (
                     <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
                   )}
-                  <td className="text-left text-sm py-1">church</td>
+                  <td className="text-left text-sm py-1">'church' or 'religious'</td>
                   <td className="text-left text-sm py-1 max-w-[200px]">
                     {data.yelp_category?.length >= 3 && (
                       <div title={data.yelp_category.join(', ')} className="inline truncate">List (hover to view)</div>
@@ -302,7 +302,7 @@ export default function Data({ params }) {
                   {data.google_category_score == 0 && (
                     <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
                   )}
-                  <td className="text-left text-sm py-1">church</td>
+                  <td className="text-left text-sm py-1">'church' or 'religious'</td>
                   <td className="text-left text-sm py-1 max-w-[200px]">
                     {data.google_category?.length >= 3 && (
                       <div className="inline truncate" title={data.google_category.join(', ')}>List (hover to view)</div>
@@ -421,7 +421,7 @@ export default function Data({ params }) {
                   {data.apple_category_score == 0 && (
                     <td className="text-left text-sm py-1 text-red-500">&#10007;</td>
                   )}
-                  <td className="text-left text-sm py-1">church</td>
+                  <td className="text-left text-sm py-1">'church' or 'religious'</td>
                   <td className="text-left text-sm py-1 max-w-[200px]">
                     {data.apple_category?.length >= 3 && (
                         <div className="inline truncate" title={data.apple.category.join(', ')}>List (hover to view)</div>
