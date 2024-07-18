@@ -1,3 +1,4 @@
+import threading
 from flask import Flask, request, jsonify
 from flask_mail import Mail
 from flask_cors import CORS, cross_origin
@@ -339,34 +340,57 @@ def handle_form_submission():
     church_obj.contact_role = json_data.get("role")
     church_obj.search_params = json_data.get("searchParams")
     church_obj.social_clarity_score = 0
-    church_obj.pdf_sent = 0
-
-    global volume_search_last_month
-    try:
-        volume_search_last_month = metricas.start_historical(church_obj.city, church_obj.state)
-    except:
-        pass
-    church_obj.volume_search_last_month = volume_search_last_month
-
-    church_obj.get_digital_search_assesment_score()
-
-    church_obj.get_map_image()
-    church_obj.write_object_to_json()
+    church_obj.pdf_sent = -1
     church_obj.created_at = int(time.time())
 
+    # insert data into database
     data = {key: value for key, value in church_obj.__dict__.items()
                 if not callable(value)}
     object_id = db_manage.insert_User(data)
     id = str(object_id)
+    church_obj.id = id
+    print('Inserted run with id: ', id)
 
-    try:
-        contact_id, company_id = post_hubspot_data(church_obj)
-        db_manage.update_contact_company(id, contact_id, company_id)
-    except Exception as error:
-        print("Error: ", error)
+    # return the id of the inserted object
+    response = jsonify({"id": str(id)})
 
-    return jsonify({"id": str(id)})
+    def continue_processing(): 
+        global volume_search_last_month
+        try:
+            volume_search_last_month = metricas.start_historical(church_obj.city, church_obj.state)
+        except:
+            pass
+        church_obj.volume_search_last_month = volume_search_last_month
 
+        church_obj.get_digital_search_assesment_score()
+
+        # Update the database with the new scores
+        church_obj.process_status = 90
+        church_obj.process_status_message = "Saving results..."
+        updateRun(id, church_obj)
+
+        try:
+            contact_id, company_id = post_hubspot_data(church_obj)
+            db_manage.update_contact_company(id, contact_id, company_id)
+        except Exception as error:
+            print("Error: ", error)
+
+        church_obj.process_status = 100
+        church_obj.process_status_message = "Process complete."
+        church_obj.pdf_sent = 0
+        updateRun(id, church_obj)
+        print('Updated run process_status = 100, process_message = "Process complete."')
+
+    # Start the background thread
+    processing_thread = threading.Thread(target=continue_processing)
+    processing_thread.start()
+
+    return response
+
+def updateRun(id, data):
+    saveData = {key: value for key, value in data.__dict__.items()
+                if not callable(value)}
+    db_manage.update_User(id, saveData)
 
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
@@ -458,6 +482,16 @@ def fetch_run_data(jsonFile):
     except Exception as error_msg:
         print("Error: ", error_msg)
         return jsonify({'message': 'Error getting run data'}), 400
+
+@app.route('/api/fetch-status/<id>', methods=['GET'])
+@cross_origin()
+def fetch_status(id):
+    try:
+        info = db_manage.get_status(id)
+        return jsonify(info)
+    except Exception as error_msg:
+        print("Error: ", error_msg)
+        return jsonify({'message': 'Error getting status for id ' + id}), 400
 
 def is_valid_domain(domain):
     # Regular expression to validate domain name

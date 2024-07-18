@@ -13,6 +13,7 @@ from urllib.parse import quote, unquote
 import boto3
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+import db_manage
 
 
 states_dic = {
@@ -146,6 +147,8 @@ class church:
         self.data_file = ""
         self.search_params = ""
         self.pdf_sent = 0
+        self.process_status = 0
+        self.process_status_message = ""
 
         self.parsed_address = ""
         self.original_address = ""
@@ -255,6 +258,7 @@ class church:
         self.digital_search_assesment_score = 0
 
     def get_map_image(self):
+        db_manage.update_process_status(self.id, 10, "Getting map image...")
         if self.google_coordinates == "":
             return None
         
@@ -283,6 +287,7 @@ class church:
 
         os.remove(image_name)
         self.map_image = file_name
+        
         return file_name
         
     def get_weighted_average(self, request_result):
@@ -337,24 +342,28 @@ class church:
         return keywords
 
     def get_semrush_domain_organic_results(self):
-        print("Getting organic results")
+        db_manage.update_process_status(self.id, 5, "Getting organic search results...")
         url = "https://api.semrush.com/?type=domain_organic&key=" + SEMRUSH_API_KEY + \
             "&display_limit=10&export_columns=Ph,Po,Pp,Pd,Nq,Cp,Ur,Tr,Tc,Co,Nr,Td&domain=" + \
             self.webpage + "&display_sort=tr_desc&database=us"
         top_organic_results = requests.get(url)
         self.domain_organic_keywords = self.get_top_keywords(top_organic_results.text)
+        
         return self.domain_organic_keywords
 
     def get_digital_search_assesment_score(self):
+        db_manage.update_process_status(self.id, 5, "Getting initial data...")
         self.standarize_initial_address()
         self.set_coordinates()
+        self.get_semrush_domain_organic_results()
+        self.get_domain_trust_score()
+        self.get_maps_score()
+        self.get_map_image()
+        self.get_voice_score()
 
+        db_manage.update_process_status(self.id, 10, "Getting social media data (this can take some time)...")
         executors_list = []
         with ThreadPoolExecutor() as executor:
-            executors_list.append(executor.submit(self.get_semrush_domain_organic_results))
-            executors_list.append(executor.submit(self.get_domain_trust_score))
-            executors_list.append(executor.submit(self.get_maps_score))
-            executors_list.append(executor.submit(self.get_voice_score))
             executors_list.append(executor.submit(self.get_facebook_data, APIFY_TOKEN))
             executors_list.append(executor.submit(self.get_instagram_data, APIFY_TOKEN))
 
@@ -600,7 +609,7 @@ class church:
         self.get_yelp_state_score()
 
     def get_voice_score(self):
-        print("Getting voice score")
+        db_manage.update_process_status(self.id, 10, "Getting digital voice data...")
         self.get_yelp_score()
         self.voice_score += \
             self.yelp_name_score + \
@@ -611,6 +620,7 @@ class church:
             self.yelp_phone_score + \
             self.yelp_address_score + \
             self.yelp_state_score
+        
 
     def get_google_name_score(self):
         self.google_name = unquote(self.google_name).replace("’", "'")
@@ -740,7 +750,7 @@ class church:
         self.get_apple_state_score()
 
     def get_maps_score(self):
-        print("Getting maps score")
+        db_manage.update_process_status(self.id, 10, "Calculating maps scores...")
         self.get_google_score()
         self.get_apple_score()
         self.apple_maps_score += \
@@ -762,6 +772,7 @@ class church:
             self.google_address_score + \
             self.google_state_score
         self.maps_score += (self.apple_maps_score + self.google_maps_score)
+        
 
     def set_duckduckgo_maps_att(self):
         params = {
@@ -945,7 +956,7 @@ class church:
         return data
 
     def get_domain_trust_score(self):
-        print('Getting domain trust score')
+        db_manage.update_process_status(self.id, 10, "Getting website authority info...")
         url = f"https://serpapi.com/search?engine=google_maps&google_domain=google.com&q=church&ll=@{self.coordinates[0]},{self.coordinates[1]},15.1z&api_key={SERPAPI_API_KEY}&hl=en&type=search"
         response = requests.request("GET", url)
         results = response.json()
@@ -962,10 +973,10 @@ class church:
                 break
         if self.domain_trust_score < 0:
             self.domain_trust_score = 0
+
         return self.domain_trust_score
 
     def get_facebook_data(self, token):
-        print('Getting facebook data')
         if self.facebook_profile == "" or self.facebook_profile == None:
             return
         url = "https://api.apify.com/v2/acts/apify~facebook-pages-scraper/run-sync-get-dataset-items?token=" + token
@@ -981,12 +992,12 @@ class church:
             response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
             fb_results = response.json()
             self.facebook_data = fb_results
-            print('Got facebook data')
+            db_manage.update_process_status(self.id, 5, "Getting Instagram data...")
         except Exception as e:
             print(e)
+        
 
     def get_instagram_data(self, token):
-        print('Getting instagram data')
         if self.instagram_profile == "" or self.instagram_profile == None:
             return
         url = "https://api.apify.com/v2/acts/apify~instagram-profile-scraper/run-sync-get-dataset-items?token=" + token + "&omit=relatedProfiles,latestIgtvVideos,postsCount,latestPosts"
@@ -1002,11 +1013,12 @@ class church:
             response = requests.request("POST", url, headers=headers, data=payload, proxies=proxies, timeout=120)
             insta_results = response.json()
             self.instagram_data = insta_results
-            print('Got instagram data')
+            db_manage.update_process_status(self.id, 5, "Getting Facebook data...")
         except Exception as e:
             print(e)
 
     def get_social_clarity_score(self):
+        db_manage.update_process_status(self.id, 10, "Calculating social clarity score...")
         if self.instagram_data == None or len(self.instagram_data) == 0:
             return
         self.instagram_data = self.instagram_data[0]
@@ -1045,8 +1057,7 @@ class church:
             self.facebook_info_score + \
             self.facebook_address_score + \
             self.facebook_state_score + \
-            self.facebook_phone_score
-        
+            self.facebook_phone_score  
 
         self.social_clarity_score = self.instagram_score + self.facebook_score
         

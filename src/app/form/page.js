@@ -23,9 +23,10 @@ export default function Page() {
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [id, setId] = useState('')
+  const [id, setId] = useState('6698aad2ec3175955ea30464')
 
-  const progress = useRef(null)
+  const progressBar = useRef(null)
+  const progressMessage = useRef(null)
 
   const searchParams = useSearchParams().toString()
 
@@ -84,11 +85,27 @@ export default function Page() {
 
   useEffect(() => {
     if (submitted) {
-      const timeoutId = setTimeout(() => {
-        router.push('/user_report?id=' + id)
-      }, 8000)
+      const intervalId = setInterval(async() => {
+        const myHeaders = new Headers()
+        myHeaders.append('Content-Type', 'application/json')
+        myHeaders.append('Access-Control-Allow-Origin', '*')
+        const url = process.env.NEXT_PUBLIC_API_ROOT + '/api/fetch-status/' + id
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: myHeaders,
+        })
+        const data = await response.json()
+        if (data.process_status) {
+          progressBar.current.style.width = data.process_status + '%'
+          progressMessage.current.innerText = data.process_status_message
+          if (data.process_status >= 100) {
+            clearInterval(intervalId)
+            router.push('/user_report?id=' + id)
+          }
+        }
+      }, 1000)
 
-      return () => clearTimeout(timeoutId)
+      return () => clearInterval(intervalId)
     }
   }, [submitted])
 
@@ -258,23 +275,8 @@ export default function Page() {
     }
   }
 
-  function startProgressBar() {
-    // let fake_timer = 0
-    // const p = setInterval(() => {
-    //   fake_timer += 0.167
-    //   if (progress.current) {
-    //     progress.current.style.width = fake_timer + '%'
-    //   }
-    //   if (fake_timer >= 100) {
-    //     clearInterval(p)
-    //   }
-    // },100)
-  }
-
   async function onSubmit(event) {
     event.preventDefault()
-    startProgressBar()
-    
     try {
       setIsSubmitting(true)
       // reset field errors
@@ -326,7 +328,7 @@ export default function Page() {
 
       const data = await response.json()
       setId(data.id)
-
+      window.scrollTo(0, 0)
       setSubmitted(true)
     } catch (error) {
       console.error(error)
@@ -353,10 +355,10 @@ export default function Page() {
         {isSubmitting ? (
           <>
             <LoadingAnimation />
-            {/* <div id="progress-outer" className="w-full bg-gray-200 h-2 rounded-md mt-10">
-              <div ref={progress} id="progress-inner" className="bg-vr-title-second h-2 rounded-md w-1"></div>
+            <div id="progress-outer" className="w-full bg-gray-200 h-4 rounded-lg mt-10">
+              <div ref={progressBar} id="progress-inner" className="bg-vr-title-second h-4 rounded-lg w-0"></div>
             </div>
-            <div className="text-center text-md text-gray-400">Calculating...</div> */}
+            <div ref={progressMessage} className="text-center text-md text-gray-400 mt-2"></div>
           </>
         ) : (
           <form onSubmit={onSubmit}>
