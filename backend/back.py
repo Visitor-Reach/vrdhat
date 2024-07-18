@@ -14,6 +14,7 @@ import tldextract
 from urllib.parse import parse_qs
 from bson import json_util
 import re
+from urllib.parse import urlparse, urlunparse
 
 HUBSPOT_API_KEY = os.environ.get('HUBSPOT_API_KEY')
 APIFY_TOKEN = "apify_api_iAg7arHnPeftRg9PVFbS1w3bhPwb1d2lxtPH"
@@ -333,15 +334,15 @@ def handle_form_submission():
     church_obj.city = json_data.get("churchCity")
     church_obj.state = json_data.get("churchState")
     church_obj.zipcode = json_data.get("churchZipCode")
-    church_obj.webpage = json_data.get("churchWebsite")
     church_obj.phone = json_data.get("churchPhone")
-    church_obj.facebook_profile = json_data.get("churchFacebook").replace("@", "")
-    church_obj.instagram_profile = json_data.get("churchInstagram").replace("@", "")
+    church_obj.facebook_profile = cleanSocialHandle(json_data.get("churchFacebook"))
+    church_obj.instagram_profile = cleanSocialHandle(json_data.get("churchInstagram"))
     church_obj.contact_role = json_data.get("role")
     church_obj.search_params = json_data.get("searchParams")
     church_obj.social_clarity_score = 0
     church_obj.pdf_sent = -1
     church_obj.created_at = int(time.time())
+    church_obj.webpage = stripQueryString(json_data.get("churchWebsite"))
 
     # insert data into database
     data = {key: value for key, value in church_obj.__dict__.items()
@@ -391,6 +392,16 @@ def updateRun(id, data):
     saveData = {key: value for key, value in data.__dict__.items()
                 if not callable(value)}
     db_manage.update_User(id, saveData)
+
+def stripQueryString(url):
+    parsed_url = urlparse(url)
+    trimmed_url = urlunparse(parsed_url._replace(query=''))
+    return trimmed_url
+
+def cleanSocialHandle(handle):
+    if handle is None:
+        return ""
+    return handle.replace('https://www.facebook.com/', '').replace('https://www.instagram.com/', '').replace("@", "").replace("/", "")
 
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
