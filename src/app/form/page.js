@@ -23,7 +23,7 @@ export default function Page() {
   const router = useRouter()
   const [submitted, setSubmitted] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [id, setId] = useState('6698aad2ec3175955ea30464')
+  const [id, setId] = useState('')
 
   const progressBar = useRef(null)
   const progressMessage = useRef(null)

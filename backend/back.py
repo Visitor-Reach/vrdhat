@@ -417,7 +417,7 @@ def fetch_data(id):
             'vrVoice': 225,
             'vrMaps': 235,
             'vrSocial': 195,
-            'vrWebsite': 205,
+            'vrWebsite': 250,
         }
 
         return jsonify(response_json)

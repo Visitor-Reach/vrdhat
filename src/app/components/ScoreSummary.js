@@ -5,7 +5,7 @@ const ScoreBar = ({ score, avgscore, label }) => {
   const score_percentage = (score / 250) * 100
   const avgscore_percentage = (avgscore / 250) * 100
   let barColor = 'bg-red-500'
-  let avgbarColor = 'bg-red-500'
+  let avgbarColor = 'bg-[#2246E2]'
 
   if (score_percentage <= 20) {
     barColor = 'bg-[#E23D3E]'
@@ -17,18 +17,6 @@ const ScoreBar = ({ score, avgscore, label }) => {
     barColor = 'bg-[#A8D281]'
   } else {
     barColor = 'bg-[#4FDD83]'
-  }
-
-  if (avgscore_percentage <= 20) {
-    avgbarColor = 'bg-[#E23D3E]'
-  } else if (avgscore_percentage <= 40) {
-    avgbarColor = 'bg-[#EB7E5C]'
-  } else if (avgscore_percentage <= 60) {
-    avgbarColor = 'bg-[#F7C780]'
-  } else if (avgscore_percentage <= 80) {
-    avgbarColor = 'bg-[#A8D281]'
-  } else {
-    avgbarColor = 'bg-[#4FDD83]'
   }
 
   const scorePosition = `${score_percentage - 5}%`

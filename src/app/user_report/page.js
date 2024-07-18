@@ -72,7 +72,7 @@ export default function SimpleResult() {
               </span>
             </p>
           </div>
-          <div className="m-auto mb-20  text-center  pt-10  w-full">
+          <div className="m-auto mb-12  text-center  pt-10  w-full">
             <p className="text-xl text-vr-body-color font-medium block text-pretty">
               Did you know there are{' '}
               <span className="text-xl text-vr-title-second font-medium">{last_month_searches} </span> Google searches
@@ -85,7 +85,7 @@ export default function SimpleResult() {
             </p>
           </div>
 
-          <div className="max-md:w-full w-[85vw] flex justify-center items-center m-auto" style={{ zoom: '0.9' }}>
+          <div className="max-md:w-full w-[85vw] flex justify-center items-center m-auto scale-90">
             <ScoreSummary
               digitalVoiceScore={digitalVoice}
               digitalMapsScore={googleMaps + appleMaps}
