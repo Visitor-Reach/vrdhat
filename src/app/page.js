@@ -22,7 +22,9 @@ export default function Home() {
       </div>
 
       <div className="relative top-2 h-14">
-        <Image src={'Logo-2.svg'} alt="VR Logo" width={500} height={500} className="origin-top-left scale-50" />
+        <a href="https://visitorreach.com" className="inline-block">
+          <Image src={'Logo-2.svg'} alt="VR Logo" width={500} height={500} className="origin-top-left scale-50" />
+        </a>
       </div>
 
       <div className="relative m-6 mt-10 sm:mt-16">
