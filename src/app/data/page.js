@@ -14,8 +14,8 @@ export default function Data() {
 
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const page = searchParams.get("page") || 1
-  const pageSize = searchParams.get("page_size") || 15
+  const page = parseInt(searchParams.get("page")) || 1
+  const pageSize = parseInt(searchParams.get("page_size")) || 15
 
   const createQueryString = useCallback(
     (name, value) => {
@@ -36,7 +36,29 @@ export default function Data() {
   const start = 1 + (page - 1) * pageSize
   const end = start + data.length - 1
   const totalPages = Math.ceil(total / pageSize)
-  const pageNumbers = Array.from({length: totalPages}, (_, i) => i + 1)
+  
+  const pageNumbers = getPageNumbers(pageSize, totalPages, page)
+
+  function getPageNumbers(pageSize, totalPages, currentPage) {
+    const maxPages = 11
+    let startPage = currentPage - Math.floor(maxPages / 2)
+    let endPage = currentPage + Math.floor(maxPages / 2)
+    console.log(Math.floor(maxPages / 2))
+    if (startPage <= 0) {
+      startPage = 1
+    }
+    if (endPage > totalPages) {
+      endPage = totalPages
+    }
+
+    // Create an array of page numbers
+    const pageNumbers = [];
+    for (let i = startPage; i <= endPage; i++) {
+        pageNumbers.push(i);
+    }
+    return pageNumbers;
+}
+
 
   return (
     <div className="m-10 w-full h-[100vh]">
