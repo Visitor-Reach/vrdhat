@@ -80,6 +80,7 @@ SEMRUSH_API_KEY = os.environ.get('SEMRUSH_API_KEY')
 SERPAPI_API_KEY = os.environ.get('SERPAPI_API_KEY')
 GOOGLE_MAPS_KEY = os.environ.get('GOOGLE_MAPS_KEY')
 GEOAPIFY_API_KEY = os.environ.get('GEOAPIFY_API_KEY')
+YELP_API_KEY = "eccMlz5W8tdwHJ5IFOYjX0vbV2UR2iVoiF7yJF5A8yGGSpxVjmKLzDwjdFtwcuJArapBK5SRHwW7DE33LR3jRqnz2eSahSc4i_YEKIzsDVP3N89bv03t-81zirrkZnYx"
 
 YELP_NAME_VALUE = 30
 YELP_CATEGORY_VALUE = 35
@@ -566,10 +567,14 @@ class church:
 
     def get_yelp_schedule_score(self):
         for sched_el in self.yelp_schedule:
-            if (sched_el.get("day")).lower() == "sun":
-                if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
-                    self.yelp_schedule_score = YELP_SCHEDULE_VALUE
-                    return self.yelp_schedule_score
+            if (sched_el.get("day")) == 6:
+                self.yelp_schedule_score = YELP_SCHEDULE_VALUE
+                return self.yelp_schedule_score
+            
+            # if (sched_el.get("day")) == "sun":
+            #     if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
+            #         self.yelp_schedule_score = YELP_SCHEDULE_VALUE
+            #         return self.yelp_schedule_score
 
     def get_yelp_webpage_score(self):
         if self.yelp_webpage != "" and self.yelp_webpage != None:
@@ -598,7 +603,7 @@ class church:
             return self.yelp_state_score
 
     def get_yelp_score(self):
-        self.set_yelp_search()
+        self.set_yelp_api_search()
         self.get_yelp_name_score()
         self.get_yelp_category_score()
         self.get_yelp_about_score()
@@ -911,6 +916,53 @@ class church:
                     self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
             except:
                 pass
+
+    def set_yelp_api_search(self):
+        try:
+            headers = {"Authorization": "Bearer " + YELP_API_KEY}
+            url = "https://api.yelp.com/v3/businesses/search?term=" + self.name + "&location=" + self.city + ", " + self.state + "&limit=1"
+            search = requests.request("GET", url, headers=headers)
+            results = search.json()
+            print(json.dumps(results, indent=4))
+            businesses = results.get("businesses", [])
+            if len(businesses) == 0:
+                return
+            business = businesses[0]
+            self.yelp_name = business.get("name", "") or ""
+            location = business.get("location", {})
+            self.yelp_address = (
+                (location.get("address1", "") or "") + " " +
+                (location.get("address2", "") or "") + " " +
+                (location.get("address3", "") or "") + " " +
+                (location.get("city", "") or "") + " " +
+                (location.get("state", "") or "") + " " +
+                (location.get("zip_code", "") or "")
+            ).strip()
+            allowed_chars = string.digits
+            self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", business.get("phone", "") or "").replace(" ", "")
+            self.yelp_category = [category.get("title", "") or "" for category in business.get("categories", [])]
+            attributes = business.get("attributes", {})
+            self.yelp_webpage = attributes.get("business_url", "") or ""
+            self.yelp_description = (attributes.get("about_this_biz_bio", "") or "") + " " + (attributes.get("about_this_biz_specialties", "") or "")
+            self.yelp_schedule = []
+            business_hours = business.get("business_hours", [])
+            if business_hours:
+                open_hours = business_hours[0].get("open", [])
+                print(json.dumps(open_hours, indent=4))
+                for entry in open_hours:
+                    day = {
+                        "day": entry.get("day", ""),
+                        "start": entry.get("start", ""),
+                        "end": entry.get("end", ""),
+                        "is_overnight": entry.get("is_overnight", False)
+                    }
+                    self.yelp_schedule.append(day)
+            else:
+                self.yelp_schedule = []
+            print(json.dumps(self.yelp_schedule, indent=4))
+        except Exception as e:
+            print(e)
+        
 
     def write_object_to_json(self):
         file_name = str(uuid.uuid4()) + '.json'
