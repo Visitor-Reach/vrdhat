@@ -403,6 +403,16 @@ def cleanSocialHandle(handle):
         return ""
     return handle.replace('https://www.facebook.com/', '').replace('https://www.instagram.com/', '').replace("@", "").replace("/", "")
 
+@app.route('/api/metrics', methods=['GET'])
+def get_metrics():
+    try:
+        city = request.args.get('city')
+        state = request.args.get('state')
+        return jsonify(metricas.start_historical(city, state))
+    except Exception as error_msg:
+        print("Error: ", error_msg)
+        return jsonify({'message': 'Error getting metrics'}), 400
+
 @app.route('/api/fetch-data/<id>', methods=['GET'])
 def fetch_data(id):
     try:

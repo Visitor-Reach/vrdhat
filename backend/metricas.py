@@ -49,8 +49,11 @@ def generate_historical_metrics(client, customer_id, city, state):
     request.customer_id = customer_id
     request.keywords = ["churches near me"]
     # Geo target constant 2840 is for USA.
+    location_id = get_location_id(client, city, state)
+    if location_id is None:
+        return None
     request.geo_target_constants.append(
-        googleads_service.geo_target_constant_path(get_location_id(client, city, state))
+        googleads_service.geo_target_constant_path(location_id)
     )
     request.keyword_plan_network = (
         client.enums.KeywordPlanNetworkEnum.GOOGLE_SEARCH
@@ -72,7 +75,9 @@ def generate_historical_metrics(client, customer_id, city, state):
         # Approximate number of monthly searches on this query averaged for the
         # past 12 months.
         #return metrics.avg_monthly_searches
-
+        if len(metrics.monthly_search_volumes) == 0:
+            return None
+        
         return metrics.monthly_search_volumes[-1]
 
 
@@ -94,7 +99,9 @@ def get_location_id(client, city, state):
 
     for suggestion in results.geo_target_constant_suggestions:
         geo_target_constant = suggestion.geo_target_constant
-        if city.lower() in (geo_target_constant.name).lower() and "city" in (geo_target_constant.target_type).lower():
+        # print('>>> ' + geo_target_constant.name + ' - ' + geo_target_constant.target_type)
+        # if city.lower() in (geo_target_constant.name).lower() and "city" in (geo_target_constant.target_type).lower():
+        if city.lower() in (geo_target_constant.name).lower():
             return(geo_target_constant.resource_name.split("/")[1])
 
 
@@ -114,6 +121,7 @@ def start_historical(city, state):
 
     customer_id = os.environ.get("CUSTOMER_ID")
 
-    last_month_search_volume = main(googleads_client, customer_id, city, state).monthly_searches
-
-    return last_month_search_volume
+    last_month_search_volume = main(googleads_client, customer_id, city, state)
+    if last_month_search_volume is None:
+        return 0
+    return last_month_search_volume.monthly_searches
