@@ -96,10 +96,11 @@ def get_location_id(client, city, state):
     )
 
     results = gtc_service.suggest_geo_target_constants(gtc_request)
+    print(results)
 
     for suggestion in results.geo_target_constant_suggestions:
         geo_target_constant = suggestion.geo_target_constant
-        # print('>>> ' + geo_target_constant.name + ' - ' + geo_target_constant.target_type)
+        print('>>> ' + geo_target_constant.name + ' - ' + geo_target_constant.target_type)
         # if city.lower() in (geo_target_constant.name).lower() and "city" in (geo_target_constant.target_type).lower():
         if city.lower() in (geo_target_constant.name).lower():
             return(geo_target_constant.resource_name.split("/")[1])

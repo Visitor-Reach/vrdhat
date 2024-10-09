@@ -517,7 +517,7 @@ class church:
     def address_similarity(self, map_adress, source):
         response = self.parse_address(map_adress)
         if response.get('results') != None:
-            if len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.9:
+            if len(response.get('results')) > 0 and response.get('results')[0].get('rank').get('confidence') >= 0.75:
                 result = response.get('results')[0]
 
                 if source == "google":
@@ -546,6 +546,99 @@ class church:
                 return address_similarity
         return 0
 
+    def set_yelp_search(self):
+        params = {
+            "api_key": SERPAPI_API_KEY,
+            "engine": "yelp",
+            "find_loc": self.city + ", " + self.state,
+            "find_desc": self.name
+        }
+
+        search = GoogleSearch(params)
+        results = search.get_dict()
+        organic_results = results.get("organic_results", "")
+        name_simil = []
+        if len(organic_results) > 0:
+            for organic_result in organic_results:
+                name_simil.append(self.name_similarity(organic_result.get("title", "")))
+
+            organic_result_simil_idx = np.argmax(np.array(name_simil))
+            most_similar_result = organic_results[organic_result_simil_idx]
+            if name_simil[organic_result_simil_idx] < 75:
+                return
+            place_id = most_similar_result.get("place_ids", "")[0]
+
+            params = {
+                "api_key": SERPAPI_API_KEY,
+                "engine": "yelp_place",
+                "place_id": place_id
+            }
+
+            search = GoogleSearch(params)
+            try:
+                result = search.get_dict()
+                place_result = result.get("place_results", "")
+                self.yelp_name = place_result.get("name")
+                self.yelp_address = place_result.get("address", "")
+                allowed_chars = string.digits
+                self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
+                self.yelp_webpage = place_result.get("website")
+                # self.yelp_rating = place_result.get("rating", "")
+
+                self.yelp_category = [category.get("title", "") for category in most_similar_result.get("categories", "")]
+                self.yelp_description = place_result.get("about", "")
+
+                if place_result.get("operation_hours", {}) != None:
+                    self.yelp_schedule = place_result.get("operation_hours", {}).get("hours", [])
+            except:
+                pass
+
+    def set_yelp_api_search(self):
+        try:
+            headers = {"Authorization": "Bearer " + YELP_API_KEY}
+            url = "https://api.yelp.com/v3/businesses/search?term=" + self.name + "&location=" + self.city + ", " + self.state + "&limit=1"
+            search = requests.request("GET", url, headers=headers)
+            results = search.json()
+            print(json.dumps(results, indent=4))
+            businesses = results.get("businesses", [])
+            if len(businesses) == 0:
+                return
+            business = businesses[0]
+            self.yelp_name = business.get("name", "") or ""
+            location = business.get("location", {})
+            self.yelp_address = (
+                (location.get("address1", "") or "") + " " +
+                (location.get("address2", "") or "") + " " +
+                (location.get("address3", "") or "") + " " +
+                (location.get("city", "") or "") + " " +
+                (location.get("state", "") or "") + " " +
+                (location.get("zip_code", "") or "")
+            ).strip()
+            allowed_chars = string.digits
+            self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", business.get("phone", "") or "").replace(" ", "")
+            self.yelp_category = [category.get("title", "") or "" for category in business.get("categories", [])]
+            attributes = business.get("attributes", {})
+            self.yelp_webpage = attributes.get("business_url", "") or ""
+            self.yelp_description = (attributes.get("about_this_biz_bio", "") or "") + " " + (attributes.get("about_this_biz_specialties", "") or "")
+            self.yelp_schedule = []
+            business_hours = business.get("business_hours", [])
+            if business_hours:
+                open_hours = business_hours[0].get("open", [])
+                print(json.dumps(open_hours, indent=4))
+                for entry in open_hours:
+                    day = {
+                        "day": entry.get("day", ""),
+                        "start": entry.get("start", ""),
+                        "end": entry.get("end", ""),
+                        "is_overnight": entry.get("is_overnight", False)
+                    }
+                    self.yelp_schedule.append(day)
+            else:
+                self.yelp_schedule = []
+            print(json.dumps(self.yelp_schedule, indent=4))
+        except Exception as e:
+            print(e)
+
     def get_yelp_name_score(self):
         name_similarity_value = self.name_similarity(self.yelp_name)
         self.yelp_name_similarity_score = name_similarity_value
@@ -555,10 +648,12 @@ class church:
         return self.yelp_name_score
 
     def get_yelp_category_score(self):
+        goodCategories = ["church", "religious", "churches"]
         for cat_element in self.yelp_category:
-            if "church" in cat_element.lower():
-                self.yelp_category_score = YELP_CATEGORY_VALUE
-                return self.yelp_category_score
+            for goodCat in goodCategories:
+                if goodCat in cat_element.lower():
+                    self.yelp_category_score = YELP_CATEGORY_VALUE
+                    return self.yelp_category_score
 
     def get_yelp_about_score(self):
         if len(self.yelp_description) > 0:
@@ -567,14 +662,14 @@ class church:
 
     def get_yelp_schedule_score(self):
         for sched_el in self.yelp_schedule:
-            if (sched_el.get("day")) == 6:
-                self.yelp_schedule_score = YELP_SCHEDULE_VALUE
-                return self.yelp_schedule_score
+            # if (sched_el.get("day")) == 6:
+            #     self.yelp_schedule_score = YELP_SCHEDULE_VALUE
+            #     return self.yelp_schedule_score
             
-            # if (sched_el.get("day")) == "sun":
-            #     if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
-            #         self.yelp_schedule_score = YELP_SCHEDULE_VALUE
-            #         return self.yelp_schedule_score
+            if sched_el.get("day").lower() == "sun":
+                if len(sched_el.get("hours")) > 0 and sched_el.get("hours") != "Closed":
+                    self.yelp_schedule_score = YELP_SCHEDULE_VALUE
+                    return self.yelp_schedule_score
 
     def get_yelp_webpage_score(self):
         if self.yelp_webpage != "" and self.yelp_webpage != None:
@@ -603,7 +698,8 @@ class church:
             return self.yelp_state_score
 
     def get_yelp_score(self):
-        self.set_yelp_api_search()
+        self.set_yelp_search()
+        # self.set_yelp_api_search()
         self.get_yelp_name_score()
         self.get_yelp_category_score()
         self.get_yelp_about_score()
@@ -637,10 +733,12 @@ class church:
         return self.google_name_score
 
     def get_google_category_score(self):
+        goodCategories = ["church", "religious", "churches"]
         for cat_element in self.google_category:
-            if "church" in cat_element.lower() or "religious" in cat_element.lower():
-                self.google_category_score = GOOGLE_CATEGORY_VALUE
-                return self.google_category_score
+            for goodCat in goodCategories:
+                if goodCat in cat_element.lower():
+                    self.google_category_score = GOOGLE_CATEGORY_VALUE
+                    return self.google_category_score
 
     def get_google_about_score(self):
         self.google_description_similarity_score = self.text_similarity(self.google_description, self.apple_description)
@@ -701,10 +799,12 @@ class church:
         return self.apple_name_score
 
     def get_apple_category_score(self):
+        goodCategories = ["church", "religious", "churches"]
         for cat_element in self.apple_category:
-            if "church" in cat_element.lower() or "religious" in cat_element.lower():
-                self.apple_category_score = APPLE_CATEGORY_VALUE
-                return self.apple_category_score
+            for goodCat in goodCategories:
+                if goodCat in cat_element.lower():
+                    self.apple_category_score = APPLE_CATEGORY_VALUE
+                    return self.apple_category_score
 
     def get_apple_about_score(self):
         self.apple_description_similarity_score = self.text_similarity(self.apple_description, self.google_description)
@@ -806,9 +906,10 @@ class church:
                         allowed_chars = string.digits
                         self.apple_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", local_results[0].get("phone", ""))
                         self.apple_webpage = local_results[0].get("website")
+
                         try:
-                            self.apple_category = [category for category in local_results[0].get("types")]
                             self.apple_category.append(local_results[0].get("type"))
+                            self.apple_category = [category for category in local_results[0].get("types")]
                         except:
                             pass
                         self.apple_description = local_results[0].get("description", "")
@@ -870,99 +971,7 @@ class church:
         self.google_description = place_results.get("description", "")
         self.google_schedule = place_results.get("hours", "")
 
-    def set_yelp_search(self):
-        params = {
-            "api_key": SERPAPI_API_KEY,
-            "engine": "yelp",
-            "find_loc": self.city + ", " + self.state,
-            "find_desc": self.name
-        }
-
-        search = GoogleSearch(params)
-        results = search.get_dict()
-        organic_results = results.get("organic_results", "")
-        name_simil = []
-        if len(organic_results) > 0:
-            for organic_result in organic_results:
-                name_simil.append(self.name_similarity(organic_result.get("title", "")))
-
-            organic_result_simil_idx = np.argmax(np.array(name_simil))
-            most_similar_result = organic_results[organic_result_simil_idx]
-            if name_simil[organic_result_simil_idx] < 75:
-                return
-            place_id = most_similar_result.get("place_ids", "")[0]
-
-            params = {
-                "api_key": SERPAPI_API_KEY,
-                "engine": "yelp_place",
-                "place_id": place_id
-            }
-
-            search = GoogleSearch(params)
-            try:
-                result = search.get_dict()
-                place_result = result.get("place_results", "")
-                self.yelp_name = place_result.get("name")
-                self.yelp_address = place_result.get("address", "")
-                allowed_chars = string.digits
-                self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", place_result.get("phone", "")).replace(" ", "")
-                self.yelp_webpage = place_result.get("website")
-                # self.yelp_rating = place_result.get("rating", "")
-
-                self.yelp_category = [category.get("title", "") for category in place_result.get("categories", "")]
-                self.yelp_description = place_result.get("about", "")
-
-                if len(place_result.get("operation_hours", "")) > 0:
-                    self.yelp_schedule = place_result.get("operation_hours", "").get("hours", "")
-            except:
-                pass
-
-    def set_yelp_api_search(self):
-        try:
-            headers = {"Authorization": "Bearer " + YELP_API_KEY}
-            url = "https://api.yelp.com/v3/businesses/search?term=" + self.name + "&location=" + self.city + ", " + self.state + "&limit=1"
-            search = requests.request("GET", url, headers=headers)
-            results = search.json()
-            print(json.dumps(results, indent=4))
-            businesses = results.get("businesses", [])
-            if len(businesses) == 0:
-                return
-            business = businesses[0]
-            self.yelp_name = business.get("name", "") or ""
-            location = business.get("location", {})
-            self.yelp_address = (
-                (location.get("address1", "") or "") + " " +
-                (location.get("address2", "") or "") + " " +
-                (location.get("address3", "") or "") + " " +
-                (location.get("city", "") or "") + " " +
-                (location.get("state", "") or "") + " " +
-                (location.get("zip_code", "") or "")
-            ).strip()
-            allowed_chars = string.digits
-            self.yelp_phone = re.sub(r"[^\w\s" + allowed_chars + "]", "", business.get("phone", "") or "").replace(" ", "")
-            self.yelp_category = [category.get("title", "") or "" for category in business.get("categories", [])]
-            attributes = business.get("attributes", {})
-            self.yelp_webpage = attributes.get("business_url", "") or ""
-            self.yelp_description = (attributes.get("about_this_biz_bio", "") or "") + " " + (attributes.get("about_this_biz_specialties", "") or "")
-            self.yelp_schedule = []
-            business_hours = business.get("business_hours", [])
-            if business_hours:
-                open_hours = business_hours[0].get("open", [])
-                print(json.dumps(open_hours, indent=4))
-                for entry in open_hours:
-                    day = {
-                        "day": entry.get("day", ""),
-                        "start": entry.get("start", ""),
-                        "end": entry.get("end", ""),
-                        "is_overnight": entry.get("is_overnight", False)
-                    }
-                    self.yelp_schedule.append(day)
-            else:
-                self.yelp_schedule = []
-            print(json.dumps(self.yelp_schedule, indent=4))
-        except Exception as e:
-            print(e)
-        
+  
 
     def write_object_to_json(self):
         file_name = str(uuid.uuid4()) + '.json'
@@ -999,7 +1008,7 @@ class church:
         #     print(json.dumps(response, indent=4))
 
     def parse_address(self, addressString):
-        url = 'https://api.geoapify.com/v1/geocode/autocomplete?text=' + quote(addressString) + \
+        url = 'https://api.geoapify.com/v1/geocode/search?text=' + quote(addressString) + \
             '&filter=countrycode:us&format=json&apiKey=' + GEOAPIFY_API_KEY
         headers = CaseInsensitiveDict()
         headers["Accept"] = "application/json"
@@ -1123,8 +1132,11 @@ class church:
 
     def get_instagram_category_score(self):
         self.instagram_category = self.instagram_data.get("businessCategoryName", "")
-        if "church" in self.instagram_category.lower() or "religious" in self.instagram_category.lower():
-            self.instagram_category_score = SOCIAL_INSTAGRAM_CATEGORY_VALUE
+        goodCategories = ["church", "religious", "churches"]
+        for goodCat in goodCategories:
+            if goodCat in self.instagram_category.lower():
+                self.instagram_category_score = SOCIAL_INSTAGRAM_CATEGORY_VALUE
+
 
     def get_instagram_webpage_score(self):
         self.instagram_webpage = self.instagram_data.get("externalUrl", "")
@@ -1143,10 +1155,12 @@ class church:
             self.facebook_name_score = SOCIAL_FACEBOOK_NAME_VALUE
 
     def get_facebook_category_score(self):
+        goodCategories = ["church", "religious", "churches"]
         self.facebook_categories = self.facebook_data.get("categories", [])
         for category in self.facebook_categories:
-            if "church" in category.lower() or "religious" in category.lower():
-                self.facebook_category_score = SOCIAL_FACEBOOK_CATEGORY_VALUE
+            for goodCat in goodCategories:
+                if goodCat in category.lower():
+                    self.facebook_category_score = SOCIAL_FACEBOOK_CATEGORY_VALUE
 
     def get_facebook_webpage_score(self):
         self.facebook_webpage = self.facebook_data.get("website", "")
