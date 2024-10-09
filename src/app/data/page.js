@@ -43,7 +43,6 @@ export default function Data() {
     const maxPages = 11
     let startPage = currentPage - Math.floor(maxPages / 2)
     let endPage = currentPage + Math.floor(maxPages / 2)
-    console.log(Math.floor(maxPages / 2))
     if (startPage <= 0) {
       startPage = 1
     }
