@@ -31,7 +31,7 @@ module.exports = {
     },
   },
   plugins: [
-      // require('flowbite/plugin')
+
   ],
   safelist: ["text-vr-form-title", "vr-form-field-bg", "tablet-vertical", "phone", "bg-vr-title-second", "from-vr-button-first", "via-vr-button-second", "to-vr-button-third", "text-vr-button-third"]
 

@@ -6,6 +6,14 @@
     @apply max-md:text-[12pt] pl-5 rounded-3xl h-14 md:h-16 bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400 w-full;
 }
 
+.form-page-prefix {
+    @apply max-md:text-[12pt] pl-5 h-14 md:h-16 bg-transparent border-none border-0 text-slate-400 appearance-none focus:outline-none active:outline-none;
+}
+
+.form-page-input-with-country-prefix {
+    @apply max-md:text-[12pt] pl-[85px] rounded-3xl  h-14 md:h-16 bg-vr-form-field-bg border-2 border-vr-form-field-border text-slate-400;
+}
+
 select {
     @apply pr-10 relative
 }

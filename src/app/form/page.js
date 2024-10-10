@@ -119,6 +119,52 @@ export default function Page() {
     )
   }
 
+  function formatPhone(e) {
+    let value = e.target.value
+    if (!value || !value.trim()) return value
+    let phone = value.trim().replace(/[()-\D]?/g, '')
+    var match = phone.match(/^(\d{3})(\d{3})(\d{4})$/);
+    if (match) {
+      return '(' + match[1] + ') ' + match[2] + '-' + match[3];
+    }
+    return null
+  }
+
+  function cleanPhoneNumber(value) {
+    if (!value || !value.trim()) return value
+    let phone = value.trim().replace(/[()-\D]?/g, '')
+    if (phone.substr(0, 1) === '1') {
+      phone = `+${phone}`
+    }
+    if (phone.substr(0, 2) !== '+1') {
+      phone = `+1${phone}`
+    }
+    if (phone.length !== 12) {
+      phone = ''
+    }
+    return phone
+  }
+
+  function cleanSocialHandle(url) {
+    try {
+      url = formatUrl(url)
+      const parsedUrl = new URL(url);
+      const pathname = parsedUrl.pathname;
+      const subfolder = pathname.split('/')[1]; // Get the first subfolder
+      return subfolder || ''; // Return empty string if no subfolder
+    } catch (error) {
+      return '';
+    }
+  }
+
+  function formatUrl(url) {
+    if (!url || !url.trim()) return url
+    if (!url.startsWith('http://') && !url.startsWith('https://')) {
+      return 'https://' + url
+    }
+    return url
+  }
+
   async function parseAddress() {
     setTimeout(() => {
       document.getElementById('spinner1').style.display = 'block'
@@ -212,6 +258,9 @@ export default function Page() {
     if (!mobilePhone || !mobilePhone.trim()) {
       errors.push({ msg: 'Mobile Phone is required', field: 'mobilePhone' })
     }
+    else if (mobilePhone.replace(/[()-\D]?/g, '').length !== 10) {
+      errors.push({ msg: 'Mobile Phone number should have 10 digits', field: 'mobilePhone' })
+    }
     if (!email || !email.trim()) {
       errors.push({ msg: 'Email is required', field: 'email' })
     }
@@ -230,6 +279,9 @@ export default function Page() {
     }
     if (!churchPhone || !churchPhone.trim()) {
       errors.push({ msg: 'Church Phone is required', field: 'churchPhone' })
+    }
+    else if (churchPhone.replace(/[()-\D]?/g, '').length !== 10) {
+      errors.push({ msg: 'Church Phone number should have 10 digits', field: 'churchPhone' })
     }
     if (!churchAddress || !churchAddress.trim()) {
       errors.push({ msg: 'Church Address is required', field: 'churchAddress' })
@@ -256,22 +308,31 @@ export default function Page() {
     return errors
   }
 
-  function onInputBlur(event) {
-    const errors = getFormErrors()
-    const element = document.forms[0][event.target.name]
-    element.style.border = '2px solid rgb(228, 231, 234)'
-    if (errors.length > 0) {
-      if (element && errors.find((error) => error.field === event.target.name)) {
-        element.style.border = '2px solid red'
+  function validateFormField(e) {
+    // fix field formats
+    if (e.target.name === 'churchWebsite') {
+      e.target.value = formatUrl(e.target.value)
+    }
+    if (e.target.name === 'mobilePhone' || e.target.name === 'churchPhone') {
+      const newValue = formatPhone(e)
+      if (newValue) {
+        e.target.value = newValue
       }
     }
-    // helpfully add https:// to the church website if it's missing
-    if (
-      document.forms[0].churchWebsite.value &&
-      !document.forms[0].churchWebsite.value.startsWith('http://') &&
-      !document.forms[0].churchWebsite.value.startsWith('https://')
-    ) {
-      document.forms[0].churchWebsite.value = 'https://' + document.forms[0].churchWebsite.value
+    if (e.target.name === 'churchFacebook' || e.target.name === 'churchInstagram') {
+      const newValue = cleanSocialHandle(e.target.value)
+      if (newValue) {
+        e.target.value = newValue
+      }
+    }
+
+    const errors = getFormErrors()
+    const element = document.forms[0][e.target.name]
+    element.style.border = '2px solid rgb(228, 231, 234)'
+    if (errors.length > 0) {
+      if (element && errors.find((error) => error.field === e.target.name)) {
+        element.style.border = '2px solid red'
+      }
     }
   }
 
@@ -282,7 +343,9 @@ export default function Page() {
       // reset field errors
       for (let i = 0; i < document.forms[0].elements.length; i++) {
         let element = document.forms[0].elements[i]
-        element.style.border = '2px solid rgb(228, 231, 234)'
+        if (element.getAttribute('class') !== 'form-page-prefix') {
+          element.style.border = '2px solid rgb(228, 231, 234)'
+        }
       }
       // validate fields
       const errors = getFormErrors()
@@ -304,12 +367,12 @@ export default function Page() {
       const churchInfo = JSON.stringify({
         firstName: event.target.elements.firstName.value,
         lastName: event.target.elements.lastName.value,
-        mobilePhone: event.target.elements.mobilePhone.value,
+        mobilePhone: cleanPhoneNumber(event.target.elements.mobilePhone.value),
         email: event.target.elements.email.value,
         churchName: event.target.elements.churchName.value,
         churchWebsite: event.target.elements.churchWebsite.value,
         churchSize: event.target.elements.churchSize.value,
-        churchPhone: event.target.elements.churchPhone.value,
+        churchPhone: cleanPhoneNumber(event.target.elements.churchPhone.value),
         churchAddress: event.target.elements.churchAddress.value,
         churchState: event.target.elements.churchState.value,
         churchCity: event.target.elements.churchCity.value,
@@ -375,30 +438,38 @@ export default function Page() {
                       type=" text"
                       name="firstName"
                       placeholder="First Name"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                     <input
                       className="form-page-input"
                       type=" text"
                       name="lastName"
                       placeholder="Last Name"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
+                    <div className="absolute w-[90px] overflow-clip border-none">
+                      <select className="form-page-prefix">
+                        <option>US</option>
+                        <option>CA</option>
+                      </select>
+                      <div className="arrow">&#8964;</div>
+                    </div>
                     <input
-                      className="form-page-input"
-                      type=" text"
+                      className="form-page-input-with-country-prefix"
+                      type="tel"
                       name="mobilePhone"
                       placeholder="Mobile Phone"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
+
                     <input
                       className="form-page-input"
                       type=" text"
                       name="email"
                       placeholder="Email"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
@@ -407,19 +478,19 @@ export default function Page() {
                       type=" text"
                       name="churchName"
                       placeholder="Church Name"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                     <input
                       className="form-page-input"
                       type=" text"
                       name="churchWebsite"
                       placeholder="Church Website"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 w-full">
                     <div className="relative phone:w-full tablet-vertical:w-full flex flex-row items-center">
-                      <select className="form-page-input appearance-none" name="churchSize" onBlur={onInputBlur}>
+                      <select className="form-page-input appearance-none" name="churchSize" onBlur={validateFormField}>
                         <option value=""> Church Size </option>
                         {church_sizes.map((size) => (
                           <option key={size.value} value={size.value}>
@@ -429,13 +500,23 @@ export default function Page() {
                       </select>
                       <div className="arrow">&#8964;</div>
                     </div>
-                    <input
-                      className="form-page-input"
-                      type=" text"
-                      name="churchPhone"
-                      placeholder="Church Phone"
-                      onBlur={onInputBlur}
-                    />
+                    
+                    <div>
+                      <div className="absolute w-[90px] overflow-clip border-none">
+                        <select className="form-page-prefix">
+                          <option>US</option>
+                          <option>CA</option>
+                        </select>
+                        <div className="arrow">&#8964;</div>
+                      </div>
+                      <input
+                        className="form-page-input-with-country-prefix"
+                        type="tel"
+                        name="churchPhone"
+                        placeholder="Church Phone"
+                        onBlur={validateFormField}
+                      />
+                    </div>
                   </div>
                   <div className="w-full">
                     <div className="flex-row relative w-full">
@@ -445,7 +526,7 @@ export default function Page() {
                         name="churchAddress"
                         placeholder="Church Address"
                         onPaste={() => parseAddress(this)}
-                        onBlur={onInputBlur}
+                        onBlur={validateFormField}
                       />
                       <div
                         id="spinner1"
@@ -476,7 +557,7 @@ export default function Page() {
                         name="churchZipCode"
                         placeholder="Zip Code"
                         onBlur={(e) => {
-                          onInputBlur(e)
+                          validateFormField(e)
                           lookupZipCode(e)
                         }}
                       />
@@ -505,10 +586,10 @@ export default function Page() {
                       type=" text"
                       name="churchCity"
                       placeholder="City"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                     <div className="relative phone:w-full tablet-vertical:w-full">
-                      <select className="form-page-input appearance-none" name="churchState" onBlur={onInputBlur}>
+                      <select className="form-page-input appearance-none" name="churchState" onBlur={validateFormField}>
                         <option value=""> State </option>
                         {states.map((state) => (
                           <option key={state.id} value={state.id}>
@@ -525,17 +606,17 @@ export default function Page() {
                       type=" text"
                       name="churchInstagram"
                       placeholder="Church Instagram Handle"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                     <input
                       className="form-page-input"
                       type=" text"
                       name="churchFacebook"
                       placeholder="Church Facebook Handle"
-                      onBlur={onInputBlur}
+                      onBlur={validateFormField}
                     />
                     <div className="relative phone:w-full tablet-vertical:w-full">
-                      <select className="form-page-input appearance-none" name="role" onBlur={onInputBlur}>
+                      <select className="form-page-input appearance-none" name="role" onBlur={validateFormField}>
                         <option value=""> Your Role </option>
                         <option key="role_1" value="Senior leadership">
                           Senior leadership
